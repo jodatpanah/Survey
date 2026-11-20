@@ -1,3 +1,41 @@
+function fillOptionPriorities() {
+    const inputs = Array.from(document.querySelectorAll('#kt_repeater_RadioShowcase .OrderIndex:enabled'));
+    const used = new Set(inputs.filter(input => input.value !== '' && input.validity.valid)
+        .map(input => input.valueAsNumber));
+    let next = Math.max(0, ...used) + 1;
+
+    for (const input of inputs) {
+        if (input.value !== '' || input.validity.badInput) {
+            continue;
+        }
+
+        const maximum = Number(input.max);
+        if (next > maximum) {
+            next = 1;
+        }
+        while (used.has(next)) {
+            next++;
+        }
+        if (next <= maximum) {
+            input.value = next;
+            used.add(next);
+            next++;
+        }
+    }
+}
+
+function validateChoiceQuestionFields() {
+    fillOptionPriorities();
+    const invalidField = document.querySelector(
+        '#weightOfQuestion:invalid, #kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+    );
+    if (invalidField) {
+        invalidField.reportValidity();
+        return false;
+    }
+    return true;
+}
+
 console.log('=== فایل update.js بارگذاری شد ===');
 
 $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
@@ -216,9 +254,6 @@ function updateWeightDisplay(element) {
     var value = $(element).val();
     $(element).siblings('.d-flex').find('.weight-value-display').text(value);
 }
-$(document).on('input', '.OrderIndex', function () {
-    validateVoteQuestionItemOrderIndexInput(this);
-});
 
 
 $(document).ready(function () {
@@ -419,15 +454,20 @@ $(document).ready(function () {
             $row.find('.js-label-trigger')
                 .removeClass('d-none');
 
-            $row.slideDown();
+            fillOptionPriorities();
+            $row.slideDown(function () {
+                $row.find('.VoteQuestionItemTitle').trigger('focus');
+            });
         },
 
         hide: function (deleteElement) {
             if (confirm('آیا از حذف این گزینه اطمینان دارید؟')) {
+                $(this).find('.OrderIndex').prop('disabled', true);
                 $(this).slideUp(deleteElement);
             }
         }
     });
+    fillOptionPriorities();
 
 
     // نمایش بخش مربوط به نوع سوال
@@ -951,6 +991,10 @@ if (submitButton) {
             return;
         }
 
+        if (Number(selectedType) === 1 && !validateChoiceQuestionFields()) {
+            return;
+        }
+
         newSubmitButton.setAttribute('data-kt-indicator', 'on');
         newSubmitButton.disabled = true;
 
@@ -981,7 +1025,9 @@ if (submitButton) {
         formData.append('VoteQuestionTypeId', selectedType || '');
         formData.append('KeyWord', $("#KeyWord").val() || '');
         formData.append('Title', $("#Title").val() || '');
-        //formData.append('Weight', $(".js-vote-question-weight").val() || '0');
+        if (Number(selectedType) === 1) {
+            formData.append('Weight', document.getElementById('weightOfQuestion').value);
+        }
         formData.append('ValidationMessage', $("#ValidationMessage").val() || '');
         formData.append('InputPatternId', inputPattenrTemp ? Number(inputPattenrTemp) : '');
         formData.append('DataSourceId', dataSourceId ?? '');
@@ -1051,7 +1097,7 @@ if (submitButton) {
         if (Number(selectedType) === 1) {
             let itemIndex = 0;
 
-            $('[data-repeater-item]').each(function () {
+            $('#kt_repeater_RadioShowcase [data-repeater-item]:has(.OrderIndex:enabled)').each(function () {
                 const $row = $(this);
 
                 const itemId = $row.find('.VoteQuestionItemId').val();
@@ -1171,15 +1217,6 @@ function getCurrentAttachmentAllowedFileTypeIds() {
         });
 }
 
-function validateVoteQuestionItemOrderIndexInput(input) {
-    if (input.value < 0 || input.value > 999) {
-        input.value = '';
-    }
-    input.value = input.value.slice(0, 3);
-    if (input.value.length > 1 && input.value[0] === '0') {
-        input.value = parseInt(input.value, 10);
-    }
-}
 //$(document).on('input', '.js-vote-question-weight', function () {
 //    validateVoteQuestionWeightInput(this);
 //});

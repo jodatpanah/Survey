@@ -1,3 +1,41 @@
+function fillOptionPriorities() {
+    const inputs = Array.from(document.querySelectorAll('#kt_repeater_RadioShowcase .OrderIndex:enabled'));
+    const used = new Set(inputs.filter(input => input.value !== '' && input.validity.valid)
+        .map(input => input.valueAsNumber));
+    let next = Math.max(0, ...used) + 1;
+
+    for (const input of inputs) {
+        if (input.value !== '' || input.validity.badInput) {
+            continue;
+        }
+
+        const maximum = Number(input.max);
+        if (next > maximum) {
+            next = 1;
+        }
+        while (used.has(next)) {
+            next++;
+        }
+        if (next <= maximum) {
+            input.value = next;
+            used.add(next);
+            next++;
+        }
+    }
+}
+
+function validateChoiceQuestionFields() {
+    fillOptionPriorities();
+    const invalidField = document.querySelector(
+        '#weightOfQuestion:invalid, #kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+    );
+    if (invalidField) {
+        invalidField.reportValidity();
+        return false;
+    }
+    return true;
+}
+
 var selectedDataSourceId = null;
 
 $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
@@ -356,31 +394,26 @@ $(document).ready(function () {
     $('#kt_repeater_RadioShowcase').repeater({
         initEmpty: false,
 
-        defaultValues: {
-            'text-item': '',
-            'priority-item': '',
-
-        },
-
         show: function () {
-            $(this).slideDown();
+            const $row = $(this);
+            $row.find('.OrderIndex').val('');
+            fillOptionPriorities();
+            $row.find('.Weight').each(function () {
+                updateWeightDisplay(this);
+            });
+            $row.slideDown(function () {
+                $row.find('.VoteQuestionItemTitle').trigger('focus');
+            });
         },
 
         hide: function (deleteElement) {
+            $(this).find('.OrderIndex').prop('disabled', true);
             $(this).slideUp(deleteElement);
         }
     });
+    fillOptionPriorities();
 });
 
-//console.log('1. شروع فایل create.js - قبل از ready');
-// برای repeater
-$('[data-repeater-create]').on('click', function () {
-    setTimeout(function () {
-        $('.Weight[type="range"]').each(function () {
-            updateWeightDisplay(this);
-        });
-    }, 100);
-});
 var selected
 function SelectTypeQestion(val) {
 
@@ -504,17 +537,6 @@ function hideErrorMessage() {
 
 
 
-function validateVoteQuestionItemOrderIndexInput(input) {
-    if (input.value < 0 || input.value > 999) {
-        input.value = '';
-    }
-    // Limit to maximum 3 numeric characters
-    input.value = input.value.slice(0, 3);
-    // Remove leading zeros
-    if (input.value.length > 1 && input.value[0] === '0') {
-        input.value = parseInt(input.value, 10);
-    }
-}
 function validateVoteQuestionWeightInput(input) {
 
     if (input.value.length > 1 && input.value[0] === '0') {
@@ -627,6 +649,10 @@ if (submitButton) {
             return;
         }
 
+        if (Number(selected) === 1 && !validateChoiceQuestionFields()) {
+            return;
+        }
+
         newSubmitButton.setAttribute('data-kt-indicator', 'on');
         newSubmitButton.disabled = true;
 
@@ -661,7 +687,9 @@ if (submitButton) {
         formData.append('KeyWord', $("#KeyWord").val() || '');
         formData.append('Title', $("#Title").val() || '');
         formData.append('ValidationMessage', $("#ValidationMessage").val() || '');
-        //formData.append('Weight', $("#weightOfQuestion").val() || '0');
+        if (Number(selected) === 1) {
+            formData.append('Weight', document.getElementById('weightOfQuestion').value);
+        }
         formData.append('InputPatternId', inputPattenrTemp ? Number(inputPattenrTemp) : '');
         formData.append('DataSourceId', dataSourceId ?? '');
         
@@ -806,7 +834,7 @@ if (submitButton) {
         if (selected == 1) {
             let itemIndex = 0;
 
-            $('[data-repeater-item]').each(function () {
+            $('#kt_repeater_RadioShowcase [data-repeater-item]:has(.OrderIndex:enabled)').each(function () {
                 const $row = $(this);
                 var title = $(this).find('.VoteQuestionItemTitle').val();
                 var weight = $(this).find('.Weight').val();

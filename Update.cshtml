@@ -14,7 +14,7 @@
                             <div class="d-flex justify-content-between align-items-start flex-wrap mt-1">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center mb-1">
-                                        <div class="fw-bolder mt-5">ایجاد سوال جدید</div>
+                                        <div class="fw-bolder mt-5">ویرایش سوال</div>
                                         <div class="text-gray-600"></div>
                                     </div>
                                 </div>
@@ -91,22 +91,6 @@
                                         </div>
                                     </div>
                                     <div class="mb-6 fv-row row">
-                                       @*  <div class="col-md-3 fv-row fv-plugins-icon-container">
-                                            <label class="fs-6 fw-bold mb-1">
-                                                <span class="px-2">  وزن سوال  </span>
-
-                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="  وزن سوال  "></i>
-                                            </label>
-                                            <input type="number"
-                                                   step="1"
-                                                   asp-for="Weight"
-                                                   min="-10"
-                                                   max="10"
-                                                   class="form-control form-control-solid js-vote-question-weight"
-                                                   placeholder="وزن سوال را وارد نمایید" />
-
-                                        </div> *@
-
                                         <div class="col-md-12 fv-row fv-plugins-icon-container">
                                             <label class="fs-6 fw-bold mb-1">
                                                 <span class="px-2">  پیغام راهنما  </span>
@@ -145,38 +129,34 @@
                                                 <div class="card card-flush py-4">
                                                     <div class="px-10 py-1">
                                                         <label class="d-flex align-items-center fs-5 fw-bold" name="RadioShowcase">
-                                                            <span class=""> تک انتخابی یا چند انتخابی</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
+                                                            <span>گزینه‌های سوال</span>
                                                         </label>
                                                     </div>
 
                                                     <div class="separator my-3"></div>
                                                     <div class="p-2">
+                                                        <div class="d-flex flex-wrap align-items-end gap-4 mb-4">
+                                                            <div>
+                                                                <label for="weightOfQuestion" class="form-label fw-bold">وزن سوال</label>
+                                                                <input id="weightOfQuestion" name="Weight" type="number"
+                                                                       class="form-control form-control-solid w-125px text-center"
+                                                                       value="@(string.IsNullOrEmpty(Convert.ToString(Model.Weight)) ? "1" : Convert.ToString(Model.Weight))" min="-10" max="10" step="1" required />
+                                                            </div>
+                                                            <p id="vote-option-priority-help" class="text-muted mb-1">
+                                                                اولویت هر گزینه خودکار تعیین می‌شود و می‌توانید آن را تغییر دهید.
+                                                            </p>
+                                                        </div>
+                                                        <details class="mb-4 text-muted">
+                                                            <summary class="fw-semibold">راهنمای وزن‌گذاری گزینه‌ها</summary>
+                                                            <ul class="mb-0 mt-2">
+                                                                <li>برای گزینه‌های سوال‌های با بار معنایی منفی، وزن مثبت تعیین کنید.</li>
+                                                                <li>برای سوال‌های با بار معنایی مثبت، وزن گزینه‌های مثبت و منفی را قرینه تعیین کنید.</li>
+                                                            </ul>
+                                                        </details>
                                                         <div class="d-flex flex-column">
                                                             <div id="kt_repeater_RadioShowcase">
                                                                 <div class="form-group">
                                                                     <div data-repeater-list="item_List">
-                                                                        <div class="cases mb-4">
-                                                                            <!-- کلمه نکته در بالا -->
-                                                                            <div class="mt-2">
-                                                                                <span class="text-tip-option">* نکته:</span>
-                                                                            </div>
-
-                                                                            <!-- ۵ متن زیر هم -->
-                                                                            <div class="d-flex flex-column gap-1">
-                                                                                <div>
-                                                                                    <span class="text-cases-option" title="Hint توضیح متن 1">1. برای گزینه‌های سوالاتی که بار معنایی منفی دارند، وزن مثبت تعیین کنید </span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span class="text-cases-option" title="Hint توضیح متن 2">2. برای گزینه سوالات با بار معنایی مثبت، وزن گزینه های مثبت و منفی میبایست قرینه باشند</span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span class="text-cases-option-image " title="Hint توضیح متن 2">3. در صورت بارگذاری عکس، برای مشاهده آن لطفا کمی کوشا باشید</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <!-- هدر گرید گزینه‌ها -->
                                                                         <div class="vote-option-header vote-option-grid mb-2">
                                                                             <div class="header-cell">متن گزینه</div>
                                                                             <div class="header-cell text-center">انتخاب عکس</div>
@@ -203,7 +183,7 @@
                                                                                                    class="form-control form-control-solid required VoteQuestionItemTitle"
                                                                                                    name="VoteQuestionItemTitle"
                                                                                                    value="@item.Title"
-                                                                                                   placeholder="متن گزینه"
+                                                                                                   placeholder="متن گزینه" aria-label="متن گزینه"
                                                                                                    maxlength="200" />
                                                                                         </div>
 
@@ -249,9 +229,9 @@
                                                                                                    name="OrderIndex"
                                                                                                    value="@item.OrderIndex"
                                                                                                    placeholder="اولویت"
-                                                                                                   min="0"
-                                                                                                   max="999"
-                                                                                                   required />
+                                                                                                   aria-label="اولویت گزینه"
+                                                                                                   aria-describedby="vote-option-priority-help"
+                                                                                                   min="0" max="999" step="1" required />
                                                                                         </div>
 
                                                                                         <!-- ۴. وزن -->
@@ -259,7 +239,7 @@
                                                                                             <div class="weight-box">
                                                                                                 <input type="range"
                                                                                                        class="form-control form-range Weight"
-                                                                                                       name="Weight"
+                                                                                                       name="Weight" aria-label="وزن گزینه"
                                                                                                        value="@item.Weight"
                                                                                                        min="-10"
                                                                                                        max="10"
@@ -277,7 +257,7 @@
                                                                                         <!-- ۵. دکمه حذف سطر -->
                                                                                         <div class="grid-cell d-flex justify-content-center">
                                                                                             <a href="javascript:;"
-                                                                                               data-repeater-delete
+                                                                                               aria-label="حذف گزینه" data-repeater-delete
                                                                                                class="btn btn-icon btn-sm btn-light-danger">
                                                                                                 <i class="fonticon-trash fs-2x"></i>
                                                                                             </a>
@@ -299,7 +279,7 @@
                                                                                                class="form-control form-control-solid required VoteQuestionItemTitle"
                                                                                                name="VoteQuestionItemTitle"
                                                                                                value=""
-                                                                                               placeholder="متن گزینه"
+                                                                                               placeholder="متن گزینه" aria-label="متن گزینه"
                                                                                                maxlength="200" />
                                                                                     </div>
 
@@ -330,16 +310,16 @@
                                                                                                name="OrderIndex"
                                                                                                value=""
                                                                                                placeholder="اولویت"
-                                                                                               min="0"
-                                                                                               max="999"
-                                                                                               required />
+                                                                                               aria-label="اولویت گزینه"
+                                                                                               aria-describedby="vote-option-priority-help"
+                                                                                               min="0" max="999" step="1" required />
                                                                                     </div>
 
                                                                                     <div class="grid-cell">
                                                                                         <div class="weight-box">
                                                                                             <input type="range"
                                                                                                    class="form-control form-range Weight"
-                                                                                                   name="Weight"
+                                                                                                   name="Weight" aria-label="وزن گزینه"
                                                                                                    value="0"
                                                                                                    min="-10"
                                                                                                    max="10"
@@ -356,7 +336,7 @@
 
                                                                                     <div class="grid-cell d-flex justify-content-center">
                                                                                         <a href="javascript:;"
-                                                                                           data-repeater-delete
+                                                                                           aria-label="حذف گزینه" data-repeater-delete
                                                                                            class="btn btn-icon btn-sm btn-light-danger">
                                                                                             <i class="fonticon-trash fs-2x"></i>
                                                                                         </a>

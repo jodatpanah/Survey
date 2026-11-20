@@ -99,35 +99,6 @@
                                         </div>
                                     </div>
                                     <div class="mb-6 fv-row row">
-                                       @*  <div class="col-md-3 fv-row fv-plugins-icon-container">
-                                            <label class="fs-6 fw-bold mb-1">
-                                                <span class="px-2">وزن سوال</span>
-                                                <span id="WeightValueQuestion" class="badge badge-light-primary">0</span>
-                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="وزن سوال"></i>
-                                            </label>
-                                            <input type="range"
-                                                   min="0"
-                                                   max="10"
-                                                   value="0"
-                                                   class="form-range"
-                                                   id="weightOfQuestion"
-                                                   asp-for="Weight"
-                                                   dir="ltr" />
-                                            <div class="d-flex justify-content-between mt-1">
-
-                                                <small class="text-muted">10</small>
-                                                <small class="text-muted">0</small>
-                                            </div>
-                                        </div>
-
- *@
-
-
-
-
-
-
-
                                         <div class="col-md-12 fv-row fv-plugins-icon-container">
                                             <label class="fs-6 fw-bold mb-1">
                                                 <span class="px-2">  پیغام راهنما  </span>
@@ -189,39 +160,34 @@
                                                 <div class="card card-flush py-4">
                                                     <div class="px-10 py-1">
                                                         <label class="d-flex align-items-center fs-5 fw-bold" name="RadioShowcase">
-                                                            <span class="">تک انتخابی یا چند انتخابی</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
+                                                            <span>گزینه‌های سوال</span>
                                                         </label>
                                                     </div>
 
                                                     <div class="separator my-3"></div>
                                                     <div class="p-2">
+                                                        <div class="d-flex flex-wrap align-items-end gap-4 mb-4">
+                                                            <div>
+                                                                <label for="weightOfQuestion" class="form-label fw-bold">وزن سوال</label>
+                                                                <input id="weightOfQuestion" name="Weight" type="number"
+                                                                       class="form-control form-control-solid w-125px text-center"
+                                                                       value="1" min="-10" max="10" step="1" required />
+                                                            </div>
+                                                            <p id="vote-option-priority-help" class="text-muted mb-1">
+                                                                اولویت هر گزینه خودکار تعیین می‌شود و می‌توانید آن را تغییر دهید.
+                                                            </p>
+                                                        </div>
+                                                        <details class="mb-4 text-muted">
+                                                            <summary class="fw-semibold">راهنمای وزن‌گذاری گزینه‌ها</summary>
+                                                            <ul class="mb-0 mt-2">
+                                                                <li>برای گزینه‌های سوال‌های با بار معنایی منفی، وزن مثبت تعیین کنید.</li>
+                                                                <li>برای سوال‌های با بار معنایی مثبت، وزن گزینه‌های مثبت و منفی را قرینه تعیین کنید.</li>
+                                                            </ul>
+                                                        </details>
                                                         <div class="d-flex flex-column">
                                                             <div id="kt_repeater_RadioShowcase">
                                                                 <div class="form-group">
                                                                     <div data-repeater-list="item_List">
-                                                                        <div class="cases">
-                                                                            <!-- کلمه نکته در بالا -->
-                                                                            <div class="mt-2">
-                                                                                <span class="text-tip-option">* نکته:</span>
-                                                                            </div>
-
-
-                                                                            <!-- ۵ متن زیر هم -->
-                                                                            <div class="d-flex flex-column gap-1">
-                                                                                <div>
-                                                                                    <span class="text-cases-option" title="Hint توضیح متن 1">1. برای گزینه‌های سوالاتی که بار معنایی منفی دارند، وزن مثبت تعیین کنید </span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span class="text-cases-option" title="Hint توضیح متن 2">2. برای گزینه سوالات با بار معنایی مثبت، وزن گزینه های مثبت و  منفی میبایست قرینه باشند</span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <span class="text-cases-option-image" title="Hint توضیح متن 2">3. در صورت بارگذاری عکس، برای مشاهده آن لطفا کمی کوشا باشید</span>
-                                                                                </div>
-
-                                                                            </div>
-                                                                        </div>
-
                                                                         <div class="vote-option-header vote-option-grid">
                                                                             <div class="header-cell">متن گزینه</div>
                                                                             <div class="header-cell text-center">انتخاب عکس</div>
@@ -230,17 +196,16 @@
                                                                             <div class="header-cell text-center"></div>
                                                                         </div>
 
-                                                                        @foreach (var item in Model.VoteQuestionItems.Where(x => x != null))
+                                                                        @foreach (var item in Model.VoteQuestionItems?.Where(x => x != null).DefaultIfEmpty() ?? new[] { Model.VoteQuestionItems?.FirstOrDefault() })
                                                                         {
                                                                             <div data-repeater-item class="vote-option-row vote-option-grid">
 
                                                                                 <div class="grid-cell">
                                                                                     <input type="text"
-                                                                                           asp-for="@item.Title"
                                                                                            class="form-control form-control-solid required VoteQuestionItemTitle"
                                                                                            name="VoteQuestionItemTitle"
-                                                                                           value="@item.Title"
-                                                                                           placeholder="متن گزینه"
+                                                                                           value="@(item?.Title)"
+                                                                                           placeholder="متن گزینه" aria-label="متن گزینه"
                                                                                            maxlength="200" />
                                                                                 </div>
 
@@ -249,7 +214,7 @@
 
                                                                                         <!-- دکمه انتخاب / تیک سبز -->
                                                                                         <div class="d-inline-flex align-items-center gap-2">
-                                                                                            <label class="btn chooseImageQuestion btn-md my-1 js-label-trigger @(string.IsNullOrEmpty(item.ImageUrl) ? "" : "d-none")">
+                                                                                            <label class="btn chooseImageQuestion btn-md my-1 js-label-trigger @(string.IsNullOrEmpty(item?.ImageUrl) ? "" : "d-none")">
                                                                                                 <i class="ki-duotone ki-upload fs-6 me-1"></i>
                                                                                                 انتخاب کنید
 
@@ -261,9 +226,9 @@
                                                                                             <!-- تیک سبز: دقیقاً هم‌تراز وسط دکمه -->
                                                                                         </div>
                                                                                         <!-- پیش‌نمایش عکس (وقتی عکس جدید انتخاب شد یا عکس قبلی هست) -->
-                                                                                        <div class="image-preview-wrapper @(string.IsNullOrEmpty(item.ImageUrl) ? "d-none" : "")">
+                                                                                        <div class="image-preview-wrapper @(string.IsNullOrEmpty(item?.ImageUrl) ? "d-none" : "")">
                                                                                             <button type="button" class="remove-image-btn js-remove-image" title="حذف عکس">×</button>
-                                                                                            <img src="@item.ImageUrl" class="option-image-preview" alt="preview" />
+                                                                                            <img src="@(item?.ImageUrl)" class="option-image-preview" alt="preview" />
                                                                                         </div>
                                                                                         <span class="js-upload-status d-none align-items-center"
                                                                                               title="تصویر انتخاب و بارگذاری شد">
@@ -278,35 +243,34 @@
                                                                                     <input type="number"
                                                                                            class="form-control form-control-solid w-100 OrderIndex"
                                                                                            name="OrderIndex"
-                                                                                           value="@item.OrderIndex"
+                                                                                           value="@(item?.OrderIndex == 0 && string.IsNullOrWhiteSpace(item?.Title) ? null : item?.OrderIndex)"
                                                                                            placeholder="اولویت"
-                                                                                           min="0"
-                                                                                           max="999"
-                                                                                           required
-                                                                                           oninput="validateVoteQuestionItemOrderIndexInput(this)" />
+                                                                                           aria-label="اولویت گزینه"
+                                                                                           aria-describedby="vote-option-priority-help"
+                                                                                           min="0" max="999" step="1" required />
                                                                                 </div>
 
                                                                                 <div class="grid-cell d-flex justify-content-center">
                                                                                     <div class="weight-box">
                                                                                         <input type="range"
                                                                                                class="form-control form-range Weight"
-                                                                                               name="Weight"
-                                                                                               value="@item.Weight"
+                                                                                               name="Weight" aria-label="وزن گزینه"
+                                                                                               value="@(item?.Weight ?? 0)"
                                                                                                min="-10"
                                                                                                max="10"
                                                                                                step="1"
                                                                                                dir="ltr"
                                                                                                required />
-                                                                                        <div class="d-flex justify-content-between align-items-center mt-1">
-                                                                                            <span class="text-muted fs-8">10</span>
-                                                                                            <span class="weight-value-display fw-bold">@item.Weight</span>
+                                                                                        <div class="d-flex justify-content-between align-items-center mt-1" dir="ltr">
                                                                                             <span class="text-muted fs-8">-10</span>
+                                                                                            <span class="weight-value-display fw-bold">@(item?.Weight ?? 0)</span>
+                                                                                            <span class="text-muted fs-8">10</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 <div class="grid-cell text-center">
-                                                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-sm btn-light-danger">
+                                                                                    <a href="javascript:;" aria-label="حذف گزینه" data-repeater-delete class="btn btn-icon btn-sm btn-light-danger">
                                                                                         <i class="fonticon-trash fs-2x"></i>
                                                                                     </a>
                                                                                 </div>
