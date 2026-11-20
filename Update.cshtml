@@ -161,6 +161,7 @@
                                                                         {
                                                                             foreach (var item in Model.VoteQuestionItemsList.Where(x => x != null))
                                                                             {
+                                                                                var savedWeight = Convert.ToString(item.Weight, System.Globalization.CultureInfo.InvariantCulture);
                                                                                 <div data-repeater-item class="vote-option-row">
                                                                                     <!-- فیلدهای مخفی برای مقادیر ثبت شده قبلی -->
                                                                                     <input type="hidden" class="VoteQuestionItemId" value="@item.VoteQuestionItemId" />
@@ -232,16 +233,17 @@
                                                                                                 <input type="range"
                                                                                                        class="form-control form-range Weight"
                                                                                                        name="Weight" aria-label="وزن گزینه"
-                                                                                                       value="@item.Weight"
+                                                                                                       value="@savedWeight"
+                                                                                                       data-saved-weight="@(savedWeight ?? string.Empty)"
                                                                                                        min="-10"
                                                                                                        max="10"
                                                                                                        step="1"
                                                                                                        dir="ltr"
                                                                                                        required />
-                                                                                                <div class="d-flex justify-content-between align-items-center mt-1">
-                                                                                                    <span class="text-muted fs-8">10</span>
-                                                                                                    <span class="weight-value-display fw-bold text-primary">@item.Weight</span>
-                                                                                                    <span class="text-muted fs-8">0</span>
+                                                                                                <div class="d-flex justify-content-between align-items-center gap-1 mt-1" dir="ltr">
+                                                                                                    <span class="weight-min text-muted fs-8">-10</span>
+                                                                                                    <output class="weight-value-display badge badge-light-primary fw-bold" dir="auto">@(string.IsNullOrEmpty(savedWeight) ? "ثبت نشده" : savedWeight)</output>
+                                                                                                    <span class="weight-max text-muted fs-8">10</span>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -319,9 +321,9 @@
                                                                                                    dir="ltr"
                                                                                                    required />
                                                                                             <div class="d-flex justify-content-between align-items-center mt-1" dir="ltr">
-                                                                                                <span class="text-muted fs-8">-10</span>
-                                                                                                <span class="weight-value-display fw-bold text-primary">1</span>
-                                                                                                <span class="text-muted fs-8">10</span>
+                                                                                                <span class="weight-min text-muted fs-8">-10</span>
+                                                                                                <output class="weight-value-display badge badge-light-primary fw-bold" dir="auto">1</output>
+                                                                                                <span class="weight-max text-muted fs-8">10</span>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>

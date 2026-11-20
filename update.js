@@ -250,11 +250,12 @@ function loadAttachmentFileTypes() {
     });
 }
 
-function updateWeightDisplay(element) {
-    var value = $(element).val();
-    $(element).siblings('.d-flex').find('.weight-value-display').text(value);
+function updateWeightDisplay(input, value = input.value) {
+    const $box = $(input).closest('.weight-box');
+    $box.find('.weight-min').text(input.min);
+    $box.find('.weight-max').text(input.max);
+    $box.find('.weight-value-display').text(value);
 }
-
 
 $(document).ready(function () {
     let selected = $('#VoteQuestionTypeId').val();
@@ -263,11 +264,27 @@ $(document).ready(function () {
     let page = 1;
     let isLoading = false;
 
-    $('.Weight[type="range"]').each(function () {
-        updateWeightDisplay(this);
+    const $choiceOptions = $('#kt_repeater_RadioShowcase');
+
+    $choiceOptions.find('.Weight[data-saved-weight]').each(function () {
+        const savedWeight = this.dataset.savedWeight;
+        const value = Number(savedWeight);
+        if (savedWeight === '' || !Number.isFinite(value)) {
+            return;
+        }
+
+        // Keep saved values from being rounded or clamped by the slider.
+        this.min = Math.min(Number(this.min), value);
+        this.max = Math.max(Number(this.max), value);
+        if (!Number.isInteger(value)) {
+            this.step = 'any';
+        }
+        this.value = savedWeight;
+        updateWeightDisplay(this, savedWeight);
     });
 
-    $(document).on('input', '.Weight[type="range"]', function () {
+    $choiceOptions.on('input', '.Weight', function () {
+        delete this.dataset.savedWeight;
         updateWeightDisplay(this);
     });
 
@@ -413,7 +430,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#kt_repeater_RadioShowcase').repeater({
+    $choiceOptions.repeater({
         initEmpty: false,
 
         show: function () {
@@ -427,7 +444,12 @@ $(document).ready(function () {
             $row.find('.VoteQuestionItemTitle').val('');
             $row.find('.OrderIndex').val('');
 
-            $row.find('.Weight').val(1).each(function () {
+            $row.find('.Weight').each(function () {
+                delete this.dataset.savedWeight;
+                this.min = '-10';
+                this.max = '10';
+                this.step = '1';
+                this.value = '1';
                 updateWeightDisplay(this);
             });
 
@@ -1089,7 +1111,8 @@ if (submitButton) {
 
                 const itemId = $row.find('.VoteQuestionItemId').val();
                 const title = $row.find('.VoteQuestionItemTitle').val();
-                const weight = $row.find('.Weight').val();
+                const weightInput = $row.find('.Weight')[0];
+                const weight = weightInput?.dataset.savedWeight ?? weightInput?.value;
                 const orderIndex = $row.find('.OrderIndex').val();
                 const existingImageUrl = $row.find('.ExistingImageUrl').val();
 
@@ -1106,7 +1129,9 @@ if (submitButton) {
 
                 formData.append(`${prefix}.VoteQuestionItemId`, itemId || '');
                 formData.append(`${prefix}.Title`, title || '');
-                formData.append(`${prefix}.Weight`, weight || '1');
+                if (weight) {
+                    formData.append(`${prefix}.Weight`, weight);
+                }
                 formData.append(`${prefix}.OrderIndex`, orderIndex || '0');
                 formData.append(`${prefix}.ImageUrl`, existingImageUrl || '');
 
@@ -1463,14 +1488,6 @@ $(document).on('click', '.js-remove-image', function (e) {
         $existingUrl.val('');
     }
 });
-
-// ۳. به‌روزرسانی لحظه‌ای برچسب وزن (Range) در زمان تغییر مقادیر
-$(document).on('input', '.Weight', function () {
-    const val = $(this).val();
-    $(this).closest('[data-repeater-item]').find('.weight-value-display').text(val);
-});
-
-
 
 // ۱. رویداد کلیک روی عکس برای بزرگنمایی
 $(document).on('click', '.option-image-preview', function (e) {
