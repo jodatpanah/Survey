@@ -24,10 +24,10 @@ function fillOptionPriorities() {
     }
 }
 
-function validateOptionPriorities() {
+function validateChoiceOptions() {
     fillOptionPriorities();
     const invalidField = document.querySelector(
-        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid, #kt_repeater_RadioShowcase .Weight:enabled:invalid'
     );
     if (invalidField) {
         invalidField.reportValidity();
@@ -85,11 +85,6 @@ $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
 });
 
 
-function updateWeightDisplay(element) {
-    var value = $(element).val();
-    $(element).siblings('.d-flex').find('.weight-value-display').text(value);
-}
-
 $(document).ready(function () {
 
     //
@@ -101,19 +96,21 @@ $(document).ready(function () {
     let isLastPage2 = false;
     let selectedGroup;
     var selected = null;
-    $('.Weight[type="range"]').each(function () {
-        updateWeightDisplay(this);
+    const $choiceOptions = $('#kt_repeater_RadioShowcase');
+
+    $choiceOptions.on('click', '.js-option-weight-step', function () {
+        const input = $(this).siblings('.Weight')[0];
+        if (input.disabled) {
+            return;
+        }
+
+        if (this.dataset.weightStep === '1') {
+            input.stepUp();
+        } else {
+            input.stepDown();
+        }
     });
 
-    // رویداد تغییر
-    $(document).on('input', '.Weight[type="range"]', function () {
-        updateWeightDisplay(this);
-    });
-
-    // رویداد تغییر برای اسلایدرها
-    $(document).on('input', '.Weight[type="range"]', function () {
-        updateWeightDisplay(this);
-    });
     $('#VoteQuestionGroupId').select2().on('select2:select', function (e) {
         var data = e.params.data;
         selectedGroup = data.id;
@@ -384,23 +381,21 @@ $(document).ready(function () {
 
 
 
-    $('#kt_repeater_RadioShowcase').repeater({
+    $choiceOptions.repeater({
         initEmpty: false,
 
         show: function () {
             const $row = $(this);
             $row.find('.OrderIndex').val('');
             fillOptionPriorities();
-            $row.find('.Weight').val(1).each(function () {
-                updateWeightDisplay(this);
-            });
+            $row.find('.Weight').val('1');
             $row.slideDown(function () {
                 $row.find('.VoteQuestionItemTitle').trigger('focus');
             });
         },
 
         hide: function (deleteElement) {
-            $(this).find('.OrderIndex').prop('disabled', true);
+            $(this).find('.OrderIndex, .Weight').prop('disabled', true);
             $(this).slideUp(deleteElement);
         }
     });
@@ -642,7 +637,7 @@ if (submitButton) {
             return;
         }
 
-        if (Number(selected) === 1 && !validateOptionPriorities()) {
+        if (Number(selected) === 1 && !validateChoiceOptions()) {
             return;
         }
 
@@ -824,7 +819,7 @@ if (submitButton) {
             $('#kt_repeater_RadioShowcase [data-repeater-item]:has(.OrderIndex:enabled)').each(function () {
                 const $row = $(this);
                 var title = $(this).find('.VoteQuestionItemTitle').val();
-                var weight = $(this).find('.Weight').val();
+                const weight = $row.find('.Weight')[0].valueAsNumber;
                 var orderIndex = $(this).find('.OrderIndex').val();
                 var imageFile = $row.find('.file-input-option').first()[0]?.files?.[0];
 
@@ -834,7 +829,7 @@ if (submitButton) {
                 }
 
                 formData.append(`VoteQuestionItems[${itemIndex}].Title`, title || '');
-                formData.append(`VoteQuestionItems[${itemIndex}].Weight`, weight || '1');
+                formData.append(`VoteQuestionItems[${itemIndex}].Weight`, String(weight));
                 formData.append(`VoteQuestionItems[${itemIndex}].OrderIndex`, orderIndex || '');
 
                 if (imageFile) {

@@ -138,6 +138,9 @@
                                                         <p id="vote-option-priority-help" class="text-muted mb-4">
                                                             اولویت هر گزینه خودکار تعیین می‌شود و می‌توانید آن را تغییر دهید.
                                                         </p>
+                                                        <p id="vote-option-weight-help" class="text-muted mb-2">
+                                                            وزن را با عدد صحیح بین منفی ۱۰ و ۱۰ وارد کنید.
+                                                        </p>
                                                         <details class="mb-4 text-muted">
                                                             <summary class="fw-semibold">راهنمای وزن‌گذاری گزینه‌ها</summary>
                                                             <ul class="mb-0 mt-2">
@@ -229,22 +232,14 @@
 
                                                                                         <!-- ۴. وزن -->
                                                                                         <div class="grid-cell">
-                                                                                            <div class="weight-box">
-                                                                                                <input type="range"
-                                                                                                       class="form-control form-range Weight"
-                                                                                                       name="Weight" aria-label="وزن گزینه"
-                                                                                                       value="@savedWeight"
-                                                                                                       data-saved-weight="@(savedWeight ?? string.Empty)"
-                                                                                                       min="-10"
-                                                                                                       max="10"
-                                                                                                       step="1"
-                                                                                                       dir="ltr"
-                                                                                                       required />
-                                                                                                <div class="d-flex justify-content-between align-items-center gap-1 mt-1" dir="ltr">
-                                                                                                    <span class="weight-min text-muted fs-8">-10</span>
-                                                                                                    <output class="weight-value-display badge badge-light-primary fw-bold" dir="auto">@(string.IsNullOrEmpty(savedWeight) ? "ثبت نشده" : savedWeight)</output>
-                                                                                                    <span class="weight-max text-muted fs-8">10</span>
-                                                                                                </div>
+                                                                                            <div class="input-group input-group-sm flex-nowrap" dir="ltr">
+                                                                                                <button type="button" class="btn btn-light px-2 js-option-weight-step"
+                                                                                                        data-weight-step="-1" aria-label="کاهش وزن گزینه">−</button>
+                                                                                                <input type="number" class="form-control form-control-solid text-center px-1 Weight"
+                                                                                                       name="Weight" value="@savedWeight" min="-10" max="10" step="1"
+                                                                                                       aria-label="وزن گزینه" aria-describedby="vote-option-weight-help" required="@(!string.IsNullOrEmpty(savedWeight))" />
+                                                                                                <button type="button" class="btn btn-light px-2 js-option-weight-step"
+                                                                                                        data-weight-step="1" aria-label="افزایش وزن گزینه">+</button>
                                                                                             </div>
                                                                                         </div>
 
@@ -310,21 +305,14 @@
                                                                                     </div>
 
                                                                                     <div class="grid-cell">
-                                                                                        <div class="weight-box">
-                                                                                            <input type="range"
-                                                                                                   class="form-control form-range Weight"
-                                                                                                   name="Weight" aria-label="وزن گزینه"
-                                                                                                   value="1"
-                                                                                                   min="-10"
-                                                                                                   max="10"
-                                                                                                   step="1"
-                                                                                                   dir="ltr"
-                                                                                                   required />
-                                                                                            <div class="d-flex justify-content-between align-items-center mt-1" dir="ltr">
-                                                                                                <span class="weight-min text-muted fs-8">-10</span>
-                                                                                                <output class="weight-value-display badge badge-light-primary fw-bold" dir="auto">1</output>
-                                                                                                <span class="weight-max text-muted fs-8">10</span>
-                                                                                            </div>
+                                                                                        <div class="input-group input-group-sm flex-nowrap" dir="ltr">
+                                                                                            <button type="button" class="btn btn-light px-2 js-option-weight-step"
+                                                                                                    data-weight-step="-1" aria-label="کاهش وزن گزینه">−</button>
+                                                                                            <input type="number" class="form-control form-control-solid text-center px-1 Weight"
+                                                                                                   name="Weight" value="1" min="-10" max="10" step="1"
+                                                                                                   aria-label="وزن گزینه" aria-describedby="vote-option-weight-help" required />
+                                                                                            <button type="button" class="btn btn-light px-2 js-option-weight-step"
+                                                                                                    data-weight-step="1" aria-label="افزایش وزن گزینه">+</button>
                                                                                         </div>
                                                                                     </div>
 

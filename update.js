@@ -250,13 +250,6 @@ function loadAttachmentFileTypes() {
     });
 }
 
-function updateWeightDisplay(input, value = input.value) {
-    const $box = $(input).closest('.weight-box');
-    $box.find('.weight-min').text(input.min);
-    $box.find('.weight-max').text(input.max);
-    $box.find('.weight-value-display').text(value);
-}
-
 $(document).ready(function () {
     let selected = $('#VoteQuestionTypeId').val();
     console.log('selected مقدار اولیه:', selected);
@@ -266,31 +259,25 @@ $(document).ready(function () {
 
     const $choiceOptions = $('#kt_repeater_RadioShowcase');
 
-    $choiceOptions.find('.Weight[data-saved-weight]').each(function () {
-        const savedWeight = this.dataset.savedWeight;
-        if (savedWeight === '') {
-            return;
+    $choiceOptions.find('.Weight').each(function () {
+        const value = this.valueAsNumber;
+        if (Number.isSafeInteger(value)) {
+            this.min = Math.min(Number(this.min), value);
+            this.max = Math.max(Number(this.max), value);
         }
-
-        const value = Number(savedWeight);
-        if (!Number.isSafeInteger(value)) {
-            this.setCustomValidity('وزن گزینه باید عدد صحیح باشد.');
-            updateWeightDisplay(this, 'وزن نامعتبر');
-            return;
-        }
-
-        // Keep existing integer weights outside today's slider bounds.
-        this.min = Math.min(Number(this.min), value);
-        this.max = Math.max(Number(this.max), value);
-        this.dataset.savedWeight = String(value);
-        this.value = this.dataset.savedWeight;
-        updateWeightDisplay(this);
     });
 
-    $choiceOptions.on('input', '.Weight', function () {
-        delete this.dataset.savedWeight;
-        this.setCustomValidity('');
-        updateWeightDisplay(this);
+    $choiceOptions.on('click', '.js-option-weight-step', function () {
+        const input = $(this).siblings('.Weight')[0];
+        if (input.disabled) {
+            return;
+        }
+
+        if (this.dataset.weightStep === '1') {
+            input.stepUp();
+        } else {
+            input.stepDown();
+        }
     });
 
     function appendOptions(data) {
@@ -450,12 +437,10 @@ $(document).ready(function () {
             $row.find('.OrderIndex').val('');
 
             $row.find('.Weight').each(function () {
-                delete this.dataset.savedWeight;
                 this.min = '-10';
                 this.max = '10';
-                this.setCustomValidity('');
+                this.required = true;
                 this.value = '1';
-                updateWeightDisplay(this);
             });
 
             // پاک کردن فایل انتخاب‌شده
@@ -1117,7 +1102,7 @@ if (submitButton) {
                 const itemId = $row.find('.VoteQuestionItemId').val();
                 const title = $row.find('.VoteQuestionItemTitle').val();
                 const weightInput = $row.find('.Weight')[0];
-                const weight = weightInput?.dataset.savedWeight ?? weightInput?.value;
+                const weight = weightInput.valueAsNumber;
                 const orderIndex = $row.find('.OrderIndex').val();
                 const existingImageUrl = $row.find('.ExistingImageUrl').val();
 
@@ -1134,8 +1119,8 @@ if (submitButton) {
 
                 formData.append(`${prefix}.VoteQuestionItemId`, itemId || '');
                 formData.append(`${prefix}.Title`, title || '');
-                if (weight) {
-                    formData.append(`${prefix}.Weight`, weight);
+                if (!Number.isNaN(weight)) {
+                    formData.append(`${prefix}.Weight`, String(weight));
                 }
                 formData.append(`${prefix}.OrderIndex`, orderIndex || '0');
                 formData.append(`${prefix}.ImageUrl`, existingImageUrl || '');
