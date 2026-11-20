@@ -290,7 +290,22 @@
 @media (min-width: 64rem) {
     .question-editor .question-editor-overview {
         grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 1fr);
-        align-items: start;
+        align-items: stretch;
+    }
+
+    .question-editor .question-editor-overview > .question-editor-panel:first-child,
+    .question-editor .question-editor-overview > .question-editor-panel:first-child .question-editor-fields > :first-child {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .question-editor .question-editor-overview > .question-editor-panel:first-child .question-editor-fields {
+        flex: 1;
+        grid-template-rows: minmax(min-content, 1fr) auto;
+    }
+
+    .question-editor .question-editor-overview textarea[name="Title"] {
+        flex: 1;
     }
 
     .question-editor .question-editor-type-layout {
