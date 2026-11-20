@@ -108,10 +108,8 @@
 
                                                                                 <div class="grid-cell d-flex justify-content-center">
                                                                                     <span class="question-editor-mobile-label" aria-hidden="true">تصویر</span>
-                                                                                    <div class="file-preview-box w-100 align-items-center justify-content-center gap-2 flex-wrap">
-
-                                                                                        <!-- دکمه انتخاب / تیک سبز -->
-                                                                                        <div class="d-inline-flex align-items-center gap-2">
+                                                                                    <div class="file-preview-box question-editor-image-control w-100">
+                                                                                        <div class="file-upload-button-wrapper">
                                                                                             <label class="btn chooseImageQuestion btn-md my-1 js-label-trigger @(string.IsNullOrEmpty(item?.ImageUrl) ? "" : "d-none")">
                                                                                                 <i class="ki-duotone ki-upload fs-6 me-1"></i>
                                                                                                 انتخاب کنید
@@ -120,20 +118,17 @@
                                                                                                        class="d-none file-input-option ImageFileCreate"
                                                                                                        accept="image/*" />
                                                                                             </label>
-
-                                                                                            <!-- تیک سبز: دقیقاً هم‌تراز وسط دکمه -->
                                                                                         </div>
-                                                                                        <!-- پیش‌نمایش عکس (وقتی عکس جدید انتخاب شد یا عکس قبلی هست) -->
-                                                                                        <div class="image-preview-wrapper @(string.IsNullOrEmpty(item?.ImageUrl) ? "d-none" : "")">
-                                                                                            <button type="button" class="remove-image-btn js-remove-image" title="حذف عکس">×</button>
-                                                                                            <img src="@(item?.ImageUrl)" class="option-image-preview" alt="preview" />
+                                                                                        <div class="question-editor-image-preview">
+                                                                                            <div class="image-preview-wrapper @(string.IsNullOrEmpty(item?.ImageUrl) ? "d-none" : "")">
+                                                                                                <button type="button" class="remove-image-btn js-remove-image" title="حذف عکس">×</button>
+                                                                                                <img src="@(item?.ImageUrl)" class="option-image-preview" alt="preview" />
+                                                                                            </div>
+                                                                                            <span class="js-upload-status d-none align-items-center"
+                                                                                                  title="تصویر انتخاب و بارگذاری شد">
+                                                                                                <i class="fas fa-check-circle text-success fs-4"></i>
+                                                                                            </span>
                                                                                         </div>
-                                                                                        <span class="js-upload-status d-none align-items-center"
-                                                                                              title="تصویر انتخاب و بارگذاری شد">
-                                                                                            <i class="fas fa-check-circle text-success fs-4"></i>
-                                                                                        </span>
-
-
                                                                                     </div>
                                                                                 </div>
 
