@@ -1,0 +1,2504 @@
+@model Survey.FrameWork.common.VotePackage.CreateVotePackageCommand
+
+@{
+    ViewData["Title"] = "Create";
+
+}
+
+@section Styles {
+    <link href="~/assets/css/CreateVotePackage.css" rel="stylesheet" />
+    <link href="../assets/css/allowedUsers.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/VotePackageGraph.css" rel="stylesheet" type="text/css" asp-append-version="true" />
+    @* <link href="../assets/css/HierarchySelectorPartial.css" rel="stylesheet" type="text/css" /> *@
+}
+
+<div class="mb-5" id="setFormDetails">
+    <div class="stepper stepper-pills" id="kt_stepper_example_clickable">
+        <div class="card">
+            <div class="card-header align-items-center py-3 gap-2 gap-md-5">
+                <!-- این div را داخل یا بالای stepper wrapper قرار بده -->
+                <div id="stepper-overlay" class="stepper-overlay">
+                    <div class="stepper-overlay-content">
+                        <h4 class="stepper-overlay-title">ابتدا نوع نظرسنجی را انتخاب کنید</h4>
+                        <p class="stepper-overlay-desc">برای مشاهده و تکمیل مراحل، لطفاً نوع نظرسنجی مورد نظر خود را از بالای صفحه انتخاب نمایید.</p>
+                    </div>
+                </div>
+
+                <div class="stepper-nav flex-center flex-wrap mx-auto w-100 mx-auto  mw-950px stepper-rtl">
+                    <!--begin::Step 1-->
+                    <div class="stepper-item current" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                        <div class="stepper-topPart w-100 steper-100">
+                            <div class="stepper-icon w-50px h-50px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">
+                                    <span class="font-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                                            <defs>
+                                                <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#490a43" />
+                                                    <stop offset="100%" stop-color="#7b1a6e" />
+                                                </linearGradient>
+                                            </defs>
+                                            <rect width="64" height="64" rx="16" fill="url(#g1)" />
+                                            <rect x="16" y="10" width="26" height="34" rx="4" fill="none" stroke="white" stroke-width="2.5" />
+                                            <rect x="22" y="18" width="14" height="3" rx="1.5" fill="white" />
+                                            <rect x="22" y="25" width="10" height="3" rx="1.5" fill="white" />
+                                            <rect x="22" y="32" width="12" height="3" rx="1.5" fill="white" />
+                                            <g transform="translate(39, 38) rotate(-45)">
+                                                <rect x="-4" y="-12" width="8" height="16" rx="2" fill="#f0c4eb" />
+                                                <polygon points="-4,4 4,4 0,11" fill="#e89dda" />
+                                                <rect x="-4" y="-15" width="8" height="4" rx="1" fill="white" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="stepper-line  w-100"></div>
+                        </div>
+                        <div class="stepper-label px-4">
+                            <h3 class="stepper-title">مرحله 1</h3>
+                            <div class="stepper-desc">طراحی فرم</div>
+                        </div>
+                    </div>
+                    <!--begin::Step 2-->
+                    <div class="stepper-item" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                        <div class="stepper-topPart w-100 steper-100">
+                            <div class="stepper-icon w-50px h-50px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">
+                                    <span class="font-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                                            <defs>
+                                                <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#490a43" />
+                                                    <stop offset="100%" stop-color="#9c1a8a" />
+                                                </linearGradient>
+                                            </defs>
+                                            <rect width="64" height="64" rx="16" fill="url(#g2)" />
+                                            <rect x="10" y="12" width="44" height="11" rx="5" fill="white" opacity="0.15" stroke="white" stroke-width="2" />
+                                            <circle cx="20" cy="17.5" r="4" fill="#f0c4eb" />
+                                            <rect x="28" y="15" width="20" height="4" rx="2" fill="white" />
+                                            <rect x="10" y="27" width="44" height="11" rx="5" fill="white" opacity="0.15" stroke="white" stroke-width="2" />
+                                            <circle cx="20" cy="32.5" r="4" fill="#e89dda" />
+                                            <rect x="28" y="30" width="24" height="4" rx="2" fill="white" />
+                                            <rect x="10" y="42" width="44" height="11" rx="5" fill="white" opacity="0.15" stroke="white" stroke-width="2" />
+                                            <circle cx="20" cy="47.5" r="4" fill="#c96bb8" />
+                                            <rect x="28" y="45" width="18" height="4" rx="2" fill="white" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="stepper-line w-100"></div>
+                        </div>
+                        <div class="stepper-label px-4">
+                            <h3 class="stepper-title">مرحله 2</h3>
+                            <div class="stepper-desc"> لیست خدمت</div>
+                        </div>
+                    </div>
+                    <!--begin::Step 3-->
+                    <div class="stepper-item" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                        <div class="stepper-topPart w-100 steper-100">
+                            <div class="stepper-icon w-50px h-50px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">
+                                    <span class="font-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                                            <defs>
+                                                <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#490a43" />
+                                                    <stop offset="100%" stop-color="#6b0f5e" />
+                                                </linearGradient>
+                                            </defs>
+                                            <rect width="64" height="64" rx="16" fill="url(#g3)" />
+                                            <rect x="13" y="14" width="34" height="40" rx="4" fill="none" stroke="white" stroke-width="2.5" />
+                                            <rect x="23" y="9" width="14" height="9" rx="3" fill="white" />
+                                            <rect x="20" y="26" width="6" height="6" rx="1.5" fill="none" stroke="#f0c4eb" stroke-width="2.5" />
+                                            <polyline points="21,29 22.5,30.5 25.5,27" fill="none" stroke="#f0c4eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <rect x="30" y="27" width="14" height="3.5" rx="1.75" fill="white" />
+                                            <rect x="20" y="36" width="6" height="6" rx="1.5" fill="none" stroke="#f0c4eb" stroke-width="2.5" />
+                                            <polyline points="21,39 22.5,40.5 25.5,37" fill="none" stroke="#f0c4eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <rect x="30" y="37" width="18" height="3.5" rx="1.75" fill="white" />
+                                            <text x="36" y="53" font-size="16" font-family="Arial" font-weight="900" fill="#f0c4eb" text-anchor="middle">?</text>
+                                        </svg>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="stepper-line w-100"></div>
+                        </div>
+                        <div class="stepper-label px-4">
+                            <h3 class="stepper-title">مرحله 3</h3>
+
+                            <div class="stepper-desc"> پرسشنامه و شروط</div>
+                        </div>
+                    </div>
+                    <!--begin::Step 4-->
+                    <div class="stepper-item" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                        <div class="stepper-topPart w-100 steper-100">
+                            <div class="stepper-icon w-50px h-50px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">
+                                    <span class="stepper-number">
+                                        <span class="font-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                                                <defs>
+                                                    <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#490a43" />
+                                                        <stop offset="100%" stop-color="#8c1a7d" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <rect width="64" height="64" rx="16" fill="url(#g4)" />
+                                                <circle cx="32" cy="20" r="8" fill="white" />
+                                                <path d="M16,50 C16,38 48,38 48,50" fill="white" />
+                                                <circle cx="12" cy="26" r="6" fill="white" opacity="0.8" />
+                                                <path d="M2,50 C2,41 22,41 22,50" fill="white" opacity="0.8" />
+                                                <circle cx="52" cy="26" r="6" fill="white" opacity="0.8" />
+                                                <path d="M42,50 C42,41 62,41 62,50" fill="white" opacity="0.8" />
+                                                <line x1="32" y1="20" x2="12" y2="26" stroke="#f0c4eb" stroke-width="2.5" stroke-dasharray="4,2" />
+                                                <line x1="32" y1="20" x2="52" y2="26" stroke="#f0c4eb" stroke-width="2.5" stroke-dasharray="4,2" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="stepper-line  w-100"></div>
+                        </div>
+                        <div class="stepper-label px-4">
+                            <h3 class="stepper-title">مرحله 4</h3>
+                            <div class="stepper-desc">  خدمات دهندگان  </div>
+                        </div>
+                        <div class="stepper-line w-40px"></div>
+                    </div>
+
+                    <!--begin::Step 5-->
+                    <div class="stepper-item" data-kt-stepper-element="nav" data-kt-stepper-action="step">
+                        <div class="stepper-topPart w-100 steper-100">
+                            <div class="stepper-icon w-50px h-50px">
+                                <i class="stepper-check fas fa-check"></i>
+                                <span class="stepper-number">
+                                    <span class="font-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                                            <defs>
+                                                <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#490a43" />
+                                                    <stop offset="100%" stop-color="#9c1a8a" />
+                                                </linearGradient>
+                                            </defs>
+                                            <!-- بک‌گراند مربعی با گوشه‌های گرد و گرادیانت یکپارچه -->
+                                            <rect width="64" height="64" rx="16" fill="url(#g3)" />
+
+                                            <!-- کاربر فرعی / پس‌زمینه (حالت لیست کاربران) -->
+                                            <circle cx="43" cy="22" r="5.5" fill="#e89dda" opacity="0.6" />
+                                            <path d="M33 41c0-4.5 4.5-8 10-8s10 3.5 10 8" fill="none" stroke="#e89dda" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+
+                                            <!-- کاربر اصلی / شاخص -->
+                                            <circle cx="25" cy="23" r="7.5" fill="#f0c4eb" stroke="white" stroke-width="1.5" />
+                                            <path d="M11 47c0-6.5 6.2-11.5 14-11.5s14 5 14 11.5" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="stepper-line  w-100"></div>
+                        </div>
+                        <div class="stepper-label px-4">
+                            <h3 class="stepper-title">مرحله 5</h3>
+                            <div class="stepper-desc">  لیست کاربران  </div>
+                        </div>
+                        <div class="stepper-line w-40px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="seprator"></div>
+        <div class="card mt-5">
+            <div class="card-header card-header-stretch">
+                <div class="card-title d-flex align-items-center w-100 mx-auto  mw-950px">
+                    <span class="svg-icon svg-icon-1 svg-icon-primary me-3 lh-0">
+                        <i class="fa fa-clipboard-check fs-2  text-VotePackageTitle"></i>
+                    </span>
+
+
+                    <h3 class="m-0 text-gray-600 fs-5 ">
+                        <span class="text-gray-600"> اطلاعات فرم نظرسنجی</span>
+                        <span class="fw-bolder text-gray-900" id="VotePackageTitleGET"></span>
+                    </h3>
+
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mx-auto w-100 pb-10 stepper-content">
+                    <!--begin::Step 1-->
+                    <div class="current" data-kt-stepper-element="content" data-original-step="1">
+                        <div class="w-100 mx-auto  mw-950px">
+                            <form id="add_question" class="mt-4">
+                                @Html.AntiForgeryToken()
+                                <div class="survey-section-card mb-8">
+
+                                    <div class="fv-row mb-6">
+                                        <label class="d-flex align-items-center fs-5 fw-bolder mb-2">
+                                            <span class="required">انتخاب نوع نظرسنجی</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7"
+                                               data-bs-toggle="tooltip"
+                                               title="انتخاب نوع نظرسنجی"></i>
+                                        </label>
+
+                                        <div class="text-muted fs-7">
+                                            نوع نظرسنجی، ساختار و جریان کلی فرم را مشخص می‌کند.
+                                        </div>
+                                    </div>
+
+                                    <div class="survey-type-list-wrapper" id="SurveyTypeList">
+                                        <label class="survey-type-card">
+                                            <input type="radio" name="SurveyTypeSelect" id="SurveyTypeId" value="4" />
+
+                                            <div class="survey-card-body">
+                                                <div class="survey-card-icon">
+                                                    <div class="survey-type-img-container type-1">
+                                                        <img src="\Icon\SurveyType\Link.svg" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="survey-card-content">
+                                                    <div class="survey-card-title">لینک</div>
+                                                    <div class="survey-card-subtitle">برای انتخاب کلیک کنید</div>
+                                                </div>
+
+                                                <div class="survey-card-check">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <label class="survey-type-card">
+                                            <input type="radio" name="SurveyTypeSelect" id="SurveyTypeId" value="3" />
+
+                                            <div class="survey-card-body">
+                                                <div class="survey-card-icon">
+                                                    <div class="survey-type-img-container type-2">
+                                                        <img src="\Icon\SurveyType\sms.svg" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="survey-card-content">
+                                                    <div class="survey-card-title">پیامک</div>
+                                                    <div class="survey-card-subtitle">برای انتخاب کلیک کنید</div>
+                                                </div>
+
+                                                <div class="survey-card-check">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <label class="survey-type-card">
+                                            <input type="radio" name="SurveyTypeSelect" id="SurveyTypeId" value="2" />
+
+                                            <div class="survey-card-body">
+                                                <div class="survey-card-icon">
+                                                    <div class="survey-type-img-container type-3">
+                                                        <img src="\Icon\Qr.svg" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="survey-card-content">
+                                                    <div class="survey-card-title">کیو آر کد </div>
+                                                    <div class="survey-card-subtitle">برای انتخاب کلیک کنید</div>
+                                                </div>
+
+                                                <div class="survey-card-check">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div id="ErrorSurveyTypeList"
+                                         class="fv-plugins-message-container invalid-feedback d-none text-center mt-5">
+                                        <div>نوع نظرسنجی را انتخاب نمایید</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="survey-settings">
+                                    <div class="fv-row">
+                                        <label class="d-flex align-items-center fs-5 fw-bolder mb-4">
+                                            <span class="required">تنظیمات فرم نظرسنجی</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" تنظیمات فرم نظرسنجی"></i>
+                                        </label>
+                                    </div>
+
+                                    <div class="setting-card">
+
+                                        <div class="setting-info">
+                                            <div class="setting-icon">
+                                                <img src="assets/media/icons/duotune/general/gen029.svg">
+                                            </div>
+
+                                            <div>
+                                                <div class="setting-title">نظرسنجی پیش فرض</div>
+                                                <div class="setting-desc">این نظرسنجی به عنوان پیش فرض نمایش داده می‌شود</div>
+                                            </div>
+                                        </div>
+
+                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="checkbox" asp-for="IsDefault" value="false" />
+                                            <span class="form-check-label fw-bold text-muted"></span>
+                                        </label>
+
+                                    </div>
+
+
+                                    <div class="setting-card">
+
+                                        <div class="setting-info">
+                                            <div class="setting-icon">
+                                                <img src="assets/media/icons/duotune/general/gen051.svg">
+                                            </div>
+
+                                            <div>
+                                                <div class="setting-title">اجبار احراز هویت</div>
+                                                <div class="setting-desc">کاربر برای پاسخ باید وارد حساب شود</div>
+                                            </div>
+                                        </div>
+
+                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="checkbox" checked="checked" asp-for="IsLoginMandatory" />
+                                            <span class="form-check-label fw-bold text-muted"></span>
+                                        </label>
+
+                                    </div>
+
+
+                                    <div class="setting-card">
+
+                                        <div class="setting-info">
+                                            <div class="setting-icon">
+                                                <img src="assets/media/icons/duotune/general/gen048.svg">
+                                            </div>
+
+                                            <div>
+                                                <div class="setting-title">وضعیت فعال</div>
+                                                <div class="setting-desc">فعال یا غیرفعال بودن فرم</div>
+                                            </div>
+                                        </div>
+
+                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="checkbox" checked="checked" asp-for="IsActive" />
+                                            <span class="form-check-label fw-bold text-muted"></span>
+                                        </label>
+
+                                    </div>
+
+                                </div>
+                                <div class="mb-6 mt-2 row">
+                                    <div class="col-md-6 col-md-6 fv-row fv-plugins-icon-container">
+                                        <label for="Title" class="required fs-6 fw-bold mb-1">
+                                            <span class="px-2"> عنوان  </span>
+                                            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="حداکثر 200 کاراکتر می توانید وارد کنید"></i>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="Title" placeholder="عنوان نظرسنجی را وارد نمایید" maxlength="200" />
+                                    </div>
+
+                                    <div class="col-md-6 col-md-6 fv-row fv-plugins-icon-container">
+                                        <label for="MaxParticipations" class=" fs-6 fw-bold mb-1">
+                                            <span class="px-2">تعداد دفعات مجاز استفاده از لینک</span>
+                                            <i class="fas fa-exclamation-circle ms-1 fs-7"
+                                               data-bs-toggle="tooltip"
+                                               title="در صورت استفاده مجدد از لینک میتوانید آن را وارد کنید">
+                                            </i>
+                                        </label>
+
+                                        <input type="number"
+                                               class="form-control form-control-solid"
+                                               id="MaxParticipations"
+                                               asp-for="MaxParticipations"
+                                               min="0"
+                                               max="100"
+                                               step="1" />
+
+                                    </div>
+
+                                    @*     <div class="col-xs-12 col-md-6 fv-row fv-plugins-icon-container">
+                                        <label for="WeightOfForm" class="fs-6 fw-bold mb-1">
+                                            <span class="required"> وزن فرم </span>
+                                            <span id="WeightValue" class="badge badge-light-primary ms-2">0</span>
+                                        </label>
+                                        <input type="range" max="10" value="0" min="-10" class="form-range WeightOfForm" id="WeightOfForm" name="WeightOfForm" dir="ltr" />
+                                        <div class="d-flex justify-content-between mt-1">
+
+                                            <small class="text-muted">10</small>
+                                            <small class="text-muted">-10</small>
+
+                                        </div>
+                                        <div id="errorweightofformtitleid" class="fv-plugins-message-container invalid-feedback d-none"><div>وزن فرم را وارد نمایید</div></div>
+                                    </div> *@
+
+
+
+
+
+                                </div>
+
+                                <div class="mb-6 fv-row">
+                                    <div class="row">
+                                        <div class="col-md-12 fv-row">
+                                            <label for="WelcomePackageTitleId" class="fs-6 mb-2">
+                                                <span class="required"> پیام پیشواز  </span>
+                                            </label>
+                                            <select class="form-select form-select-mb form-select-solid getdataClass" data-placeholder="انتخاب  پیام پیشواز" data-control="select2" id="WelcomePackageTitleId" name="WelcomePackageTitleId">
+                                                <option disabled="disabled" selected="selected" value="default" id="defaultWelcomePackageTitleId">پیام پیشواز را انتخاب نمایید</option>
+                                            </select>
+                                            <div id="ErrorWelcomePackageTitleId" class="fv-plugins-message-container invalid-feedback d-none"><div>پیام پیشواز را انتخاب نمایید</div></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="mb-6 fv-row">
+                                    <div class="row">
+                                        <div class="col-md-12 fv-row">
+                                            <label for="GoodbyePackageTitleId" class="fs-6 mb-2">
+                                                <span class="required">پیام بدرقه  </span>
+                                            </label>
+                                            <select class="form-select form-select-mb form-select-solid getdataClass" data-placeholder="انتخاب  پیام بدرقه" data-control="select2" id="GoodbyePackageTitleId" name="GoodbyePackageTitleId">
+                                                <option disabled="disabled" selected="selected" value="default" id="defaultGoodbyePackageTitleId">پیام بدرقه انتخاب نمایید</option>
+                                            </select>
+                                            <div id="ErrorSurveyGoodbyePackageTitleId" class="fv-plugins-message-container invalid-feedback d-none"><div>پیام بدرقه انتخاب نمایید</div></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="fv-row">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-8  fv-row">
+                                            <label class="required fs-6 fw-bold mb-1" for="StartDateTimePersian">
+                                                <span class="px-2"> تاریخ آغاز  </span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="تاریخ آغاز نمی تواند قبل از امروز باشد"></i>
+                                            </label>
+                                            <div class="position-relative align-items-center">
+                                                <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <input class="form-control form-control-solid ps-12 cursor-pointer" type="text" asp-for="StartDateTimePersian" placeholder="تاریخ آغاز فرم نظرسنجی را انتخاب نمایید" data-jdp data-jdp-min-date="today" readonly required data-jdp-only-date />
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="col-md-6 mb-8  fv-row">
+                                            <label class="required fs-6 fw-bold mb-1" for="ExpireDateTimePersian">
+                                                <span class="px-2"> تاریخ پایان  </span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="تاریخ پایان نمی تواند قبل آغاز باشد"></i>
+                                            </label>
+                                            <div class="position-relative align-items-center">
+                                                <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <input class="form-control form-control-solid ps-12 cursor-pointer" type="text" asp-for="ExpireDateTimePersian" placeholder="تاریخ پایان فرم نظرسجی را وارد نمایید" value="" readonly required data-jdp-only-date data-jdp />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* @await Html.PartialAsync("_AllowedUsersSelect") *@
+                                @* @await Html.PartialAsync("_HierarchySelectorPartial",
+                                new OrganizationDropdownOptions
+                                    {
+                                       Id = "PersonSelector",
+                                       TargetLevel = "person",
+                                       Title = "انتخاب فرد",
+                                       Placeholder = "فرد را انتخاب کنید",
+                                       Multiple = false,
+                                       OutputName = "PersonId"
+                                    }
+                                ) *@
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--begin::Step 2-->
+                    <div data-kt-stepper-element="content" data-original-step="2">
+                        <div class="w-100 mx-auto mw-950px">
+                            <div class="mb-6 fv-row">
+                                <div id="ProssesTypeListChoosen" class="border-0">
+                                    <div class="card border-0 shadow-none mb-6 mb-xl-9">
+                                        <div class="card-header p-0 bg-transparent border-0">
+                                            <div class="card-title">
+                                                <h2 class="d-flex align-items-center">لیست خدمت</h2>
+                                            </div>
+                                            <div class="card-toolbar">
+                                                <div class="d-flex align-items-center position-relative my-1" data-kt-view-roles-table-toolbar="base">
+                                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="#77cf97" />
+                                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="#77cf97" />
+                                                        </svg>
+                                                    </span>
+                                                    <input type="text" class="form-control form-control-solid w-250px ps-15" id="ProcessTypeSerachInput" value="@ViewBag.Name" placeholder="خدمت" />
+                                                </div>
+                                                <div class="d-flex justify-content-end align-items-center d-none" data-kt-view-roles-table-toolbar="selected">
+                                                    <div class="fw-bolder me-5">
+                                                        <span class="me-2" data-kt-view-roles-table-select="selected_count"></span>Selected
+                                                    </div>
+                                                    <button type="button" class="btn btn-danger" data-kt-view-roles-table-select="delete_selected">Delete Selected</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <table class="table align-middle table-row-dashed fs-6 mb-0 table-striped" id="kt_view_ProssesTypeChoosen">
+                                                <thead>
+                                                    <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="w-10px pe-2">
+                                                            <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                <input class="form-check-input" type="checkbox" data-kt-check="true" id="ProcessTypeSelectAll" data-kt-check-target="#kt_view_ProssesTypeChoosen" value="1" />
+                                                            </div>
+                                                        </th>
+                                                        <th class="min-w-150px">خدمت</th>
+                                                        <th class="min-w-150px"> نظرسنجی فعال</th>
+                                                        <th class="min-w-50px">کد</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fw-bold text-gray-900" id="ProssesTypeList"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--begin::Step 3-->
+                    <div data-kt-stepper-element="content" data-original-step="3">
+                        <div class="w-100 mx-auto  mw-950px">
+
+                            <input type="hidden" id="VotePackageIdGET" name="VotePackageIdGET" value="" />
+                            <input type="hidden" id="voteQuestionIdGET" name="voteQuestionIdGET" value="" />
+                            <input type="hidden"
+                                   id="VotePackageSectionIdGET"
+                                   name="VotePackageSectionIdGET"
+                                   value="" />
+                            <div class="card card-flush">
+                                <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bold fs-3 mb-1">
+                                            ایجاد پرسشنامه
+                                        </span>
+                                        <span class="text-muted fw-bold fs-7">
+                                            @*   پرسشنامه ورود کابران *@
+                                        </span>
+                                    </h3>
+                                    <div class="card-toolbar flex-row-fluid justify-content-end gap-3">
+
+                                        <button type="button"
+                                                class="btn btn-light-primary btn-sm"
+                                                id="btn_show_vote_package_graph"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_vote_package_graph">
+                                            <i class="fas fa-project-diagram me-1"></i>
+                                            نمایش گراف سوالات
+                                        </button>
+
+                                        <a href="#"
+                                           class="btn btn-sm btn-light-primary"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#kt_modal_add_question_section"
+                                           id="kt_modal_add_question_section_btn">
+
+                                            <i class="la la-layer-group fs-2"></i>
+
+                                            افزودن دسته سوالات
+                                        </a>
+
+                                        <a href="#"
+                                           class="btn btn-prevForm btn-sm btn-success"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#kt_modal_add_question"
+                                           id="kt_modal_add_question_btn">
+
+                                            <span class="svg-icon svg-icon-muted icon-size-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none">
+
+                                                    <path opacity="0.3"
+                                                          d="M3 13V11C3 10.4 3.4 10 4 10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14H4C3.4 14 3 13.6 3 13Z"
+                                                          fill="black" />
+
+                                                    <path d="M13 21H11C10.4 21 10 20.6 10 20V4C10 3.4 10.4 3 11 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z"
+                                                          fill="black" />
+                                                </svg>
+                                            </span>
+
+                                            افزودن سوال
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0">
+
+                                    <div class="drop-container" id="drop-items">
+                                    </div>
+                                </div>
+                            </div>
+
+                            @await Html.PartialAsync("_VotePackageGraphModal")
+
+                            <div class="modal fade"
+                                 id="kt_modal_add_question_section"
+                                 tabindex="-1"
+                                 aria-hidden="true">
+
+                                <div class="modal-dialog modal-dialog-centered mw-700px">
+
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+
+                                            <div>
+                                                <h2 class="fw-bold mb-1">
+                                                    افزودن دسته سوالات
+                                                </h2>
+
+                                                <div class="text-muted fs-7">
+                                                    یک دسته موجود را انتخاب کنید یا دسته جدید بسازید.
+                                                </div>
+                                            </div>
+
+                                            <button type="button"
+                                                    class="btn btn-icon btn-sm btn-active-icon-primary"
+                                                    data-bs-dismiss="modal">
+
+                                                <i class="la la-close fs-2"></i>
+
+                                            </button>
+
+                                        </div>
+
+
+                                        <div class="modal-body py-8">
+
+                                            <!-- =============================== -->
+                                            <!-- انتخاب دسته موجود -->
+                                            <!-- =============================== -->
+
+                                            <div class="mb-7">
+
+                                                <label class="form-label fw-bold">
+                                                    دسته‌بندی
+                                                </label>
+
+
+                                                <div class="d-flex gap-2">
+
+                                                    <div class="flex-grow-1">
+
+                                                        <select id="CompositionQuestionSelect"
+                                                                class="form-select form-select-solid"
+                                                                data-control="select2"
+                                                                data-placeholder="دسته‌بندی را انتخاب نمایید">
+
+                                                            <option></option>
+
+                                                        </select>
+
+                                                    </div>
+
+
+                                                    <button type="button"
+                                                            id="RefreshCompositionQuestionsBtn"
+                                                            class="btn btn-icon btn-light-primary"
+                                                            title="بروزرسانی لیست">
+
+                                                        <i class="la la-refresh fs-2"></i>
+
+                                                    </button>
+
+                                                </div>
+
+
+                                                <div class="text-muted fs-8 mt-2">
+                                                    دسته‌بندی‌های ساخته‌شده قبلی را می‌توانید مجدداً در فرم استفاده کنید.
+                                                </div>
+
+                                            </div>
+
+                                            <div id="isInLoopContainer"
+                                                 class="form-check form-switch form-check-custom form-check-solid mt-5">
+
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       id="IsInLoop" />
+
+                                                <label class="form-check-label"
+                                                       for="IsInLoop">
+                                                    امکان ثبت چندباره این مجموعه سوال
+                                                </label>
+
+                                            </div>
+
+
+                                            <div class="separator separator-dashed my-7"></div>
+
+
+                                            <!-- =============================== -->
+                                            <!-- ایجاد دسته جدید -->
+                                            <!-- =============================== -->
+
+                                            <div class="d-flex align-items-center justify-content-between">
+
+                                                <div>
+
+                                                    <div class="fw-bold fs-6">
+                                                        دسته موردنظر وجود ندارد؟
+                                                    </div>
+
+                                                    <div class="text-muted fs-8 mt-1">
+                                                        یک دسته جدید به بانک سوالات اضافه کنید.
+                                                    </div>
+
+                                                </div>
+
+
+                                                <button type="button"
+                                                        id="ShowCreateCompositionBtn"
+                                                        class="btn btn-sm btn-light-success">
+
+                                                    <i class="la la-plus"></i>
+
+                                                    ایجاد دسته جدید
+
+                                                </button>
+
+                                            </div>
+
+
+                                            <!-- =============================== -->
+                                            <!-- فرم ایجاد دسته -->
+                                            <!-- =============================== -->
+
+                                            <div id="CreateCompositionBox"
+                                                 class="d-none mt-6 p-5 border border-dashed rounded">
+
+                                                <label class="required form-label fw-bold">
+                                                    عنوان دسته
+                                                </label>
+
+
+                                                <div class="d-flex gap-2">
+
+                                                    <input type="text"
+                                                           id="NewCompositionTitle"
+                                                           class="form-control form-control-solid"
+                                                           maxlength="150"
+                                                           placeholder="مثلاً اطلاعات فردی" />
+
+
+                                                    <button type="button"
+                                                            id="CreateCompositionQuestionBtn"
+                                                            class="btn btn-success flex-shrink-0">
+
+                                                        ایجاد
+
+                                                    </button>
+
+                                                </div>
+
+
+                                                <div id="NewCompositionTitleError"
+                                                     class="text-danger fs-7 mt-2 d-none">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="modal-footer">
+
+                                            <button type="button"
+                                                    class="btn btn-light"
+                                                    data-bs-dismiss="modal">
+
+                                                انصراف
+
+                                            </button>
+
+
+                                            <button type="button"
+                                                    id="AddCompositionToPackageBtn"
+                                                    class="btn btn-confirmPage">
+
+                                                <i class="la la-check text-white"></i>
+
+                                                افزودن به پرسشنامه
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!--begin::Modal - Question - Add-->
+                            <div class="modal fade" id="kt_modal_add_question" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered mw-950px">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="kt_modal_add_header">
+                                            <h2 class="fw-bold"
+                                                id="AddQuestionModalTitle">
+                                                افزودن سوال
+                                            </h2>
+                                            <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                                                <span class="svg-icon svg-icon-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body mx-2 openDatetimeBody">
+                                            <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                                                 data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
+
+                                                <ul class="nav nav-line-tabs custom-glass-tabs">
+                                                    <li class="custom-tab-item">
+                                                        <a class="custom-tab-link text-active-primary p-2 fs-6 active" data-bs-toggle="tab" href="#SearchGrouping">جستجو بر اساس گروه بندی</a>
+                                                    </li>
+                                                    <li class="custom-tab-item">
+                                                        <a class="custom-tab-link text-active-primary p-2 fs-6" data-bs-toggle="tab" href="#SearchKeyword">جستجو بر اساس کلمه کلیدی</a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade show active" id="SearchGrouping" role="tabpanel">
+                                                        <div class="card w-100">
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-6 mb-3 fv-row fv-plugins-icon-container">
+                                                                    <label>
+                                                                        <span class="fs-6 form-label mb-1">سرگروه سوالات</span>
+                                                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="توضیحات"></i>
+                                                                    </label>
+
+                                                                    <select id="VoteQuestionGroupId" name="VoteQuestionGroupId" data-control="select2" data-placeholder=" نام گروه را انتخاب نمایید" class="form-select form-select-solid  ">
+                                                                        <option></option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3 fv-row fv-plugins-icon-container">
+                                                                    <label>
+                                                                        <span class="fs-6 form-label mb-1">  زیر گروه  </span>
+                                                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="توضیحات"></i>
+                                                                    </label>
+                                                                    <select id="SubVoteQuestionGroupId" name="SubVoteQuestionGroupId" data-control="select2" data-placeholder=" نام زیر گروه را انتخاب نمایید" class="form-select form-select-solid   ">
+                                                                        <option></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="SearchKeyword" role="tabpanel">
+                                                        <div class="card w-100">
+
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-6 mb-3 fv-row fv-plugins-icon-container">
+                                                                    <label>
+                                                                        <span class="fs-6 form-label mb-1">کلمات کلیدی</span>
+                                                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="توضیحات"></i>
+                                                                    </label>
+                                                                    <div class="fv-row">
+                                                                        <input class="form-control form-control-solid" name="KeyWord" id="KeyWord" oninput="GetAllVoteQuestionByKeyword(this.value)" placeholder="   " />
+
+                                                                    </div>
+                                                                    <div class="error-message fs-7 text-muted display-none" id="tag-error-message"></div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="d-flex flex-column mb-4 fv-row">
+                                                    <div class="row mt-3">
+                                                        <div class="col-md-12 fv-row fv-plugins-icon-container">
+                                                            <label class="fs-6 form-label fw-bold mb-1">عنوان سوال</label>
+                                                            <select id="AllQuestionByVoteQuestionGroupId" name="AllQuestionByVoteQuestionGroupId" class="form-select form-select-solid" data-control="select2" data-placeholder="انتخاب سوال">
+                                                                <option value=""></option>
+
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="addDataQuestionMain ">
+                                                    <div class=" bg-lighten rounded">
+                                                        <div class=" p-5">
+                                                            <input type="hidden" id="QuestionTypeIDThis" value="" />
+                                                            <div id="addDataQuestion"></div>
+                                                            <div class="row mt-2">
+                                                                <div class="col-xs-12 col-md-8 ">
+                                                                    <div class="card card-flush py-4 mt-1 min-h-200px">
+
+
+                                                                        @* انتخابی *@
+                                                                        <div id="bodyQuestionType1" class="bodyQuestion d-none">
+
+
+                                                                            <div class="row px-10">
+                                                                                <div class="d-flex flex-column">
+                                                                                    <div class="tab-content rounded h-100 bg-light px-5 py-5 ">
+                                                                                        <div class="mb-3">
+                                                                                            <h2 class="text-dark  fs-6 fw-bolder">لیست گزینه ها</h2>
+                                                                                        </div>
+                                                                                        <div class="pt-1" id="voteQuestionItemsListGET">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+
+                                                                                <div class="d-flex flex-column  mt-4">
+                                                                                    @* <label class="fw-row fs-6 mb-1"> امکان انتخاب چند گزینه وجود دارد</label> *@
+                                                                                    <div class="input-group mb-5 w-200">
+                                                                                        <span class="input-group-text" id="basic-addon3">حداقل  انتخاب</span>
+                                                                                        <input type="number" min="0" maxlength="99" class="form-control mw-100px validate-limit-chosen" id="LowerLimitChosenCount" name="LowerLimitChosenCount" aria-describedby="basic-addon3">
+                                                                                        <span class="input-group-text" id="basic-addon3">حداکثر  انتخاب</span>
+                                                                                        <input type="number" min="0" maxlength="99" class="form-control mw-100px validate-limit-chosen" id="UpperLimitChosenCount" name="UpperLimitChosenCount" aria-describedby="basic-addon3">
+                                                                                    </div>
+
+                                                                                </div>
+
+
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        @* توافقنامه *@
+                                                                        <div id="bodyQuestionType2" class="bodyQuestion d-none">
+                                                                            <p>توافقنامه</p>
+                                                                        </div>
+
+                                                                        @* بازه عددی *@
+                                                                        <div id="bodyQuestionType3" class="bodyQuestion d-none">
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+                                                                                <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات اختصاصی سوال</h2>
+                                                                            </div>
+
+                                                                            <div class="input-group p-5 w-200">
+                                                                                <span class="input-group-text mw-100px" id="basic-addon3">شروع بازه</span>
+                                                                                <input type="number" class="form-control mw-100px" min="0" id="LowerLimitNumericValue" name="LowerLimitNumericValue" aria-describedby="basic-addon3">
+                                                                                <span class="input-group-text mw-100px" id="basic-addon3">پایان بازه</span>
+                                                                                <input type="number" class="form-control mw-100px" min="0" id="UpperLimitNumericValue" name="UpperLimitNumericValue" aria-describedby="basic-addon3">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        @*  تشریحی   *@
+                                                                        <div id="bodyQuestionType4" class="bodyQuestion d-none">
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+                                                                                <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات اختصاصی سوال</h2>
+                                                                            </div>
+                                                                            <div class="  mb-2 rounded-3 d-flex flex-Right-Ho m-10">
+                                                                                <div class="input-group mb-5  w-200">
+                                                                                    <span class="input-group-text" id="basic-addon3">   حداکثر کاراکتر ورودی  </span>
+                                                                                    <input type="number" min="0" maxlength="500" oninput="ValidateNumberofQsetionInput(this)" class="form-control mw-100px" id="numberOfChoosen" aria-describedby="basic-addon3">
+
+                                                                                </div>
+                                                                                <span class="badge badge-light-info fs-8 fw-bolder my-2">
+                                                                                    حداکثر کاراکتر ورودی 999 می باشد.
+                                                                                </span>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        @*  تاریخ   *@
+                                                                        <div id="bodyQuestionType5" class="bodyQuestion d-none">
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+                                                                                <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات اختصاصی سوال</h2>
+                                                                            </div>
+
+                                                                            <div class="fv-row">
+                                                                                <div class="row mb-2 rounded-3  m-10">
+
+                                                                                    <div class="col-md-6 mb-8  fv-row">
+                                                                                        <label class="required fs-6 fw-bold mb-1" for="LowerLimitDateValue">
+                                                                                            <span class="px-2"> زمان شروع  </span>
+                                                                                            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="زمان شروع"></i>
+                                                                                        </label>
+                                                                                        <div class="position-relative align-items-center">
+                                                                                            <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                                                                <img src="assets/media/icons/duotune/general/gen014.svg" class="opacity-50 mx-n1 my-n1 m--3" />
+                                                                                            </span>
+                                                                                            <input class="form-control form-control-solid ps-12" type="text" id="LowerLimitDateValue" name="LowerLimitDateValue" placeholder="زمان شروع" value="" data-jdp data-jdp-only-date />
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-6 mb-8  fv-row">
+                                                                                        <label class="required fs-6 fw-bold mb-1" for="UpperLimitDateValue">
+                                                                                            <span class="px-2"> زمان پایان  </span>
+                                                                                            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="زمان پایان"></i>
+                                                                                        </label>
+                                                                                        <div class="position-relative align-items-center">
+                                                                                            <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                                                                <img src="assets/media/icons/duotune/general/gen014.svg" class="opacity-50 mx-n1 my-n1 m--3" />
+                                                                                            </span>
+                                                                                            <input class="form-control form-control-solid ps-12" type="text" id="UpperLimitDateValue" name="UpperLimitDateValue" placeholder="زمان پایان" value="" data-jdp data-jdp-only-date />
+                                                                                        </div>
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        @*  ورودی معتبر   *@
+                                                                        <div id="bodyQuestionType6" class="bodyQuestion d-none">
+
+                                                                            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed rounded-3 p-6 m-5">
+                                                                                <div class="d-flex flex-stack flex-grow-1">
+                                                                                    <div class="fw-bold">
+                                                                                        <h4 class="text-gray-900 fw-bolder">ورودی معتبر</h4>
+                                                                                        <div class="fs-6 text-gray-700">این نوع سوال دارای جزییات نیست</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        @*  ستاره ایی *@
+                                                                        <div id="bodyQuestionType10" class="bodyQuestion d-none">
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+                                                                                <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات اختصاصی سوال</h2>
+                                                                            </div>
+
+
+                                                                            <div class="d-flex flex-column  rounded h-100  px-10  mt-3">
+
+
+
+
+                                                                                <div class="input-group w-200">
+                                                                                    <span class="input-group-text" id="basic-addon10">تعداد ستاره</span>
+                                                                                    <select class="form-select rounded-start-0 " id="UpperLimitStarValue" name="UpperLimitStarValue">
+                                                                                        <option value="3">3 ستاره  </option>
+                                                                                        <option value="5">5 ستاره   </option>
+                                                                                    </select>
+                                                                                    @*<input type="number" class="form-control mw-100px" id="UpperLimitStarValue" name="UpperLimitStarValue" aria-describedby="basic-addon10" max="5">*@
+                                                                                </div>
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        @*  میله ایی *@
+                                                                        <div id="bodyQuestionType11" class="bodyQuestion d-none">
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+                                                                                <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات اختصاصی سوال</h2>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column  rounded h-100  px-10  mt-3">
+
+
+
+
+
+                                                                                <div class="input-group w-200">
+                                                                                    <span class="input-group-text" id="basic-addon11">شروع بازه</span>
+                                                                                    <input type="number" class="form-control mw-100px" id="LowerLimitRangeValue" name="LowerLimitRangeValue" aria-describedby="basic-addon11">
+                                                                                    <span class="input-group-text  me-2" id="basic-addon3">پایان بازه</span>
+                                                                                    <input type="number" class="form-control mw-100px" id="UpperLimitRangeValue" name="UpperLimitRangeValue" aria-describedby="basic-addon11">
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div id="bodyQuestionType12" class="bodyQuestion d-none">
+
+
+                                                                            <div class="row px-10">
+                                                                                <div class="d-flex flex-column">
+                                                                                    <div class="tab-content rounded h-100 bg-light px-5 py-5 ">
+                                                                                        <div class="mb-3">
+                                                                                            <h2 class="text-dark  fs-6 fw-bolder">لیست گزینه ها</h2>
+                                                                                        </div>
+                                                                                        <div class="pt-1 bodyQuestion_items-list" id="dataSourceItemsListGET">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        @*  کامپوزیشن *@
+                                                                        <div id="bodyQuestionType13" class="bodyQuestion d-none">
+
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+
+                                                                                <h2 class="text-dark fs-6 fw-bolder ps-2">
+                                                                                    تنظیمات اختصاصی سوال
+                                                                                </h2>
+
+                                                                            </div>
+
+
+                                                                            <div class="d-flex flex-column rounded h-100 px-10 mt-3">
+
+                                                                                <div class="alert alert-info d-flex align-items-center p-5 mb-0">
+
+                                                                                    <span class="svg-icon svg-icon-2hx svg-icon-info me-4">
+                                                                                        <i class="fas fa-layer-group fs-2 text-info"></i>
+                                                                                    </span>
+
+                                                                                    <div class="d-flex flex-column">
+
+                                                                                        <h4 class="mb-1 text-info">
+                                                                                            کامپوزیشن
+                                                                                        </h4>
+
+                                                                                        <span>
+                                                                                            این نوع سوال تنظیمات اختصاصی ندارد.
+                                                                                            سوالات داخل کامپوزیشن پس از افزودن آن به پرسشنامه مدیریت می‌شوند.
+                                                                                        </span>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                        @*  محتوای نمایشی *@
+                                                                        <div id="bodyQuestionType14" class="bodyQuestion d-none">
+
+                                                                            <div class="card-title fs-4 p-2 pe-4">
+
+                                                                                <h2 class="text-dark fs-6 fw-bolder ps-2">
+                                                                                    محتوای نمایشی
+                                                                                </h2>
+
+                                                                            </div>
+
+
+                                                                            <div class="d-flex flex-column rounded h-100 px-10 mt-3">
+
+                                                                                <div class="alert alert-info d-flex align-items-center p-5 mb-4">
+
+                                                                                    <span class="svg-icon svg-icon-2hx svg-icon-info me-4">
+                                                                                        <i class="fas fa-image fs-2 text-info"></i>
+                                                                                    </span>
+
+                                                                                    <div class="d-flex flex-column">
+
+                                                                                        <h4 class="mb-1 text-info">
+                                                                                            محتوای نمایشی
+                                                                                        </h4>
+
+                                                                                        <span>
+                                                                                            این نوع سوال صرفاً برای نمایش متن و تصویر در پرسشنامه است
+                                                                                            و پاسخی از کاربر دریافت نمی‌کند.
+                                                                                        </span>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+
+                                                                                <div id="displayContentPreview"
+                                                                                     class="d-none">
+
+                                                                                    <div id="displayContentDescriptionPreview"
+                                                                                         class="mb-4 text-gray-700"></div>
+
+                                                                                    <div id="displayContentMediaPreview"
+                                                                                         class="d-flex flex-wrap gap-3"></div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-xs-12 col-md-4">
+                                                                    <div class="card card-flush py-4 mt-1">
+
+                                                                        <div class="card-title fs-4 p-2 pe-4">
+                                                                            <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات عمومی سوال</h2>
+                                                                        </div>
+
+                                                                        <label class="d-flex justify-content-center align-items-center cursor-pointer px-2">
+                                                                            <span class="d-flex align-items-center me-2">
+                                                                                <span class="symbol symbol-50px m-3">
+                                                                                    <span class="svg-icon svg-icon-2x svg-icon-warning">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                                            <path opacity="0.3" d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z" fill="black"></path>
+                                                                                            <path d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z" fill="black"></path>
+                                                                                        </svg>
+                                                                                    </span>
+                                                                                </span>
+
+                                                                                <span class="d-flex flex-column px-4">
+                                                                                    <span class="fw-bold text-hover-primary fs-5">
+                                                                                        وزن سوال
+                                                                                        <span class="text-primary" id="WeightValueQuestion">0</span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </span>
+
+                                                                            <span class="form-check form-check-custom form-check-solid d-flex flex-column align-items-end">
+                                                                                <input type="range" value="0" min="-10" max="10" class="form-range mw-200px" id="weightOfQuestion" dir="ltr" name="weightOfQuestion">
+                                                                                <div class="d-flex justify-content-between w-100 mt-1">
+                                                                                    <small class="text-muted">10</small>
+                                                                                    <small class="text-muted" dir="ltr">- 10</small>
+
+                                                                                </div>
+                                                                            </span>
+                                                                        </label>
+
+
+
+
+                                                                        <div class="separator separator-dashed m-8"></div>
+                                                                        <label class="d-flex flex-stack mb-4 cursor-pointer px-2">
+                                                                            <span class="d-flex align-items-center me-2">
+                                                                                <span class="symbol symbol-50px m-3">
+
+                                                                                    <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                                            <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM11.7 17.7L16 14C16.4 13.6 16.4 12.9 16 12.5C15.6 12.1 15.4 12.6 15 13L11 16L9 15C8.6 14.6 8.4 14.1 8 14.5C7.6 14.9 8.1 15.6 8.5 16L10.3 17.7C10.5 17.9 10.8 18 11 18C11.2 18 11.5 17.9 11.7 17.7Z" fill="black"></path>
+                                                                                            <path d="M10.4343 15.4343L9.25 14.25C8.83579 13.8358 8.16421 13.8358 7.75 14.25C7.33579 14.6642 7.33579 15.3358 7.75 15.75L10.2929 18.2929C10.6834 18.6834 11.3166 18.6834 11.7071 18.2929L16.25 13.75C16.6642 13.3358 16.6642 12.6642 16.25 12.25C15.8358 11.8358 15.1642 11.8358 14.75 12.25L11.5657 15.4343C11.2533 15.7467 10.7467 15.7467 10.4343 15.4343Z" fill="black"></path>
+                                                                                            <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"></path>
+                                                                                        </svg>
+                                                                                    </span>
+
+                                                                                </span>
+
+                                                                                <span class="d-flex flex-column">
+                                                                                    <span class="fw-bold   text-hover-primary fs-5">   اجباری بودن سوال  </span>
+                                                                                    @* <span class="fs-6 fw-bold text-muted"> پاسخ به این سوال اجباری است.    </span> *@
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="form-check form-check-custom form-check-solid  px-4">
+                                                                                <input class="form-check-input" name="IsMandatory" id="IsMandatory" type="checkbox" checked="checked" value="true" />
+                                                                            </span>
+                                                                        </label>
+
+                                                                        <label id="IsComboBoxShowLabel" class="d-flex flex-stack mb-4 cursor-pointer px-2">
+                                                                            <span class="d-flex align-items-center me-2">
+                                                                                <span class="symbol symbol-50px m-3">
+
+                                                                                    <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                                            <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM11.7 17.7L16 14C16.4 13.6 16.4 12.9 16 12.5C15.6 12.1 15.4 12.6 15 13L11 16L9 15C8.6 14.6 8.4 14.1 8 14.5C7.6 14.9 8.1 15.6 8.5 16L10.3 17.7C10.5 17.9 10.8 18 11 18C11.2 18 11.5 17.9 11.7 17.7Z" fill="black"></path>
+                                                                                            <path d="M10.4343 15.4343L9.25 14.25C8.83579 13.8358 8.16421 13.8358 7.75 14.25C7.33579 14.6642 7.33579 15.3358 7.75 15.75L10.2929 18.2929C10.6834 18.6834 11.3166 18.6834 11.7071 18.2929L16.25 13.75C16.6642 13.3358 16.6642 12.6642 16.25 12.25C15.8358 11.8358 15.1642 11.8358 14.75 12.25L11.5657 15.4343C11.2533 15.7467 10.7467 15.7467 10.4343 15.4343Z" fill="black"></path>
+                                                                                            <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"></path>
+                                                                                        </svg>
+                                                                                    </span>
+
+                                                                                </span>
+
+                                                                                <span class="d-flex flex-column">
+                                                                                    <span class="fw-bold   text-hover-primary fs-5"> نمایش به‌صورت فهرست کشویی  </span>
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="form-check form-check-custom form-check-solid  px-4">
+                                                                                <input class="form-check-input" name="IsComboBoxShow" id="IsComboBoxShow" type="checkbox" value="false" />
+                                                                            </span>
+                                                                        </label>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row mt-3">
+                                                        <div class="col-xs-12 col-md-12">
+                                                            <div class="d-flex flex-column  fv-row rounded-3 p-4 px-7 border border-dashed border-gray-300">
+                                                                <div class="d-flex flex-stack ">
+                                                                    <div class="fw-bold me-5">
+                                                                        <label class="fs-6 mb-2">آیا سوال مورد تایید است؟</label>
+                                                                    </div>
+                                                                    <div class="d-flex align-items-center px-2">
+
+                                                                        <a id="cancele_Quetion_Btn" data-bs-dismiss="modal" aria-label="Close" class="btn btn-sm btn-danger me-2 mb-2">
+                                                                            <i class="la la-close"></i>
+                                                                            عدم تایید
+                                                                        </a>
+                                                                        <a id="Accept_Quetion_Btn" class="btn btn-sm yas-btn-success me-2 mb-2">
+                                                                            <i class="la la-check text-white"></i>
+                                                                            تایید سوال
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer flex-end">
+                                                <a href="../VoteQuestionCreate" target="_blank" class="btn btn-lg yas-primary-btn  m-2">
+                                                    <i class="la la-plus"></i>
+                                                    افزودن سوال جدید
+                                                </a>
+
+                                                <button type="reset" id="kt_modal_add_customer_cancel" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light me-3">انصراف</button>
+                                                @*   <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                                                <span class="indicator-label">تایید</span>
+                                                <span class="indicator-progress">
+                                                Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                </span>
+                                                </button> *@
+
+
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--begin::Step 4-->
+                    <div data-kt-stepper-element="content" data-original-step="4">
+
+                        <div class="w-100 mx-auto  mw-950px">
+
+                            <div id="IsDefaultActive" class="visually-hidden">
+                                <div class="alert alert-warning d-flex align-items-center p-5 mb-10 mt-5">
+                                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                            <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                        </svg>
+                                    </span>
+                                    <div class="d-flex flex-column">
+                                        <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                        <span>در صورتیکه سوال مورد نظر دارای بازه خاصی می باشد ,می توان حداقل و حداکثر تاریخ مجاز را در فرم نظرسنجی وارد نمود. </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="IsDefaultNotActive">
+                                <div class="alert alert-info d-flex align-items-center p-3 mb-5 mt-5" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span>لطفاً حداقل یک مورد را از یکی از دسته‌های زیر انتخاب کنید (سمت، شعبه یا شخص)</span>
+                                </div>
+
+                                <ul class="nav nav-tabs custom-glass-tabs">
+                                    <li class="custom-tab-item">
+                                        <a class="custom-tab-link active" data-bs-toggle="tab" href="#kt_tab_pane_4">
+                                            <div class="custom-tab-symbol">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.3" d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM12 7C10.3 7 9 8.3 9 10C9 11.7 10.3 13 12 13C13.7 13 15 11.7 15 10C15 8.3 13.7 7 12 7Z" fill="currentColor" />
+                                                    <path d="M12 22C14.6 22 17 21 18.7 19.4C17.9 16.9 15.2 15 12 15C8.8 15 6.09999 16.9 5.29999 19.4C7.00001 21 9.4 22 12 22Z" fill="currentColor" />
+                                                </svg>
+                                            </div>
+                                            <span class="custom-tab-title">لیست سمت</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="custom-tab-item">
+                                        <a class="custom-tab-link" data-bs-toggle="tab" href="#kt_tab_pane_5">
+                                            <div class="custom-tab-symbol">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor" />
+                                                    <rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor" />
+                                                </svg>
+                                            </div>
+                                            <span class="custom-tab-title">لیست شعب</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="custom-tab-item">
+                                        <a class="custom-tab-link" data-bs-toggle="tab" href="#kt_tab_pane_6">
+                                            <div class="custom-tab-symbol">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="currentColor" />
+                                                    <path d="M14.854 11.321C14.7568 11.2237 14.6388 11.1463 14.5068 11.1004C14.3748 11.0545 14.2326 11.0414 14.0938 11.0626C13.955 11.0838 13.8227 11.1388 13.7071 11.2234C13.5915 11.3079 13.4952 11.4203 13.4251 11.5523L10.9965 16.1795L9.39169 14.5746C9.29412 14.4773 9.17611 14.3999 9.04413 14.354C8.91215 14.3081 8.76996 14.2949 8.63116 14.3161C8.49235 14.3373 8.36001 14.3923 8.24443 14.4769C8.12885 14.5614 8.03253 14.6738 7.96247 14.8058C7.89241 14.9378 7.85016 15.0865 7.83822 15.2403C7.82627 15.3941 7.84494 15.549 7.89296 15.6948C7.94099 15.8406 8.01715 15.9738 8.11637 16.0845L10.4007 18.3687C10.4977 18.4657 10.6147 18.5427 10.7447 18.5941C10.8747 18.6455 11.015 18.6701 11.1565 18.6666C11.2979 18.663 11.4368 18.6314 11.5642 18.5736C11.6916 18.5158 11.8048 18.433 11.8965 18.3305L14.8407 12.8583C14.9085 12.7261 14.9484 12.5804 14.9577 12.4303C14.9669 12.2803 14.9453 12.1295 14.8942 11.9884C14.8432 11.8474 14.7638 11.7193 14.6613 11.6123C14.5588 11.5053 14.4355 11.4218 14.2997 11.3673L14.854 11.321Z" fill="currentColor" />
+                                                </svg>
+                                            </div>
+                                            <span class="custom-tab-title">لیست اشخاص</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_4" role="tabpanel">
+
+                                        <div class="" id="OrganizationStructureChoosen">
+
+                                            <div class="card card-flush mb-6 mb-xl-9">
+                                                <div class="card-header pt-5">
+                                                    <div class="card-title">
+                                                        <h2 class="d-flex align-items-center">
+                                                            لیست سمت
+
+                                                        </h2>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <div class="d-flex align-items-center position-relative my-1" data-kt-view-roles-table-toolbar="base">
+                                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="#77cf97" />
+                                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="#77cf97" />
+                                                                </svg>
+                                                            </span>
+
+                                                            <input type="text" data-kt-roles-table-filter="search" class="form-control form-control-solid w-250px ps-15" id="OrganizationStructureSearchInput" placeholder="جستجو " />
+
+
+                                                        </div>
+                                                        <div class="d-flex justify-content-end align-items-center d-none" data-kt-view-roles-table-toolbar="selected">
+                                                            <div class="fw-bolder me-5">
+                                                                <span class="me-2" data-kt-view-roles-table-select="selected_count"></span>Selected
+                                                            </div>
+                                                            <button type="button" class="btn btn-danger" data-kt-view-roles-table-select="delete_selected">Delete Selected</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body pt-0">
+                                                    <table class="table align-middle table-row-dashed fs-6 mb-0 table-striped" id="kt_view_OrganizationStructureChoosen">
+                                                        <thead>
+                                                            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                                                <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                    <input class="form-check-input" type="checkbox" data-kt-check="true" id="OrganizationStructureSelectAll" data-kt-check-target="#kt_view_OrganizationStructureChoosen" value="1" />
+                                                                    <span class="m-2">انتخاب همه</span>
+                                                                </div>
+                                                                <th class="w-10px pe-2">
+
+
+                                                                </th>
+                                                                <th class="min-w-150px">سمت</th>
+                                                                <th class="min-w-50px">کد  </th>
+                                                                <th class="min-w-50px">سمت بالاتر  </th>
+                                                                <th class="min-w-50px">رتبه  </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="fw-bold text-gray-900" id="OrganizationStructureId">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_5" role="tabpanel">
+
+                                        <div class="" id="OrganizationChoosen">
+                                            <div class="card card-flush mb-6 mb-xl-9">
+                                                <div class="card-header pt-5">
+                                                    <div class="card-title">
+                                                        <h2 class="d-flex align-items-center">
+                                                            لیست شعب
+
+                                                        </h2>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <div class="d-flex align-items-center position-relative my-1" data-kt-view-roles-table-toolbar="base">
+                                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="#77cf97" />
+                                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="#77cf97" />
+                                                                </svg>
+                                                            </span>
+                                                            <input type="text" data-kt-roles-table-filter="search" class="form-control form-control-solid w-250px ps-15" id="OrganizationSearchInput" placeholder="جستجو " />
+                                                        </div>
+                                                        <div class="d-flex justify-content-end align-items-center d-none" data-kt-view-roles-table-toolbar="selected">
+                                                            <div class="fw-bolder me-5">
+                                                                <span class="me-2" data-kt-view-roles-table-select="selected_count"></span>Selected
+                                                            </div>
+                                                            <button type="button" class="btn btn-danger" data-kt-view-roles-table-select="delete_selected">Delete Selected</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body pt-0">
+                                                    <table class="table align-middle table-row-dashed fs-6 mb-0 table-striped" id="kt_view_table">
+                                                        <thead>
+                                                            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-10px pe-2">
+                                                                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                        <input class="form-check-input" type="checkbox" data-kt-check="true" id="OrganizationSelectAll" data-kt-check-target="#kt_view_table" value="1" />
+                                                                    </div>
+                                                                </th>
+                                                                <th class="min-w-150px">شعبه</th>
+                                                                <th class="min-w-50px">کد شعبه</th>
+                                                                <th class="min-w-50px">کد شعبه سرپرستی</th>
+                                                                <th class="min-w-50px">شعبه سرپرستی</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="fw-bold text-gray-900" id="OrganizationId">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_6" role="tabpanel">
+                                        <div class="" id="EmployeeChoosen">
+
+                                            <div class="card card-flush mb-6 mb-xl-9">
+                                                <div class="card-header pt-5">
+                                                    <div class="card-title">
+                                                        <h2 class="d-flex align-items-center">
+                                                            لیست اشخاص
+
+                                                        </h2>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <div class="d-flex align-items-center position-relative my-1" data-kt-view-roles-table-toolbar="base">
+                                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="#77cf97" />
+                                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="#77cf97" />
+                                                                </svg>
+                                                            </span>
+                                                            <input type="text" data-kt-roles-table-filter="search" class="form-control form-control-solid w-250px ps-15" id="EmployeesearchInput" placeholder="جستجو" />
+                                                        </div>
+                                                        <div class="d-flex justify-content-end align-items-center d-none" data-kt-view-roles-table-toolbar="selected">
+                                                            <div class="fw-bolder me-5">
+                                                                <span class="me-2" data-kt-view-roles-table-select="selected_count"></span>Selected
+                                                            </div>
+                                                            <button type="button" class="btn btn-danger" data-kt-view-roles-table-select="delete_selected">Delete Selected</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body pt-0">
+                                                    <table class="table align-middle table-row-dashed fs-6 mb-0 table-striped" id="kt_roles_view_table">
+                                                        <thead>
+                                                            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-10px pe-2">
+                                                                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                        <input class="form-check-input" type="checkbox" id="EmployeeSelectAll" data-kt-check="true" data-kt-check-target="#kt_roles_view_table" value="1" />
+                                                                    </div>
+                                                                </th>
+                                                                <th class="min-w-80px">نام</th>
+                                                                <th class="min-w-50px">نام خانوادگی</th>
+                                                                <th class="min-w-50px">کد پرسنلی</th>
+                                                                <th class="min-w-50px">محل خدمت</th>
+                                                                <th class="min-w-50px">سمت</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="fw-bold text-gray-900" id="EmployeeId">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--begin::Step 5-->
+                    <div data-kt-stepper-element="content" data-original-step="5">
+
+                        <div class="w-100 mx-auto  mw-950px">
+                            @await Html.PartialAsync("_AllowedUsersSelect")
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="card-footer d-flex justify-content-end py-6 px-9">
+
+                <div class="mr-2 mx-2">
+                    <button type="button" class="btn btn-lg btn-prevForm btn-light me-3" data-kt-stepper-action="previous">
+                        <span class="svg-icon svg-icon-4 me-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
+                                <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
+                            </svg>
+                        </span>قبلی
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-lg me-3 yas-primary-btn" data-kt-stepper-action="submit" id="kt_submit">
+                        <span class="indicator-label">
+                            اتمام
+
+
+                        </span>
+                        <span class="indicator-progress">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-lg yas-primary-btn" data-kt-stepper-action="next">
+                        ذخیره و بعدی
+                        <span class="svg-icon svg-icon-4 ms-1 me-0">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="black" />
+                                <path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="black" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<!--kt_modal_condition -->
+<div class="modal fade " id="kt_modal_condition" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-950px">
+        <div class="modal-content">
+            <div id="kt_modal_ConditionForm_form">
+                <div class="modal-header" id="kt_modal_add_header">
+                    <h2 class="fw-bold"> افزودن سوال </h2>
+                    <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-body mx-1 mx-xl-5 ">
+                    <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                         data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
+
+                        <div class="border p-3 rounded mb-4">
+                            <div class="d-flex flex-stack">
+                                <div class="d-flex space-between align-items-center  w-100">
+                                    <div class="d-flex align-items-center  p-2">
+                                        <div class="symbol symbol-50px me-5" id="voteQuestionTypeIcon">
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-dark text-hover-primary fs-6 fw-bold min-w-200px max-300char" id="QuestionTitle">  </span>
+                                            <div class="d-flex flex-wrap fw-bold fs-6 pe-2">
+
+                                                <div class="d-flex align-items-center text-gray-400 text-hover-primary ">
+                                                    <span class="svg-icon svg-icon-1x svg-icon-info  px-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <path d="M13 10.9128V3.01281C13 2.41281 13.5 1.91281 14.1 2.01281C16.1 2.21281 17.9 3.11284 19.3 4.61284C20.7 6.01284 21.6 7.91285 21.9 9.81285C22 10.4129 21.5 10.9128 20.9 10.9128H13Z" fill="black"></path>
+                                                            <path opacity="0.3" d="M13 12.9128V20.8129C13 21.4129 13.5 21.9129 14.1 21.8129C16.1 21.6129 17.9 20.7128 19.3 19.2128C20.7 17.8128 21.6 15.9128 21.9 14.0128C22 13.4128 21.5 12.9128 20.9 12.9128H13Z" fill="black"></path>
+                                                            <path opacity="0.3" d="M11 19.8129C11 20.4129 10.5 20.9129 9.89999 20.8129C5.49999 20.2129 2 16.5128 2 11.9128C2 7.31283 5.39999 3.51281 9.89999 3.01281C10.5 2.91281 11 3.41281 11 4.01281V19.8129Z" fill="black"></path>
+                                                        </svg>
+                                                    </span>    نوع سوال:
+
+                                                    <span class="text-gray-800 px-2" id="voteQuestionTypetitle"></span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-gray-400 text-hover-primary me-5">
+                                                    <span class="svg-icon svg-icon-1x svg-icon-warning  px-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                            <path opacity="0.3" d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z" fill="black"></path>
+                                                            <path d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z" fill="black"></path>
+                                                        </svg>
+                                                    </span>
+                                                    وزن سوال
+                                                    <span class="text-gray-800 px-2" id="voteQuestionWeight"></span>
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" value="" id="voteQuestionTypeId" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="VotePackageDetailGraphIdHidden" type="hidden" value="" />
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType1">
+                            <input type="hidden" value="" id="QuestionIdHidden" />
+                            <input type="hidden" value="" id="lowerChosen" />
+                            <input type="hidden" value="" id="upperChosen" />
+                            <input type="hidden" value="1" id="typeQuestion1" />
+                            <input type="hidden" value="" id="maxSelect" />
+
+
+
+
+                            <div id="repeater_MultipleChoiceRepeater" class="d-none">
+
+                                <div class="form-group">
+
+                                    <div class="form-group d-flex space-between mb-3 align-items-center question-title-input-container">
+                                        <div class=""> <label class="form-label">اگر</label></div>
+                                        <div class="item-col">
+                                            <div class="input-group ">
+                                                <span class="input-group-text fs-7" id="inputGroup-sizing-default">در سوال</span>
+                                                <input type="text" class="form-control" disabled value="" id="QuestionTitleInput" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div data-repeater-list="MultipleChoiceRepeater" id="MultipleChoiceRepeater">
+                                        <div data-repeater-item>
+                                            <div class="form-group d-flex space-between mb-3 align-items-center multiple-choice-repeater-item-container" id="MultipleChoiceRepeaterItem">
+                                                <div class=""> <label class="form-label"></label></div>
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">  پاسخ   </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 voteQuestionItemsList" id="voteQuestionItemsList1" name="selectItems" data-kt-repeater="voteQuestionItemsList1" data-control="select2" data-placeholder="انتخاب گزینه های سوال">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text"> برو به </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList" id="getQuestionList1" name="selectQuestion" data-kt-repeater="getQuestionList" data-control="select2" data-placeholder="انتخاب پاسخ">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group  float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn  btn-sm btn-light-primary add-condition-item-question-btn">
+                                        <i class="la la-plus"></i>افزودن شرط
+                                    </a>
+                                </div>
+                                <span class="badge badge-light-info fs-8 fw-bolder my-2 m-8">
+                                    حداقل انتخاب
+                                    <span id="LowerChosentext"></span>
+                                    و حداکثر انتخاب
+                                    <span id="UpperChosentext"></span>
+                                    باشد.
+                                </span>
+                            </div>
+
+
+                            <div id="repeater_MultipleChoiceRepeater2" class="d-none">
+                                @* <div class="ifLineRight"></div> *@
+
+
+                                <div class="form-group">
+                                    <div class="form-group d-flex space-between mb-3 align-items-center inputGroup-sizing-default-container">
+                                        @*   <div class=""> <label class="form-label">اگر</label></div> *@
+                                        <div class="item-col">
+                                            <div class="input-group ">
+                                                <span class="input-group-text fs-7" id="inputGroup-sizing-default">اگر در سوال</span>
+                                                <input type="text" class="form-control" disabled value="" id="QuestionTitleInput1_2" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div data-repeater-list="MultipleChoiceRepeater2" id="MultipleChoiceRepeater2">
+                                        <div data-repeater-item>
+                                            <div class="form-group row multiple-choice-repeater-item2-container" id="MultipleChoiceRepeaterItem2">
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">در صورت انتخاب</span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getIsAll" id="IsAll" name="selectIsAll" data-hide-search="true" data-kt-repeater="IsAll" data-control="select2" data-placeholder="انتخاب پاسخ">
+                                                                <option value="true"> همه</option>
+                                                                <option value="false"> یکی</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col">
+                                                    <div class="inner-repeater">
+                                                        <div data-repeater-list="SubMultipleChoiceRepeater2" class="SubRepeater">
+                                                            <div data-repeater-item>
+                                                                <div class="item-col">
+                                                                    <div class="input-group flex-nowrap">
+                                                                        <span class="input-group-text">پاسخ</span>
+                                                                        <div class="overflow-hidden d-flex flex-grow-1">
+                                                                            <select class="form-select rounded-start-0 voteQuestionItemsList1_2" id="voteQuestionItemsList1_2" name="selectItems" data-kt-repeater="voteQuestionItemsList1_2" data-control="select2" data-placeholder="انتخاب گزینه های سوال">
+                                                                            </select>
+                                                                            <button class="btnMines btn btn-icon btn-light-danger" data-repeater-delete="" type="button"><span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">&lt; rect opacity = "0.3" x = "2" y = "2" width = "20" height = "20" rx = "5" fill = "black" /&gt;<rect x="6.0104" y="10.9247" width="12" height="2" rx="1" fill="black"></rect></svg></span></button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <a href="javascript:;" data-repeater-create="" class="btn form-group btn-icon btn-light-primary float-end mb-5 btn-primary addChoiceForConditionBtn add-choice-condition-btn" data-id="0" data-condition-id="0" title="افزودن گزینه"><span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">&lt; rect opacity = "0.3" x = "2" y = "2" width = "20" height = "20" rx = "5" fill = "black" /&gt;<rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="#456"></rect><rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="#456"></rect></svg></span></a>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text"> برو به </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList1_2" id="getQuestionList1_2" name="selectQuestion" data-kt-repeater="getQuestionList1_2" data-control="select2" data-placeholder="انتخاب پاسخ">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group  float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn fw-bolder px-5 py-1 btn-sm btn-light-primary add-condition-item-question-btn2">
+                                        <span class="svg-icon svg-icon-muted svg-icon-2hx m-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">&lt; rect opacity = "0.3" x = "2" y = "2" width = "20" height = "20" rx = "5" fill = "black" /&gt;<rect x="10.8891" y="17.8033" width="12" height="2" rx="1" transform="rotate(-90 10.8891 17.8033)" fill="black"></rect><rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="black"></rect></svg></span> افزودن شرط
+                                    </a>
+                                </div>
+
+                                <span class="badge badge-light-info fs-8 fw-bolder my-2 m-8">
+                                    حداقل انتخاب
+                                    <span id="LowerChosentext2"></span>
+                                    و حداکثر انتخاب
+                                    <span id="UpperChosentext2"></span>
+                                    باشد.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType2">
+                            <input type="hidden" value="2" id="typeQuestion2" />
+                            <p>222222</p>
+                        </div>
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType3">
+                            <input id="LowerNumeric" type="hidden" value="" />
+                            <input id="UpperNumeric" type="hidden" value="" />
+                            <input type="hidden" value="3" id="typeQuestion3" />
+
+                            <div id="repeater_NumericRangeRepeater">
+                                <div class="form-group">
+                                    <div class="form-group d-flex space-between mb-3 align-items-center repeater_NumericRangeRepeater-container">
+                                        <div class=""> <label class="form-label">اگر</label></div>
+                                        <div class="item-col">
+                                            <div class="input-group ">
+                                                <span class="input-group-text fs-7" id="inputGroup-sizing-default">در سوال</span>
+                                                <input type="text" class="form-control" disabled value="" id="QuestionTitleInput3" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div data-repeater-list="NumericRangeRepeater" id="NumericRangeRepeater">
+                                        <div data-repeater-item>
+                                            <div class="form-group d-flex space-between mb-3 align-items-center NumericRangeRepeater-container">
+                                                <div class=""> <label class="form-label"></label></div>
+
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">   بین عدد   </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <input class="form-control rounded-start-0 setMinMax LowerLimitNumericCondition" name="LowerLimitNumericCondition" type="number" min="" max="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">   و عدد   </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <input class="form-control rounded-start-0 setMinMax UpperLimitNumericCondition" name="UpperLimitNumericCondition" type="number" min="" max="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text"> برو به </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList3" name="getQuestionList3" id="getQuestionList3" data-kt-repeater="getQuestionList3" data-control="select2" data-placeholder="انتخاب سوال">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group  float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn  btn-sm btn-light-primary add-condition-numeric-question-btn">
+                                        <i class="la la-plus"></i>افزودن شرط
+                                    </a>
+                                </div>
+                                <span class="badge badge-light-info fs-8 fw-bolder my-2 m-8">
+                                    عدد ورودی باید بین
+                                    <span id="LowerNumerictext"></span>
+                                    و
+                                    <span id="UpperNumerictext"></span>
+                                    باشد.
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType4">
+                            <input type="hidden" value="4" id="typeQuestion4" />
+                            <p> </p>
+
+                        </div>
+
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType5">
+                            <input type="hidden" value="" id="QuestionIdHidden" />
+                            <input type="hidden" value="5" id="typeQuestion5" />
+
+                            <div id="repeater_DateTimeRepeater">
+                                <div class="form-group">
+                                    <div class="form-group d-flex space-between mb-3 align-items-center repeater_DateTimeRepeater-container">
+                                        <div class=""> <label class="form-label">اگر</label></div>
+                                        <div class="item-col">
+                                            <div class="input-group ">
+                                                <span class="input-group-text fs-7" id="inputGroup-sizing-default">در سوال</span>
+                                                <input type="text" class="form-control" disabled value="" id="QuestionTitleInput5" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div data-repeater-list="DateTimeRepeater" id="DateTimeRepeater">
+                                        <div data-repeater-item>
+
+                                            <div class="form-group d-flex space-between mb-3 align-items-center DateTimeRepeater-container" id="DateTimeRepeaterItem">
+                                                <div class=""> <label class="form-label"></label></div>
+
+                                                <div class="item-col">
+                                                    <div class="position-relative align-items-center" for="LowerLimitDateItemValue">
+                                                        <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                                                <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                                                <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                                            </svg>
+                                                        </span>
+                                                        <input class="form-control form-control-solid ps-12 LowerLimitDateItemValue" type="text" id="LowerLimitDateItemValue" name="LowerLimitDateItemValue" data-kt-repeater="LowerLimitDateItemValue" placeholder="زمان شروع" value="" data-jdp data-jdp-only-date />
+                                                    </div>
+
+                                                </div>
+
+
+
+                                                <div class="item-col">
+                                                    @*     <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text"> تاریخ بین    </span>
+                                                    <div class="flex-grow-1">
+                                                    <index class="form-select rounded-start-0 LowerLimitDateItemValue" id="UpperLimitDateItemValue" name="LowerLimitDateItemValue" data-kt-repeater="LowerLimitDateItemValue" data-placeholder="شروع بازه" type="text" />
+                                                    </div>
+                                                    </div> *@
+
+                                                    <div class="position-relative align-items-center" for="UpperLimitDateItemValue">
+                                                        <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                                                <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                                                <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                                            </svg>
+                                                        </span>
+                                                        <input class="form-control form-control-solid ps-12 UpperLimitDateItemValue" type="text" id="UpperLimitDateItemValue" name="UpperLimitDateItemValue" data-kt-repeater="UpperLimitDateItemValue" placeholder="زمان پایان" value="" data-jdp data-jdp-only-date />
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                @*   <div class="item-col">
+                                                <div class="input-group flex-nowrap">
+                                                <span class="input-group-text">و</span>
+                                                <div class="flex-grow-1">
+                                                <input class="form-select rounded-start-0 UpperLimitDateItemValue" id="UpperLimitDateItemValue" name="UpperLimitDateItemValue" data-kt-repeater="UpperLimitDateItemValue" data-placeholder="پایان بازه" type="text" />
+                                                </div>
+                                                </div>
+                                                </div> *@
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">برو به  </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList5" id="getQuestionList5" name="selectQuestion5" data-kt-repeater="getQuestionList5" data-control="select2" data-placeholder="انتخاب پاسخ">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group  float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn  btn-sm btn-light-primary add-condition-datetime-question-btn">
+                                        <i class="la la-plus"></i>افزودن شرط
+                                    </a>
+                                </div>
+
+                                <span class="badge badge-light-info fs-8 fw-bolder my-2 m-8">
+                                    تاریخ ورودی باید بین
+                                    <span id="lowerLimitDatetext"></span>
+                                    و
+                                    <span id="upperLimitDatetext"></span>
+                                    باشد.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType6">
+                            <input type="hidden" value="2" id="typeQuestion2" />
+
+
+                        </div>
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType10">
+                            <input id="LowerStar" type="hidden" value="" />
+                            <input id="UpperStar" type="hidden" value="" />
+                            <input type="hidden" value="10" id="typeQuestion10" />
+
+                            <div id="repeater_StarRepeater">
+                                <div class="form-group">
+                                    <div class="form-group d-flex space-between mb-3 align-items-center repeater_StarRepeater-container">
+                                        <div class=""> <label class="form-label">اگر</label></div>
+                                        <div class="item-col">
+                                            <div class="input-group ">
+                                                <span class="input-group-text fs-7" id="inputGroup-sizing-default">در سوال</span>
+                                                <input type="text" class="form-control" disabled value="" id="QuestionTitleInput10" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div data-repeater-list="StarRepeater" id="StarRepeater">
+                                        <div data-repeater-item>
+                                            <div class="form-group d-flex space-between mb-3 align-items-center StarRepeater-container">
+                                                <div class=""> <label class="form-label"></label></div>
+
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">   بین عدد   </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <input class="form-control rounded-start-0 setMinMaxStar LowerLimitStarCondition" name="LowerLimitStarCondition" type="number" min="" max="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">   و عدد   </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <input class="form-control rounded-start-0 setMinMaxStar UpperLimitStarCondition" name="UpperLimitStarCondition" type="number" min="" max="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text"> برو به </span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList10" name="getQuestionList10" id="getQuestionList10" data-kt-repeater="getQuestionList10" data-control="select2" data-placeholder="انتخاب سوال">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group  float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn  btn-sm btn-light-primary add-condition-star-question-btn">
+                                        <i class="la la-plus"></i>افزودن شرط
+                                    </a>
+                                </div>
+                                <span class="badge badge-light-info fs-8 fw-bolder my-2 m-8">
+                                    عدد ورودی باید بین
+                                    <span id="LowerStartext">1</span>
+                                    و
+                                    <span id="UpperStartext"></span>
+                                    باشد.
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType12">
+
+                            <input type="hidden" value="" id="QuestionIdHidden12" />
+                            <input type="hidden" value="" id="lowerChosen12" />
+                            <input type="hidden" value="" id="upperChosen12" />
+                            <input type="hidden" value="12" id="typeQuestion12" />
+                            <input type="hidden" value="" id="maxSelect12" />
+
+                            <div class="form-group">
+                                <div class="form-group d-flex space-between mb-3 align-items-center question-title-input-container">
+                                    <div>
+                                        <label class="form-label">اگر</label>
+                                    </div>
+                                    <div class="item-col">
+                                        <div class="input-group">
+                                            <span class="input-group-text fs-7">در سوال</span>
+                                            <input type="text" class="form-control" disabled value="" id="QuestionTitleInput12" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="repeater_MultipleChoiceRepeater12">
+                                    <div data-repeater-list="MultipleChoiceRepeater12" id="MultipleChoiceRepeater12">
+                                        <div data-repeater-item>
+                                            <div class="form-group d-flex space-between mb-3 align-items-center multiple-choice-repeater-item-container">
+
+                                                <div>
+                                                    <label class="form-label"></label>
+                                                </div>
+
+                                                <div class="item-col col-md-5">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">پاسخ</span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 dataSourceItemsList12"
+                                                                    name="selectItems"
+                                                                    data-control="select2"
+                                                                    data-placeholder="انتخاب گزینه های سوال">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col col-md-5">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">برو به</span>
+                                                        <div class="overflow-hidden flex-grow-1">
+                                                            <select class="form-select rounded-start-0 getQuestionList12"
+                                                                    name="selectQuestion"
+                                                                    data-control="select2"
+                                                                    data-placeholder="انتخاب پاسخ">
+                                                                <option></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="item-col">
+                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger">
+                                                        <i class="la la-trash-o fs-3"></i>
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group float-end mb-5">
+                                        <a href="javascript:;" data-repeater-create class="btn btn-sm btn-light-primary add-condition-item-dataSource-btn">
+                                            <i class="la la-plus"></i>افزودن شرط
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="d-none InCardQTypeClass" id="InCardQType12">
+                            <input type="hidden" value="" id="QuestionIdHidden12" />
+                            <input type="hidden" value="" id="lowerChosen12" />
+                            <input type="hidden" value="" id="upperChosen12" />
+                            <input type="hidden" value="12" id="typeQuestion12" />
+                            <input type="hidden" value="" id="maxSelect12" />
+
+                            <div class="form-group">
+                                <div class="form-group d-flex space-between mb-3 align-items-center question-title-input-container">
+                                    <div>
+                                        <label class="form-label">اگر</label>
+                                    </div>
+                                    <div class="item-col">
+                                        <div class="input-group">
+                                            <span class="input-group-text fs-7">در سوال</span>
+                                            <input type="text" class="form-control" disabled value="" id="QuestionTitleInput12" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div data-repeater-list="MultipleChoiceRepeater12" id="MultipleChoiceRepeater12">
+                                    <div data-repeater-item>
+                                        <div class="form-group d-flex space-between mb-3 align-items-center multiple-choice-repeater-item-container">
+                                            <div>
+                                                <label class="form-label"></label>
+                                            </div>
+
+                                            <div class="item-col col-md-5">
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">پاسخ</span>
+                                                    <div class="overflow-hidden flex-grow-1">
+                                                        <select class="form-select rounded-start-0 dataSourceItemsList12"
+                                                                name="selectItems"
+                                                                data-control="select2"
+                                                                data-placeholder="انتخاب گزینه های سوال">
+                                                            <option></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="item-col col-md-5">
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">برو به</span>
+                                                    <div class="overflow-hidden flex-grow-1">
+                                                        <select class="form-select rounded-start-0 getQuestionList12"
+                                                                name="selectQuestion"
+                                                                data-control="select2"
+                                                                data-placeholder="انتخاب پاسخ">
+                                                            <option></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="item-col">
+                                                <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger">
+                                                    <i class="la la-trash-o fs-3"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group float-end mb-5">
+                                    <a href="javascript:;" data-repeater-create class="btn btn-sm btn-light-primary add-condition-item-dataSource-btn">
+                                        <i class="la la-plus"></i>افزودن شرط
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @* <div class="d-none InCardQTypeClass" id="InCardQType12">
+                        <input type="hidden" value="" id="QuestionIdHidden" />
+                        <input type="hidden" value="" id="lowerChosen" />
+                        <input type="hidden" value="" id="upperChosen" />
+                        <input type="hidden" value="1" id="typeQuestion1" />
+                        <input type="hidden" value="" id="maxSelect" />
+
+
+
+
+                        <div>
+
+                        <div class="form-group">
+
+                        <div class="form-group d-flex space-between mb-3 align-items-center question-title-input-container">
+                        <div class=""> <label class="form-label">اگر</label></div>
+                        <div class="item-col">
+                        <div class="input-group ">
+                        <span class="input-group-text fs-7" id="inputGroup-sizing-default">در سوال</span>
+                        <input type="text" class="form-control" disabled value="" id="QuestionTitleInput12" />
+                        </div>
+                        </div>
+                        </div>
+
+
+                        <div data-repeater-list="MultipleChoiceRepeater12" id="MultipleChoiceRepeater12">
+                        <div data-repeater-item>
+                        <div class="form-group d-flex space-between mb-3 align-items-center multiple-choice-repeater-item-container" id="MultipleChoiceRepeaterItem12">
+                        <div class=""> <label class="form-label"></label></div>
+                        <div class="item-col col-md-5">
+                        <div class="input-group flex-nowrap">
+                        <span class="input-group-text">  پاسخ   </span>
+                        <div class="overflow-hidden flex-grow-1">
+                        <select class="form-select rounded-start-0 voteQuestionItemsList" id="voteQuestionItemsList12" name="selectItems" data-kt-repeater="voteQuestionItemsList12" data-control="select2" data-placeholder="انتخاب گزینه های سوال">
+                        <option></option>
+                        </select>
+                        </div>
+                        </div>
+                        </div>
+
+                        <div class="item-col col-md-5">
+                        <div class="input-group flex-nowrap">
+                        <span class="input-group-text"> برو به </span>
+                        <div class="overflow-hidden flex-grow-1">
+                        <select class="form-select rounded-start-0 getQuestionList" id="getQuestionList12" name="selectQuestion" data-kt-repeater="getQuestionList12" data-control="select2" data-placeholder="انتخاب پاسخ">
+                        <option></option>
+                        </select>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="item-col">
+                        <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-md btn-light-danger ">
+                        <i class="la la-trash-o fs-3"></i>
+                        </a>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+
+                        <div class="form-group  float-end mb-5">
+                        <a href="javascript:;" data-repeater-create class="btn  btn-sm btn-light-primary add-condition-item-dataSource-btn">
+                        <i class="la la-plus"></i>افزودن شرط
+                        </a>
+                        </div>
+                        </div>
+
+                        </div> *@
+
+                        <div class="alert alert-dismissible bg-lightborder border-gray border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-5 ">
+                            <span class="svg-icon svg-icon-2hx svg-icon-primary me-4 mb-5 mb-sm-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.3" d="M2 4V16C2 16.6 2.4 17 3 17H13L16.6 20.6C17.1 21.1 18 20.8 18 20V17H21C21.6 17 22 16.6 22 16V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4Z" fill="black"></path>
+                                    <path d="M18 9H6C5.4 9 5 8.6 5 8C5 7.4 5.4 7 6 7H18C18.6 7 19 7.4 19 8C19 8.6 18.6 9 18 9ZM16 12C16 11.4 15.6 11 15 11H6C5.4 11 5 11.4 5 12C5 12.6 5.4 13 6 13H15C15.6 13 16 12.6 16 12Z" fill="black"></path>
+                                </svg>
+                            </span>
+                            <div class="d-flex pe-0 pe-sm-10 w-100 ElseOtherState" for="ElseAnswearQuestion">
+                                <span class="w-100">در صورت عدم پاسخ دهی یا سایر حالات برو به </span>
+                                <div class="input-group d-flex w-100">
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text"> برو به </span>
+                                        <div class="overflow-hidden flex-grow-1">
+                                            <select class="form-select rounded-start-0 " data-control="select2" data-kt-repeater="select2" data-placeholder="انتخاب سوال" name="ElseAnswearQuestion" id="ElseAnswearQuestion">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer flex-end">
+
+                    <button type="reset" id="kt_modal_add_customer_cancel" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light me-3">انصراف</button>
+                    <button id="kt_modal_add_Condition_submit" class="btn btn-primary">
+                        <span class="indicator-label">تایید</span>
+                        <span class="indicator-progress">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script src="~/assets/js/sortable.min.js"></script>
+    <script src="~/assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
+
+    <link href="~/assets/js/jalalidatepicker.min.css" rel="stylesheet" />
+    <script src="~/assets/js/jalalidatepicker.min.js"></script>
+
+    <script src="~/assets/plugins/custom/cytoscape/cytoscape.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/custom/votepackage/VotePackageGraph.js" asp-append-version="true"></script>
+
+    <script src="~/assets/js/custom/votepackage/create.js" asp-append-version="true"></script>
+    <script src="~/assets/js/custom/votepackage/allowedUsers.js" asp-append-version="true"></script>
+    @* <script src="~/assets/js/custom/shared/hierarchySelectorPartial.js" asp-append-version="true"></script> *@
+}
+
