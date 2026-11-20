@@ -1613,11 +1613,36 @@ $(document).ready(function () {
     //$(document).on('input', '#WeightOfForm', function () {
     //    $('#WeightValue').text($(this).val());
     //});
-    $('#WeightValueQuestion').text($('#weightOfQuestion').val());
+    $(document).on('click', '.js-vote-package-weight-step', function () {
+        const input = document.getElementById('weightOfQuestion');
+        if (this.dataset.weightStep === '1') {
+            input.stepUp();
+        } else {
+            input.stepDown();
+        }
+        input.dataset.lastIntegerWeight = input.value;
+    });
 
-    // آپدیت هنگام تغییر
+    $(document).on('beforeinput', '#weightOfQuestion', function (event) {
+        const data = event.originalEvent?.data;
+        if (data && !/^[\d۰-۹٠-٩]+$/.test(data)) {
+            event.preventDefault();
+        }
+    });
+
+    $(document).on('paste', '#weightOfQuestion', function (event) {
+        const value = event.originalEvent?.clipboardData?.getData('text');
+        if (value && !/^[\d۰-۹٠-٩]+$/.test(value.trim())) {
+            event.preventDefault();
+        }
+    });
+
     $(document).on('input', '#weightOfQuestion', function () {
-        $('#WeightValueQuestion').text($(this).val());
+        if (this.validity.badInput || (this.value && !/^\d+$/.test(this.value))) {
+            this.value = this.dataset.lastIntegerWeight ?? '';
+        } else {
+            this.dataset.lastIntegerWeight = this.value;
+        }
     });
 
     $(document).on("click", ".add-confirm-config", function () {
@@ -2577,7 +2602,7 @@ function renderVoteQuestionSection(
                         data-package-id="${composition.votePackageId ?? ""
                 }"
 
-                        data-weight="${composition.weight ?? 0
+                        data-weight="${composition.weight ?? ""
                 }"
 
                         data-upper="${composition.upperLimitChosenCount ?? ""
@@ -2909,7 +2934,7 @@ function renderVoteQuestionCard(
 
                    data-package-id="${item.votePackageId ?? ""}"
 
-                   data-weight="${item.weight ?? 0}"
+                   data-weight="${item.weight ?? ""}"
 
                    data-upper="${item.upperLimitChosenCount ?? ""}"
 
@@ -4518,7 +4543,22 @@ function UpdateOwnerAll() {
 //});
 
 
+function getVotePackageQuestionWeight() {
+    const input = document.getElementById('weightOfQuestion');
+    return /^\d+$/.test(input.value) && input.validity.valid
+        ? input.valueAsNumber
+        : null;
+}
+
+function resetVotePackageQuestionWeight() {
+    const input = document.getElementById('weightOfQuestion');
+    input.value = input.defaultValue;
+    input.dataset.lastIntegerWeight = input.value;
+}
+
 function clearModalAddQuestionForData() {
+    resetVotePackageQuestionWeight();
+    $("#vote-package-question-weight").removeClass('d-none');
 
     $("#addDataQuestion").empty();
     $("#LowerLimitChosenCount").val('');
@@ -4796,9 +4836,9 @@ $('#AllQuestionByVoteQuestionGroupId').on('select2:select', function (e) {
         },
         success: function (data) {
             var voteQuestionIdGET = data.data.voteQuestionId;
-            $("#weightOfQuestion").val('');
-            $("#weightOfQuestion").val(data.data.weight);
-            $("#weightOfQuestion").text(data.data.weight);
+            $("#vote-package-question-weight").toggleClass(
+                'd-none', Number(data.data.voteQuestionTypeList.voteQuestionTypeId) === 14
+            );
             $("#voteQuestionIdGET").val(voteQuestionIdGET);
             $('.addDataQuestionMain').addClass('active');
             $('#bodyQuestion').addClass('active');
@@ -5267,6 +5307,12 @@ function CreateVotePackageDetailFunction(
         );
 
 
+    const weight = questionTypeId === 14 ? 0 : getVotePackageQuestionWeight();
+    if (weight === null) {
+        document.getElementById('weightOfQuestion').reportValidity();
+        return;
+    }
+
     const parentId =
         activeCompositionDetailId
             ? Number(activeCompositionDetailId)
@@ -5393,7 +5439,7 @@ function CreateVotePackageDetailFunction(
                 UpperLimitChosen,
 
             Weight:
-                $("#weightOfQuestion").val(),
+                weight,
 
             DisplayTypeEnum:
                 displayType
@@ -5648,7 +5694,7 @@ AcceptQuetionToPackage.addEventListener('click', function (e) {
     e.preventDefault();
 
     var ThisQuestion = parseInt($("#voteQuestionIdGET").val());
-    var Getweight = $('#weightOfQuestion').val();
+    const Getweight = getVotePackageQuestionWeight();
 
     $.ajax({
         url: '/VotePackageDetail/GetAllVotePackageDetailByVotePackageId',
@@ -5847,7 +5893,7 @@ AcceptQuetionToPackage.addEventListener('click', function (e) {
             // سایر سوال‌ها
             // ==========================================
 
-            if (Getweight > 0) {
+            if (Getweight !== null) {
 
                 // --------------------------------------
                 // نوع 1 - انتخابی
@@ -5872,9 +5918,7 @@ AcceptQuetionToPackage.addEventListener('click', function (e) {
                         LowerLimitChosen < 1 ||
                         UpperLimitChosen < 1 ||
                         LowerLimitChosen === undefined ||
-                        UpperLimitChosen === undefined ||
-                        Getweight < 0 ||
-                        Getweight === undefined
+                        UpperLimitChosen === undefined
                     ) {
 
                         Swal.fire({
@@ -6123,7 +6167,7 @@ AcceptQuetionToPackage.addEventListener('click', function (e) {
 
                 Swal.fire({
                     text:
-                        "لطفا وزن سوال را وارد نمایید.",
+                        "وزن سوال باید یک عدد صحیح از ۱ تا ۱۰ باشد.",
 
                     icon:
                         "warning",
@@ -6211,7 +6255,6 @@ function GetDetailsQuestion(QuestionId, typeQuestion, votePackageDetailId, voteP
         $("#DateTimeRepeater").empty(),
         $("#StarRepeater").empty(),
         $("#RangeRepeater").empty(),
-        $("#weightOfQuestion").val(''),
         $("#maxSelect").val(''),
         $('.voteQuestionItemsList').select2();
     $('.voteQuestionItemsList1_2').select2();
@@ -6221,8 +6264,8 @@ function GetDetailsQuestion(QuestionId, typeQuestion, votePackageDetailId, voteP
     $('.getQuestionList10').select2();
     $('.getQuestionList11').select2();
     $("#ElseAnswearQuestion").empty();
-    $("#weightOfQuestion").val(weightQuestion),
-        $('#ElseAnswearQuestion').prepend('<option  selected="selected"   disabled="disabled" value="None" >انتخاب نمایید</option>');
+    $("#voteQuestionWeight").text(String(weightQuestion ?? '').trim() || '—');
+    $('#ElseAnswearQuestion').prepend('<option  selected="selected"   disabled="disabled" value="None" >انتخاب نمایید</option>');
 
 
     $.ajax({
@@ -6980,7 +7023,6 @@ function GetDetailsQuestion(QuestionId, typeQuestion, votePackageDetailId, voteP
             $(".voteQuestionItemsList1").empty();
             $('#voteQuestionTypeIcon').empty();
             $("#getQuestionList").empty();
-            $('#voteQuestionWeight').html('');
             //$("#ElseAnswearQuestion").empty();
             //$('#ElseAnswearQuestion').prepend('<option  selected="selected"   disabled="disabled" value="None" >انتخاب نمایید</option>');
             const questionType =
@@ -7042,7 +7084,6 @@ function GetDetailsQuestion(QuestionId, typeQuestion, votePackageDetailId, voteP
 
                 `);
             $('#voteQuestionTypetitle').html(data2.data.voteQuestionTypeList.title);
-            $('#voteQuestionWeight').html(data2.data.weight);
             $('#voteQuestionTypeId').val(typeQuestion);
             $('#QuestionTitle').html(data2.data.title);
 

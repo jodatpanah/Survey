@@ -670,19 +670,19 @@
                                                                         <div class="card-title fs-4 p-2 pe-4">
                                                                             <h2 class="text-dark  fs-6 fw-bolder ps-2">تنظیمات عمومی سوال</h2>
                                                                         </div>
-                                                                        <label class="d-flex justify-content-center align-items-center cursor-pointer px-2">
-                                                                            <span class="form-check form-check-custom form-check-solid d-flex flex-column align-items-end">
-                                                                                <div class="d-flex justify-content-between w-100 mb-2">
-                                                                                    <span class="fw-bold">وزن سوال:</span>
-                                                                                    <span id="WeightValueQuestion" class="badge badge-light-primary">0</span>
-                                                                                </div>
-                                                                                <input type="range" value="0" min="-10" max="10" class="form-range mw-200px" id="weightOfQuestion" dir="ltr" name="weightOfQuestion">
-                                                                                <div class="d-flex justify-content-between w-100 mt-1">
-                                                                                    <small class="text-muted">10</small>
-                                                                                    <small class="text-muted">-10</small>
-                                                                                </div>
-                                                                            </span>
-                                                                        </label>
+                                                                        <div id="vote-package-question-weight" class="d-flex flex-column align-items-center gap-2 px-2">
+                                                                            <label for="weightOfQuestion" class="form-label fw-bold mb-0">وزن سوال در پرسشنامه</label>
+                                                                            <div class="d-flex align-items-center gap-2" dir="ltr">
+                                                                                <button type="button" class="btn btn-icon btn-sm btn-light-primary js-vote-package-weight-step"
+                                                                                        data-weight-step="-1" aria-label="کاهش وزن سوال">−</button>
+                                                                                <input type="number" value="1" min="1" max="10" step="1" required
+                                                                                       class="form-control form-control-solid form-control-sm text-center w-75px"
+                                                                                       id="weightOfQuestion" name="weightOfQuestion" aria-describedby="vote-package-question-weight-help" />
+                                                                                <button type="button" class="btn btn-icon btn-sm btn-light-primary js-vote-package-weight-step"
+                                                                                        data-weight-step="1" aria-label="افزایش وزن سوال">+</button>
+                                                                            </div>
+                                                                            <small id="vote-package-question-weight-help" class="text-muted">عدد صحیح از ۱ تا ۱۰</small>
+                                                                        </div>
                                                                         <div class="separator separator-dashed m-8"></div>
                                                                         <label class="d-flex flex-stack mb-4 cursor-pointer px-2">
                                                                             <span class="d-flex align-items-center me-2">
@@ -1155,8 +1155,8 @@
                                                             <path d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z" fill="black"></path>
                                                         </svg>
                                                     </span>
-                                                    وزن سوال
-                                                    <span class="text-gray-800 px-2" id="voteQuestionWeight"></span>
+                                                    وزن سوال در پرسشنامه
+                                                    <span class="badge badge-light-primary mx-2" id="voteQuestionWeight"></span>
                                                 </div>
                                             </div>
                                             <input type="hidden" value="" id="voteQuestionTypeId" />
