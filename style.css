@@ -2855,15 +2855,6 @@ input.star:checked ~ .rev-box {
         position: absolute;
     }
 
-    .form-structor #votePackageBox {
-        position: relative;
-        bottom: 0;
-        top: -80px;
-        height: 100%;
-        width: 50% !important;
-        right: 50% !important;
-    }
-
     #content {
         height: calc(100% - 80px);
     }
@@ -6736,91 +6727,45 @@ input.inputFild[pattern] {
 ========================================================= */
 
 .starterVotepackage {
+    position: fixed !important;
     inset: 0 !important;
     z-index: 100 !important;
     width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0;
+    max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
     background: #f7f6f9 !important;
 }
 
-
-    .starterVotepackage.d-none {
-        display: none !important;
-    }
-
-
-    .starterVotepackage .survey-welcome-screen {
-        position: relative;
-        width: 100%;
-        height: 100dvh;
-        display: flex;
-        flex-direction: column;
-        direction: rtl;
-        overflow: hidden;
-        font-family: iransansweb_medium, Tahoma, sans-serif;
-    }
-
-
-@media (max-width: 576px) {
-    .starterVotepackage {
-        position: fixed;
-        height: 100dvh !important;
-    }
-
-    .starterVotepackage .survey-welcome-screen {
-        height: 100dvh;
-    }
+.starterVotepackage.d-none {
+    display: none !important;
 }
 
-    /* =========================================================
-   Top / Hero - 60%
-========================================================= */
+.starterVotepackage .survey-welcome-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    overflow: hidden;
+    font-family: iransansweb_medium, Tahoma, sans-serif;
+}
 
-    /* =========================================================
-   Welcome Hero - Survey Concept Background
-========================================================= */
 .starterVotepackage .survey-welcome-hero {
     position: relative;
-    flex: 0 0 60%;
-    height: 60%;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
-    padding: max(24px, env(safe-area-inset-top)) 24px 48px;
+    padding: max(12px, env(safe-area-inset-top)) 24px 28px;
     overflow: hidden;
-    background-image: url('/images/survey-welcome-bg-optimized.webp');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: url('/images/survey-welcome-bg-optimized.webp') center 27% / cover no-repeat;
     isolation: isolate;
-    display: none;
-}
-@media (max-width: 576px) {
-
-    .starterVotepackage .survey-welcome-hero {
-        display: flex;
-        flex-basis: 60%;
-        height: 60%;
-        padding-bottom: 44px;
-        background-size: cover;
-        background-position: center 27%;
-    }
-
-
-    /*.starterVotepackage .survey-welcome-logo {
-        width: 185px;
-        max-width: 58vw;
-    }*/
-
-
-    .starterVotepackage .survey-welcome-panel {
-        flex-basis: 40%;
-        height: 40%;
-        margin-top: -28px;
-        border-radius: 30px 30px 0 0;
-    }
 }
 
         .starterVotepackage .survey-welcome-hero::before {
@@ -6867,21 +6812,14 @@ input.inputFild[pattern] {
 ========================================================= */
 
 .starterVotepackage .survey-welcome-panel {
-    --panel-overlap: 30px;
-    bottom: 0;
+    position: relative;
     z-index: 10;
-    flex: 100%;
-    height: 100%;
-    min-height: 100%;
+    flex: 1 1 0;
+    min-height: 0;
     width: 100%;
-    margin-top: calc(var(--panel-overlap) * -1);
     display: flex;
     background: rgba(255, 255, 255, 0.85);
-    border-radius: 34px 34px 0 0;
-    box-shadow: 0 -18px 55px rgba(35, 30, 38, .08);
     overflow: hidden;
-    flex-shrink: 0;
-    padding-bottom: 25px;
 }
 
 
@@ -6892,15 +6830,23 @@ input.inputFild[pattern] {
     .starterVotepackage .survey-welcome-panel-content {
         width: 100%;
         max-width: 560px;
+        min-height: 0;
         margin: 0 auto;
-        padding: 30px 26px max(20px, env(safe-area-inset-bottom));
+        padding: max(20px, env(safe-area-inset-top)) 26px max(16px, env(safe-area-inset-bottom));
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 12px;
         text-align: center;
-        opacity: 0;
-        transform: translateY(16px);
-        animation: surveyWelcomePanelEnter .65s cubic-bezier(.22, 1, .36, 1) .12s forwards;
+    }
+
+    .starterVotepackage .survey-welcome-copy {
+        width: 100%;
+        min-height: 0;
+        flex: 1 1 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        overflow-wrap: anywhere;
     }
 
 
@@ -6961,7 +6907,7 @@ input.inputFild[pattern] {
 .starterVotepackage .survey-welcome-message {
     width: 100%;
     max-width: 430px;
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
     display: block !important;
     color: #6c726e !important;
@@ -6970,9 +6916,7 @@ input.inputFild[pattern] {
     font-size: 13px !important;
     font-weight: 400 !important;
     line-height: 2 !important;
-    text-align: center !important;
     text-align: justify !important;
-    overflow-y: scroll;
 }
 
 
@@ -7053,71 +6997,34 @@ input.inputFild[pattern] {
 }
 
 
-@keyframes surveyWelcomePanelEnter {
-
-    from {
-        opacity: 0;
-        transform: translateY(16px);
+@media (max-width: 576px) and (min-height: 26rem), (hover: none) and (pointer: coarse) and (min-height: 26rem) {
+    .starterVotepackage .survey-welcome-hero {
+        display: flex;
+        flex: 0 0 52%;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .starterVotepackage .survey-welcome-logo {
+        width: min(200px, 55vw);
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .starterVotepackage .survey-welcome-panel {
+        margin-top: -24px;
+        border-radius: 30px 30px 0 0;
+        box-shadow: 0 -18px 55px rgba(35, 30, 38, .08);
+    }
+
+    .starterVotepackage .survey-welcome-panel-content {
+        padding-top: 20px;
     }
 }
 
-@media (max-width: 576px) {
-
-    .starterVotepackage .survey-welcome-hero {
-        flex-basis: 100%;
-        height: 100%;
-        padding-bottom: 380px;
-    }
-
-
-    /*.starterVotepackage .survey-welcome-logo {
-        width: 175px;
-        max-width: 55vw;
-    }*/
-
-
-    .starterVotepackage .survey-welcome-hero::after {
-        width: 230px;
-        height: 230px;
-    }
-
-
-    .starterVotepackage .survey-welcome-panel {
-        position: absolute;
-        --panel-overlap: 58px;
-        flex-basis: calc(45% + var(--panel-overlap));
-        height: calc(45% + var(--panel-overlap));
-        min-height: calc(40% + var(--panel-overlap));
-        margin-top: calc(var(--panel-overlap) * -1);
-        border-radius: 30px 30px 0 0;
-    }
-
-
+@media (max-height: 26rem) {
     .starterVotepackage .survey-welcome-panel-content {
-        padding: 25px 22px max(16px, env(safe-area-inset-bottom));
-    }
-
-
-    .starterVotepackage .survey-welcome-title {
-        font-size: 21px;
-    }
-
-
-    .starterVotepackage .survey-welcome-message {
-        font-size: 12px !important;
-        line-height: 1.95 !important;
-    }
-
-
-    .starterVotepackage .survey-welcome-start-btn {
-        height: 55px;
-        flex-basis: 55px;
-        border-radius: 17px;
+        padding-top: max(8px, env(safe-area-inset-top));
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        gap: 8px;
     }
 }
 
@@ -7157,42 +7064,18 @@ input.inputFild[pattern] {
    Mobile
 ========================================================= */
 
-@media (max-width: 576px) {
-    .starterVotepackage .survey-welcome-logo-wrap {
-        width: 170px;
-        height: 170px;
-        margin-bottom: 28px;
-    }
-
-
-    .starterVotepackage .survey-welcome-logo {
-        width: 200px;
-        height: 240px;
-    }
-
-
+@media (max-width: 576px), (hover: none) and (pointer: coarse) {
     .starterVotepackage .survey-welcome-title {
         font-size: 22px;
-        /*margin-bottom: 10px;*/
     }
-
 
     .starterVotepackage .survey-welcome-message {
         max-width: 340px;
         font-size: 14px !important;
-        line-height: 2.05 !important;
     }
-
-
-    .starterVotepackage .survey-welcome-action {
-        margin-top: 30px;
-    }
-
 
     .starterVotepackage .survey-welcome-start-btn {
         max-width: 100%;
-        height: 58px;
-        border-radius: 18px;
     }
 }
 
