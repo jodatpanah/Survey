@@ -1,0 +1,214 @@
+@using Survey.EndPoint.Presentation.Helpers
+@using Survey.FrameWork.DomainModel.Dtos.BaseResult
+@model PagedResult<Survey.FrameWork.common.VoteQuestion.VoteQuestionListDto>
+
+@{
+
+    ViewData["TitlePage"] = "  لیست سوالات  ";
+    long i = (Model.PageNumber - 1) * Model.TotalRecordCount;
+}
+
+
+<!--searchForm-->
+
+
+<form class="searchForm" method="post" id="searchForm">
+    <input type="hidden" name="page" value="1" id="pageInput" />
+    @Html.AntiForgeryToken()
+    <div class="card mb-7">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <input hidden id="searchVoteQuestionTypeId" value="@ViewBag.VoteQuestionTypeId" />
+                <input hidden id="searchVoteQuestionGroupId" value="@ViewBag.VoteQuestionGroupId" />
+
+                <div class="position-relative w-md-400px me-md-2">
+                    <span class="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control form-control-sm form-control-solid ps-10" name="Title" value="@ViewBag.Title" placeholder="عنوان" />
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-sm btn-bg-light px-2 py-2">
+                        <span class="svg-icon svg-icon-1  svg-icon-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8C2182">
+                                <path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="#8C2182" />
+                                <path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="#8C2182" />
+                            </svg>
+                        </span>
+                    </button>
+
+
+                    <a id="kt_horizontal_search_advanced_link" class="btn btn-sm  btn-icon-primary btn-text-primary me-2  " data-bs-toggle="collapse" href="#kt_advanced_search_form"> جست و جوی پیشرفته</a>
+                </div>
+
+            </div>
+
+            <div class="collapse" id="kt_advanced_search_form">
+                <div class="separator separator-dashed mt-9 mb-6"></div>
+                <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                     data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
+                    <div class="fv-row">
+                        <div class="row g-9 mb-2">
+                            <div class="col-md-6 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">عنوان</label>
+                                <input type="text" class="form-control form-control-sm  form-control-solid" placeholder="عنوان" name="TitlePro" value="@ViewBag.TitlePro">
+                            </div>
+
+
+                            <div class="col-md-6 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">کلمه کلیدی</label>
+                                <input class="form-control  form-control-sm  form-control-solid" name="keyword" placeholder="کلمه کلیدی" value="@ViewBag.keyword">
+
+                            </div>
+
+
+                            <div class="col-md-3 fv-row fv-plugins-icon-container">
+                                <label class="fs-6 fw-bold ">نوع پرسش</label>
+                                <select class="form-select form-select-solid form-select-sm getdataClass" data-hide-search="true" data-placeholder="انتخاب نوع پرسش" id="VotequestionTypeIdSearch" name="VoteQuestionTypeId">
+                                    <option value="">انتخاب کنید</option>
+                                </select>
+
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label for="VoteQuestionGroupId" class="fs-6 fw-bold">
+                                    نام گروه
+                                </label>
+                                <select class="form-select form-select-sm form-select-solid getdataClass" data-placeholder="انتخاب نام گروه" data-control="select2" id="VoteQuestionGroupId" name="VoteQuestionGroupId">
+                                    <option id="VoteQuestionGroupId">انتخاب نام گروه</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row px-3 float-end">
+                            <button type="submit" class="btn btn-primary btn-sm min-w-125px ">
+                                جست و جو
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <img class="bgImage" src="../../assets/media/sigma-1/5.png" />
+
+        </div>
+    </div>
+</form>
+
+
+
+
+<div class="card mb-8">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+
+        <h2 class="card-title fw-bolder">
+            لیست سوالات
+
+        </h2>
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+
+
+            <a asp-controller="VoteQuestion" asp-action="Create" class="btn btn-acceptQuestion btn-sm ">
+                <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs011.svg-->
+                <span class="svg-icon svg-icon-muted icon-size-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 13V11C3 10.4 3.4 10 4 10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14H4C3.4 14 3 13.6 3 13Z" fill="#D9EFBD"></path>
+                        <path d="M13 21H11C10.4 21 10 20.6 10 20V4C10 3.4 10.4 3 11 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="#D9EFBD"></path>
+                    </svg>
+                </span>
+                افزودن
+            </a>
+
+        </div>
+    </div>
+    <div class="card-body py-4">
+        <div class="table-responsive">
+            <table class="table align-middle table-row-dashed  fs-6 gy-5" id="kt_main_table">
+                <thead>
+                    <tr class="text-start fw-bolder fs-6 bg-light ">
+
+
+                        <th class="rounded-start text-start w-125px max-300char ps-4"> @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Title)</th>
+                        <th class="text-start min-w-100px">  @Html.DisplayNameFor(model => model.Result.FirstOrDefault().VoteQuestionGroupList.Title)</th>
+                        <th class="text-start min-w-100px">     @Html.DisplayNameFor(model => model.Result.FirstOrDefault().VoteQuestionTypeList.Title)</th>
+                        <th class="text-start min-w-100px">     @Html.DisplayNameFor(model => model.Result.FirstOrDefault().KeyWord)</th>
+                        <th class="text-end min-w-100px ps-4">   عملیات</th>
+                    </tr>
+
+                <tbody class="fw-bold text-gray-900">
+                        @foreach (var item in Model.Result)
+                        {
+                        <tr>
+
+                            <td class="text-start pe-0 ps-4 ">
+                                <span class="max-300char w-125px ">@item.Title</span>
+                            </td>
+                            <td class="text-start pe-0">
+                                <span class="">@Html.DisplayFor(modelItem => item.VoteQuestionGroupList.Title)</span>
+                            </td>
+                            <td class="text-start pe-0">
+                                <div class="badge" style="background-color:  @Html.DisplayFor(modelItem => item.VoteQuestionTypeList.Color);">
+                                    <span class="svg-icon svg-icon-4  svg-icon-info">
+
+                                        <img src="  @Html.DisplayFor(modelItem => item.VoteQuestionTypeList.Icon)" />
+                                    </span>
+
+                                </div>
+                                <span class="fs-6 fw-bolder">  @Html.DisplayFor(modelItem => item.VoteQuestionTypeList.Title)</span>
+                            </td>
+                            <td class="text-start pe-0 limitDataTableHead15">
+                                <span class="limitDataTable">
+                                        @Html.DisplayFor(modelItem => item.KeyWord)
+                                </span>
+                            </td>
+
+                            <td class="text-end px-3 ps-4">
+                                <a asp-controller="VoteQuestion" asp-action="Update" asp-route-voteQuestionId="@item.VoteQuestionId"
+                                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-primary btn-text-primary btn-sm px-4" title="ویرایش">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
+                                            <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="black"></path>
+                                        </svg>
+                                    </span>
+
+                                </a>
+                                <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-danger btn-text-danger btn-sm px-4 js-delete-vote-question"
+                                   data-vote-question-id="@item.VoteQuestionId"
+                                   data-vote-question-title="@item.Title"
+                                   id="@Html.DisplayFor(modelItem => item.VoteQuestionId)" title="حذف">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
+                                            <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"></path>
+                                            <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </td>
+
+                        </tr>
+
+
+
+                        }
+
+                </tbody>
+            </table>
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, Title = ViewBag.Title, TitlePro = ViewBag.TitlePro, Keyword = ViewBag.Keyword, VoteQuestionTypeId = ViewBag.VoteQuestionTypeId }))
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="../assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
+
+    <script src="../assets/js/custom/VoteQuestion/index.js" asp-append-version="true"></script>
+
+}
+
+
+
