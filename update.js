@@ -260,10 +260,36 @@ $(document).ready(function () {
     const $choiceOptions = $('#kt_repeater_RadioShowcase');
 
     $choiceOptions.find('.Weight').each(function () {
-        const value = this.valueAsNumber;
-        if (Number.isSafeInteger(value)) {
+        if (this.value && !Number.isSafeInteger(this.valueAsNumber)) {
+            this.value = '';
+        } else if (this.value) {
+            const value = this.valueAsNumber;
             this.min = Math.min(Number(this.min), value);
             this.max = Math.max(Number(this.max), value);
+            this.value = String(value);
+        }
+        this.dataset.lastIntegerWeight = this.value;
+    });
+
+    $choiceOptions.on('beforeinput', '.Weight', function (event) {
+        const data = event.originalEvent?.data;
+        if (data && !/^-?[\d۰-۹٠-٩]*$/.test(data)) {
+            event.preventDefault();
+        }
+    });
+
+    $choiceOptions.on('paste', '.Weight', function (event) {
+        const pasted = event.originalEvent?.clipboardData?.getData('text');
+        if (pasted && !/^-?[\d۰-۹٠-٩]+$/.test(pasted.trim())) {
+            event.preventDefault();
+        }
+    });
+
+    $choiceOptions.on('input', '.Weight', function () {
+        if (this.value && !/^-?\d+$/.test(this.value)) {
+            this.value = this.dataset.lastIntegerWeight ?? '';
+        } else if (!this.validity.badInput) {
+            this.dataset.lastIntegerWeight = this.value;
         }
     });
 
@@ -278,6 +304,7 @@ $(document).ready(function () {
         } else {
             input.stepDown();
         }
+        input.dataset.lastIntegerWeight = input.value;
     });
 
     function appendOptions(data) {
@@ -454,6 +481,7 @@ $(document).ready(function () {
                 this.max = '10';
                 this.required = true;
                 this.value = '1';
+                this.dataset.lastIntegerWeight = this.value;
             });
 
             // پاک کردن فایل انتخاب‌شده

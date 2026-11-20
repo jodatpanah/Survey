@@ -98,6 +98,37 @@ $(document).ready(function () {
     var selected = null;
     const $choiceOptions = $('#kt_repeater_RadioShowcase');
 
+    $choiceOptions.find('.Weight').each(function () {
+        if (this.value && !Number.isSafeInteger(this.valueAsNumber)) {
+            this.value = '';
+        } else if (this.value) {
+            this.value = String(this.valueAsNumber);
+        }
+        this.dataset.lastIntegerWeight = this.value;
+    });
+
+    $choiceOptions.on('beforeinput', '.Weight', function (event) {
+        const data = event.originalEvent?.data;
+        if (data && !/^-?[\d۰-۹٠-٩]*$/.test(data)) {
+            event.preventDefault();
+        }
+    });
+
+    $choiceOptions.on('paste', '.Weight', function (event) {
+        const pasted = event.originalEvent?.clipboardData?.getData('text');
+        if (pasted && !/^-?[\d۰-۹٠-٩]+$/.test(pasted.trim())) {
+            event.preventDefault();
+        }
+    });
+
+    $choiceOptions.on('input', '.Weight', function () {
+        if (this.value && !/^-?\d+$/.test(this.value)) {
+            this.value = this.dataset.lastIntegerWeight ?? '';
+        } else if (!this.validity.badInput) {
+            this.dataset.lastIntegerWeight = this.value;
+        }
+    });
+
     $choiceOptions.on('click', '.js-option-weight-step', function () {
         const input = $(this).siblings('.Weight')[0];
         if (input.disabled) {
@@ -109,6 +140,7 @@ $(document).ready(function () {
         } else {
             input.stepDown();
         }
+        input.dataset.lastIntegerWeight = input.value;
     });
 
     $('#VoteQuestionGroupId').select2().on('select2:select', function (e) {
@@ -401,7 +433,7 @@ $(document).ready(function () {
             const $row = $(this);
             $row.find('.OrderIndex').val('');
             fillOptionPriorities();
-            $row.find('.Weight').val('1');
+            $row.find('.Weight').val('1').attr('data-last-integer-weight', '1');
             $row.slideDown(function () {
                 $row.find('.VoteQuestionItemTitle').trigger('focus');
             });
