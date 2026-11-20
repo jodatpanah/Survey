@@ -6,6 +6,7 @@ let modalTotalRecords = 0;
 let modalTotalPages = 1;
 let modalRecordCount = 10;
 let modalSmsId = null;
+let modalResendRecipients = [];
 function renderTableSkeleton(rowCount = 5) {
     const columnCount = 12;
     let skeletonRows = '';
@@ -580,6 +581,8 @@ function closeCustomModal() {
     const modal = document.getElementById('customDetailsModal');
     modal.classList.remove('show');
     document.body.classList.remove('modal-open');
+    modalResendRecipients = [];
+    selectSmsResendAudience(document.querySelector('#smsResendAudienceOptions [data-audience="all"]'));
 }
 
 document.getElementById('customDetailsModalClose').addEventListener('click', closeCustomModal);
@@ -595,11 +598,48 @@ document.addEventListener('keydown', function (e) {
 });
 
 
+function selectSmsResendAudience(option) {
+    if (!option) return;
+
+    $('#smsResendAudienceOptions [data-audience]').removeClass('active').attr('aria-pressed', 'false');
+    $(option).addClass('active').attr('aria-pressed', 'true');
+    $('#smsResendAudienceLabel').text(option.textContent.trim());
+}
+
+function showSmsResendPreview(title, recipientLabel) {
+    Swal.fire({
+        target: document.getElementById('customDetailsModal'),
+        keydownListenerCapture: true,
+        icon: 'info',
+        title,
+        text: recipientLabel + ' | ارسال پیامک پس از اتصال سرویس فعال می‌شود.',
+        confirmButtonText: 'متوجه شدم'
+    });
+}
+
+$('#smsResendAudienceOptions').on('click', '[data-audience]', function () {
+    selectSmsResendAudience(this);
+});
+
+$('#smsResendGroupButton').on('click', function () {
+    const audience = $('#smsResendAudienceLabel').text();
+    showSmsResendPreview('ارسال مجدد گروهی', 'گیرندگان این گزارش: ' + audience);
+});
+
+$('#customDetailsModalBody').on('click', '.js-sms-resend-recipient', function () {
+    const recipient = modalResendRecipients[Number(this.dataset.recipientIndex)];
+    if (recipient?.mobileNo) {
+        showSmsResendPreview('ارسال مجدد لینک', 'شماره گیرنده: ' + convertToPersianNumbers(recipient.mobileNo));
+    }
+});
+
 function showDetailsModal(data) {
 
     const items = Array.isArray(data)
         ? data
         : data.items || data.data || data.result || [];
+
+    modalResendRecipients = items;
 
     if (!items || items.length === 0) {
         Swal.fire({
@@ -626,6 +666,7 @@ function showDetailsModal(data) {
     };
 
     const rows = items.map((item, i) => {
+        const hasMobileNumber = String(item.mobileNo ?? '').trim() !== '';
 
         const startIndex =
             (modalCurrentPage - 1) * modalRecordCount;
@@ -687,6 +728,14 @@ function showDetailsModal(data) {
                 : '-'
             }
                 </td>
+
+                <td class="text-center text-nowrap">
+                    <button type="button" class="btn btn-sm btn-light-primary js-sms-resend-recipient"
+                            data-recipient-index="${i}" ${hasMobileNumber ? '' : 'disabled'}>
+                        <i class="ri-send-plane-line" aria-hidden="true"></i>
+                        ارسال مجدد لینک
+                    </button>
+                </td>
             </tr>
         `;
     }).join('');
@@ -705,6 +754,7 @@ function showDetailsModal(data) {
                         <th>تاریخ ارسال</th>
                         <th>تعداد تلاش</th>
                         <th>لینک کوتاه</th>
+                        <th>ارسال مجدد</th>
                     </tr>
                 </thead>
 

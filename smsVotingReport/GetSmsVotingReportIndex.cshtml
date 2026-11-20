@@ -144,6 +144,29 @@
             </div>
         </div>
 
+        <div class="border-bottom px-3 py-3">
+            <div class="d-flex flex-wrap align-items-center gap-2" role="group" aria-label="ارسال مجدد گروهی">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-sm btn-light-primary dropdown-toggle"
+                            id="smsResendAudienceButton" data-bs-toggle="dropdown" aria-expanded="false"
+                            aria-controls="smsResendAudienceOptions">
+                        گیرندگان: <span id="smsResendAudienceLabel">همه شماره‌ها</span>
+                    </button>
+                    <ul class="dropdown-menu" id="smsResendAudienceOptions" aria-labelledby="smsResendAudienceButton">
+                        <li><button type="button" class="dropdown-item active" data-audience="all" aria-pressed="true">همه شماره‌ها</button></li>
+                        <li><button type="button" class="dropdown-item" data-audience="not-participated" aria-pressed="false">شماره‌های بدون مشارکت</button></li>
+                        <li><button type="button" class="dropdown-item" data-audience="participated" aria-pressed="false">شماره‌های مشارکت‌کننده</button></li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary" id="smsResendGroupButton"
+                        aria-describedby="smsResendGroupHint">
+                    <i class="ri-send-plane-line" aria-hidden="true"></i>
+                    ارسال مجدد گروهی
+                </button>
+            </div>
+            <div class="text-muted small mt-2" id="smsResendGroupHint">گروه انتخابی به کل این گزارش مربوط است.</div>
+        </div>
+
         <div class="custom-modal-body" id="customDetailsModalBody"></div>
 
         <div class="custom-modal-footer">
@@ -159,5 +182,5 @@
     <link href="~/assets/js/jalalidatepicker.min.css" rel="stylesheet" />
     <script src="~/assets/js/jalalidatepicker.min.js"></script>
 
-    <script src="~/assets/js/custom/Reports/GetSmsVotingReport.js"></script>
+    <script src="~/assets/js/custom/Reports/GetSmsVotingReport.js" asp-append-version="true"></script>
 }
