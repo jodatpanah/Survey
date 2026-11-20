@@ -302,7 +302,8 @@ $(document).ready(function () {
     });
 
     ///
-    $('#VotequestionTypeId').empty();
+    const $typeStatus = $('#question-editor-type-status');
+    const $questionTypes = $('#VotequestionTypeIdSearch').attr('aria-busy', 'true');
     $.ajax({
         type: "GET",
         dataType: 'JSOn',
@@ -311,13 +312,19 @@ $(document).ready(function () {
             pageSize: 100
         },
         success: function (data) {
+            if (!data.length) {
+                $typeStatus.text('نوع پرسشی برای انتخاب وجود ندارد.');
+                return;
+            }
+
+            $typeStatus.addClass('d-none');
             for (var i = 0; i < data.length; i++) {
-                $("#VotequestionTypeIdSearch").append(
-                    '<label class="d-flex flex-stack cursor-pointer mb-5">' +
+                $questionTypes.append(
+                    '<label class="d-flex flex-stack cursor-pointer">' +
                     '<span class="d-flex align-items-center me-2">' +
                     '<span class="symbol symbol-50px me-6 mr-0">' +
                     '<span class="symbol-label color-item" data-color="' + data[i].color + '">' +
-                    '<img src="' + data[i].icon + '"/>' +
+                    '<img src="' + data[i].icon + '" alt="" />' +
                     '</span>' +
                     '</span>' +
                     '<span class="d-flex flex-column">' +
@@ -341,11 +348,17 @@ $(document).ready(function () {
                 el.style.setProperty('background-color', color, 'important');
             });
 
-            $(document).on("change", ".vote-type-radio", function () {
+            $questionTypes.on("change", ".vote-type-radio", function () {
                 const id = $(this).data("id");
                 SelectTypeQestion(id);
             });
 
+        },
+        error: function () {
+            $typeStatus.text('انواع پرسش بارگذاری نشد. صفحه را دوباره بارگذاری کنید.');
+        },
+        complete: function () {
+            $questionTypes.removeAttr('aria-busy');
         }
     });
 

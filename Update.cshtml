@@ -1,158 +1,90 @@
 @model Survey.FrameWork.common.VoteQuestion.UpdateVoteQuestionCommand
 
-<div class="d-flex flex-column flex-lg-row">
+<link rel="stylesheet" href="~/assets/css/custom/question-editor.css" asp-append-version="true" />
 
-    <div class="flex-lg-row-fluid order-2 order-lg-1 mb-10 mb-lg-0">
-        <div class="d-flex flex-column gap-7 gap-lg-10">
-            <div class="card">
-                <div class="card-body pt-9 pb-0">
-                    <div class="d-flex flex-wrap flex-sm-nowrap mb-1">
-                        <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-80px h-80px w-lg-80px h-lg-80px me-7 mb-4">
-                            <img class="mw-50px mw-lg-75px" src="~/assets/media/sigma-1/4.png" alt="image" />
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start flex-wrap mt-1">
-                                <div class="d-flex flex-column">
-                                    <div class="d-flex align-items-center mb-1">
-                                        <div class="fw-bolder mt-5">ویرایش سوال</div>
-                                        <div class="text-gray-600"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<section class="question-editor" dir="rtl" aria-labelledby="question-editor-title">
+    <header class="question-editor-header">
+        <h1 id="question-editor-title">ویرایش سوال</h1>
+    </header>
+
+    <form asp-action="Update" asp-controller="VoteQuestion" id="kt_add_Question_form" class="form question-editor-form">
+        @Html.AntiForgeryToken()
+        <input asp-for="VoteQuestionTypeId" type="hidden" />
+        <input asp-for="VoteQuestionId" type="hidden" value="@Model.VoteQuestionId" />
+
+        <div class="question-editor-overview">
+            <section class="question-editor-panel" aria-labelledby="question-editor-content-title">
+                <h2 id="question-editor-content-title" class="question-editor-section-title">متن سوال</h2>
+                <div class="question-editor-fields">
+                    <div>
+                        <label for="Title" class="form-label required">عنوان سوال</label>
+                        <textarea asp-for="Title" class="form-control form-control-solid" rows="3"
+                                  placeholder="متن سوال را وارد کنید" maxlength="200" aria-required="true"></textarea>
                     </div>
-                    <div class="separator"></div>
-                    <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
-                        <!--<ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2">-->
-                        <li class="nav-item">
-                            <a class="nav-link text-active-primary p-4 active" data-bs-toggle="tab" href="#kt_general">عمومی</a>
-                        </li>
-                        @*   <li class="nav-item">
-                        <a class="nav-link text-active-primary p-4" data-bs-toggle="tab" href="#kt_advanced">پیشرفته</a>
-                        </li> *@
-                    </ul>
+                    <div>
+                        <label for="ValidationMessage" class="form-label">پیام راهنما</label>
+                        <input type="text" class="form-control form-control-solid" name="ValidationMessage" asp-for="ValidationMessage" placeholder="مثلا یک گزینه را انتخاب کنید" maxlength="300" />
+                    </div>
                 </div>
-            </div>
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="kt_general" role="tab-panel">
-                    <form asp-action="Update" asp-controller="VoteQuestion" id="kt_add_Question_form" class="form d-flex flex-column flex-lg-row">
-                        @Html.AntiForgeryToken()
-                        <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 ">
-                            <input asp-for="VoteQuestionTypeId" type="hidden" />
-                            <input asp-for="VoteQuestionId" type="hidden" value="@Model.VoteQuestionId" />
+            </section>
 
+            <section class="question-editor-panel" aria-labelledby="question-editor-meta-title">
+                <h2 id="question-editor-meta-title" class="question-editor-section-title">دسته‌بندی و کلیدواژه‌ها</h2>
+                <div class="question-editor-fields">
+                    <div>
+                        <label for="VoteQuestionGroupId" class="form-label required">گروه</label>
+                        <select id="VoteQuestionGroupId" name="VoteQuestionGroupId" data-control="select2" data-placeholder=" نام گروه را انتخاب نمایید" class="form-select form-select-solid ">
+                        <option value="@Model.VoteQuestionGroupId">@Model.VoteQuestionGroupTitle</option>
+                        </select>
+                    </div>
+                    <div class="subGroup">
+                        <label for="SubVoteQuestionGroupId" class="form-label required">زیرگروه</label>
+                        <select id="SubVoteQuestionGroupId" name="SubVoteQuestionGroupId" data-control="select2" data-placeholder=" نام زیر گروه را انتخاب نمایید" class="form-select form-select-solid ">
+                        <option value="@Model.VoteQuestionGroupChildId">@Model.VoteQuestionGroupChildTitle</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="KeyWord" class="form-label required">کلمات کلیدی</label>
+                        <input asp-for="KeyWord" class="form-control form-control-solid" aria-required="true"
+                               aria-describedby="tag-error-message" />
+                        <div class="error-message fs-7 text-muted" id="tag-error-message"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
 
-                            <div class="card card-flush py-4">
-                                <div class="px-10 py-1">
-                                    <label class="d-flex align-items-center fs-5 fw-bold">
-                                        <span class="required"> دسته بندی سوال  </span>
-                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب گروه سوال"></i>
-                                    </label>
-                                </div>
-                                <div class="card-body px-10">
-                                    <div class="mb-6 fv-row">
-                                        <select id="VoteQuestionGroupId" name="VoteQuestionGroupId" data-control="select2" data-placeholder=" نام گروه را انتخاب نمایید" class="form-select form-select-solid ">
-                                            <option value="@Model.VoteQuestionGroupId">@Model.VoteQuestionGroupTitle</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-6 fv-row subGroup">
-                                        <select id="SubVoteQuestionGroupId" name="SubVoteQuestionGroupId" data-control="select2" data-placeholder=" نام زیر گروه را انتخاب نمایید" class="form-select form-select-solid ">
-                                            <option value="@Model.VoteQuestionGroupChildId">@Model.VoteQuestionGroupChildTitle</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="question-editor-type-layout">
+            <section class="question-editor-panel question-editor-type-picker" aria-labelledby="question-editor-type-title">
+                <h2 id="question-editor-type-title" class="question-editor-section-title">نوع پرسش</h2>
+                <p class="question-editor-type-status" id="question-editor-type-status" role="status">در حال بارگذاری انواع پرسش…</p>
+                <div id="VotequestionTypeIdSearch" role="radiogroup" aria-labelledby="question-editor-type-title"
+                     aria-required="true"></div>
+            </section>
 
-                            <div class="card card-flush py-4">
-                                <div class="px-10 py-1">
-                                    <label class="d-flex align-items-center fs-5 fw-bold">
-                                        <span class="required">کلمات کلیدی</span>
-                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
-                                    </label>
-                                </div>
-                                <div class="card-body px-10">
-                                    <div class="mb-6 fv-row">
-                                        <input class="form-control form-control-solid" asp-for="KeyWord" placeholder="   " />
-                                    </div>
-                                    <div class="error-message fs-7 text-muted" id="tag-error-message"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10 ms-lg-10 me-0">
-                            <div class="card card-flush py-4">
-                                <div class="card-body px-15">
-                                    <div class="mb-6 fv-row">
-                                        <div class="col-md-12 fv-row fv-plugins-icon-container">
-                                            <label class="required fs-6 fw-bold mb-1">
-                                                <span class="px-2"> عنوان سوال</span>
-                                            </label>
-                                            <textarea type="text" name="Title" class="form-control form-control-solid" asp-for="Title" placeholder="عنوان سوال را وارد نمایید." maxlength="200"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mb-6 fv-row row">
-                                        <div class="col-md-12 fv-row fv-plugins-icon-container">
-                                            <label class="fs-6 fw-bold mb-1">
-                                                <span class="px-2">  پیغام راهنما  </span>
-
-                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="  پیغام راهنما  "></i>
-                                            </label>
-                                            <input type="text" class="form-control form-control-solid" name="ValidationMessage" asp-for="ValidationMessage" placeholder="پیغام راهنما  را وارد نمایید" maxlength="300" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5 col-lg-5">
-                                        <div class="card card-flush py-4">
-                                            <div class="px-10 py-1">
-                                                <label class="d-flex align-items-center fs-5 fw-bold">
-                                                    <span class="required">نوع پرسش</span>
-                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
-                                                </label>
-                                            </div>
-                                            <div class="separator my-3"></div>
-                                            <div class="card-body">
-                                                <div id="VotequestionTypeIdSearch">
-                                                    @* add in create.js *@
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-sm-12 col-md-7 col-lg-7">
-                                        <div class="showDetailQuestion">
+            <div class="question-editor-panel question-editor-type-details">
+                <p class="question-editor-type-empty">با انتخاب نوع پرسش، تنظیمات آن اینجا نمایش داده می‌شود.</p>
+                <p class="question-editor-type-empty question-editor-type-no-settings">این نوع پرسش تنظیمات دیگری ندارد.</p>
+                                        <div class="showDetailQuestion" id="question-editor-type-settings">
                                             <div class="d-none showDetailQuestionItem" id="RadioShowcase-Add">
-                                                <div class="card card-flush py-4">
-                                                    <div class="px-10 py-1">
-                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="RadioShowcase">
-                                                            <span>گزینه‌های سوال</span>
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="separator my-3"></div>
-                                                    <div class="p-2">
-                                                        <p id="vote-option-priority-help" class="text-muted mb-4">
-                                                            اولویت هر گزینه خودکار تعیین می‌شود و می‌توانید آن را تغییر دهید.
-                                                        </p>
-                                                        <p id="vote-option-weight-help" class="text-muted mb-2">
-                                                            وزن را با عدد صحیح بین منفی ۱۰ و ۱۰ وارد کنید.
-                                                        </p>
-                                                        <details class="mb-4 text-muted">
-                                                            <summary class="fw-semibold">راهنمای وزن‌گذاری گزینه‌ها</summary>
-                                                            <ul class="mb-0 mt-2">
+                                                <div class="question-editor-options">
+                                                    <h3 class="question-editor-section-title">گزینه‌های سوال</h3>
+                                                    <div class="question-editor-option-guide">
+                                                        <p id="vote-option-priority-help">اولویت، ترتیب نمایش گزینه‌ها را مشخص می‌کند.</p>
+                                                        <p id="vote-option-weight-help">وزن گزینه را با عدد صحیح از منفی ۱۰ تا ۱۰ وارد کنید.</p>
+                                                        <details class="question-editor-weight-guide">
+                                                            <summary>راهنمای وزن‌گذاری</summary>
+                                                            <ul>
                                                                 <li>برای گزینه‌های سوال‌های با بار معنایی منفی، وزن مثبت تعیین کنید.</li>
                                                                 <li>برای سوال‌های با بار معنایی مثبت، وزن گزینه‌های مثبت و منفی را قرینه تعیین کنید.</li>
                                                             </ul>
                                                         </details>
+                                                    </div>
+                                                    <div class="question-editor-options-table">
                                                         <div class="d-flex flex-column">
                                                             <div id="kt_repeater_RadioShowcase">
                                                                 <div class="form-group">
                                                                     <div data-repeater-list="item_List">
-                                                                        <div class="vote-option-header vote-option-grid mb-2">
+                                                                        <div class="vote-option-header vote-option-grid" aria-hidden="true">
                                                                             <div class="header-cell">متن گزینه</div>
                                                                             <div class="header-cell text-center">انتخاب عکس</div>
                                                                             <div class="header-cell text-center">اولویت</div>
@@ -174,6 +106,7 @@
                                                                                     <div class="vote-option-grid">
                                                                                         <!-- ۱. متن گزینه -->
                                                                                         <div class="grid-cell">
+                                                                                            <span class="question-editor-mobile-label" aria-hidden="true">متن گزینه</span>
                                                                                             <input type="text"
                                                                                                    asp-for="@item.Title"
                                                                                                    class="form-control form-control-solid required VoteQuestionItemTitle"
@@ -185,6 +118,7 @@
 
                                                                                         <!-- ۲. فیلد پیش‌نمایش و انتخاب فایل -->
                                                                                         <div class="grid-cell d-flex justify-content-center">
+                                                                                            <span class="question-editor-mobile-label" aria-hidden="true">تصویر</span>
                                                                                             <div class="file-preview-box w-100 d-flex align-items-center justify-content-center gap-2 flex-wrap">
 
                                                                                                 <!-- دکمه انتخاب / تیک سبز -->
@@ -220,6 +154,7 @@
 
                                                                                         <!-- ۳. اولویت -->
                                                                                         <div class="grid-cell d-flex justify-content-center">
+                                                                                            <span class="question-editor-mobile-label" aria-hidden="true">اولویت</span>
                                                                                             <input type="number"
                                                                                                    class="form-control form-control-solid w-100 px-2 text-center OrderIndex"
                                                                                                    name="OrderIndex"
@@ -232,6 +167,7 @@
 
                                                                                         <!-- ۴. وزن -->
                                                                                         <div class="grid-cell">
+                                                                                            <span class="question-editor-mobile-label" aria-hidden="true">وزن</span>
                                                                                             <div class="input-group input-group-sm flex-nowrap" dir="ltr">
                                                                                                 <button type="button" class="btn btn-light px-2 js-option-weight-step"
                                                                                                         data-weight-step="-1" aria-label="کاهش وزن گزینه">−</button>
@@ -245,11 +181,10 @@
 
                                                                                         <!-- ۵. دکمه حذف سطر -->
                                                                                         <div class="grid-cell d-flex justify-content-center">
-                                                                                            <a href="javascript:;"
-                                                                                               aria-label="حذف گزینه" data-repeater-delete
+                                                                                            <button type="button" aria-label="حذف گزینه" data-repeater-delete
                                                                                                class="btn btn-icon btn-sm btn-light-danger">
                                                                                                 <i class="fonticon-trash fs-2x"></i>
-                                                                                            </a>
+                                                                                            </button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -264,6 +199,7 @@
 
                                                                                 <div class="vote-option-grid">
                                                                                     <div class="grid-cell">
+                                                                                        <span class="question-editor-mobile-label" aria-hidden="true">متن گزینه</span>
                                                                                         <input type="text"
                                                                                                class="form-control form-control-solid required VoteQuestionItemTitle"
                                                                                                name="VoteQuestionItemTitle"
@@ -273,6 +209,7 @@
                                                                                     </div>
 
                                                                                     <div class="grid-cell d-flex justify-content-center">
+                                                                                        <span class="question-editor-mobile-label" aria-hidden="true">تصویر</span>
                                                                                         <div class="file-preview-box w-100">
                                                                                             <div class="file-upload-button-wrapper">
                                                                                                 <label class="btn chooseImageQuestion btn-md my-1 js-label-trigger">
@@ -294,6 +231,7 @@
                                                                                     </div>
 
                                                                                     <div class="grid-cell d-flex justify-content-center">
+                                                                                        <span class="question-editor-mobile-label" aria-hidden="true">اولویت</span>
                                                                                         <input type="number"
                                                                                                class="form-control form-control-solid w-100 px-2 text-center OrderIndex"
                                                                                                name="OrderIndex"
@@ -305,6 +243,7 @@
                                                                                     </div>
 
                                                                                     <div class="grid-cell">
+                                                                                        <span class="question-editor-mobile-label" aria-hidden="true">وزن</span>
                                                                                         <div class="input-group input-group-sm flex-nowrap" dir="ltr">
                                                                                             <button type="button" class="btn btn-light px-2 js-option-weight-step"
                                                                                                     data-weight-step="-1" aria-label="کاهش وزن گزینه">−</button>
@@ -317,11 +256,10 @@
                                                                                     </div>
 
                                                                                     <div class="grid-cell d-flex justify-content-center">
-                                                                                        <a href="javascript:;"
-                                                                                           aria-label="حذف گزینه" data-repeater-delete
+                                                                                        <button type="button" aria-label="حذف گزینه" data-repeater-delete
                                                                                            class="btn btn-icon btn-sm btn-light-danger">
                                                                                             <i class="fonticon-trash fs-2x"></i>
-                                                                                        </a>
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -332,9 +270,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex flex-stack justify-content-end mt-3">
-                                                                    <a href="javascript:;" data-repeater-create class="btn btn-sm yas-primary-btn">
-                                                                        <i class="la la-plus"></i>افزودن گزینه
-                                                                    </a>
+                                                                    <button type="button" data-repeater-create class="btn btn-sm btn-light-primary">
+                                                                        <i class="la la-plus" aria-hidden="true"></i> افزودن گزینه
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -837,49 +775,21 @@
                                             </div>
 
                                         </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end  me-3 mt-3 mb-5">
-                                <a asp-action="Index" class="btn btn-light">بازگشت به لیست سوالات</a>
-                                <button type="button" class="btn btn-lg btn-primary  mw-200px" id="add_Question_btn" data-kt-stepper-action="submit">
-                                    <span class="indicator-label">
-                                        ویرایش سوال
-                                        <span class="svg-icon svg-icon-3 ms-2 me-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
-                                                <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </span>
-                                    <span class="indicator-progress">
-                                        چند لحظه صبر کنید...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!--begin::Tab pane-->
-                <div class="tab-pane fade" id="kt_advanced" role="tab-panel">
-                    <div class="d-flex flex-column gap-7 gap-lg-10">
-                        <p>tab2</p>
-                    </div>
-                </div>
-
-
             </div>
         </div>
-        <!--end::Form-->
 
-    </div>
-</div>
+        <div class="question-editor-actions">
+            <a asp-action="Index" class="btn btn-light">بازگشت به فهرست سوالات</a>
+            <button type="button" class="btn yas-primary-btn" id="add_Question_btn" data-kt-stepper-action="submit">
+                <span class="indicator-label">ذخیره تغییرات</span>
+                <span class="indicator-progress">
+                    در حال ذخیره…
+                    <span class="spinner-border spinner-border-sm align-middle ms-2" aria-hidden="true"></span>
+                </span>
+            </button>
+        </div>
+    </form>
+</section>
 
 <!-- مودال نمایش بزرگ تصویر -->
 <div id="imagePreviewModal" class="image-zoom-modal">
