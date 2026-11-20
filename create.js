@@ -24,10 +24,10 @@ function fillOptionPriorities() {
     }
 }
 
-function validateChoiceQuestionFields() {
+function validateOptionPriorities() {
     fillOptionPriorities();
     const invalidField = document.querySelector(
-        '#weightOfQuestion:invalid, #kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
     );
     if (invalidField) {
         invalidField.reportValidity();
@@ -101,13 +101,6 @@ $(document).ready(function () {
     let isLastPage2 = false;
     let selectedGroup;
     var selected = null;
-    //$('#weightOfQuestion').on('input', function () {
-    //    $('#WeightValueQuestion').text($(this).val());
-    //});
-
-    //// مقداردهی اولیه
-    //$('#WeightValueQuestion').text($('#weightOfQuestion').val());
-
     $('.Weight[type="range"]').each(function () {
         updateWeightDisplay(this);
     });
@@ -398,7 +391,7 @@ $(document).ready(function () {
             const $row = $(this);
             $row.find('.OrderIndex').val('');
             fillOptionPriorities();
-            $row.find('.Weight').each(function () {
+            $row.find('.Weight').val(1).each(function () {
                 updateWeightDisplay(this);
             });
             $row.slideDown(function () {
@@ -649,7 +642,7 @@ if (submitButton) {
             return;
         }
 
-        if (Number(selected) === 1 && !validateChoiceQuestionFields()) {
+        if (Number(selected) === 1 && !validateOptionPriorities()) {
             return;
         }
 
@@ -675,9 +668,6 @@ if (submitButton) {
         var groupId = groupData && groupData[0] ? groupData[0].id : null;
         var subGroupId = subGroupData && subGroupData[0] ? subGroupData[0].id : null;
 
-        //console.log('Weight اصلی:', $("#weightOfQuestion").val());
-        //console.log('Weight Value Question span:', $("#WeightValueQuestion").text());
-
         var formData = new FormData();
 
         formData.append('VoteQuestionId', $("#VoteQuestionId").val() || '');
@@ -687,9 +677,6 @@ if (submitButton) {
         formData.append('KeyWord', $("#KeyWord").val() || '');
         formData.append('Title', $("#Title").val() || '');
         formData.append('ValidationMessage', $("#ValidationMessage").val() || '');
-        if (Number(selected) === 1) {
-            formData.append('Weight', document.getElementById('weightOfQuestion').value);
-        }
         formData.append('InputPatternId', inputPattenrTemp ? Number(inputPattenrTemp) : '');
         formData.append('DataSourceId', dataSourceId ?? '');
         
@@ -847,7 +834,7 @@ if (submitButton) {
                 }
 
                 formData.append(`VoteQuestionItems[${itemIndex}].Title`, title || '');
-                formData.append(`VoteQuestionItems[${itemIndex}].Weight`, weight || '');
+                formData.append(`VoteQuestionItems[${itemIndex}].Weight`, weight || '1');
                 formData.append(`VoteQuestionItems[${itemIndex}].OrderIndex`, orderIndex || '');
 
                 if (imageFile) {

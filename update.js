@@ -24,10 +24,10 @@ function fillOptionPriorities() {
     }
 }
 
-function validateChoiceQuestionFields() {
+function validateOptionPriorities() {
     fillOptionPriorities();
     const invalidField = document.querySelector(
-        '#weightOfQuestion:invalid, #kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
     );
     if (invalidField) {
         invalidField.reportValidity();
@@ -263,12 +263,6 @@ $(document).ready(function () {
     let page = 1;
     let isLoading = false;
 
-    //$('#weightOfQuestion').on('input', function () {
-    //    $('#WeightValueQuestion').text($(this).val());
-    //});
-
-    //$('#WeightValueQuestion').text($('#weightOfQuestion').val());
-
     $('.Weight[type="range"]').each(function () {
         updateWeightDisplay(this);
     });
@@ -433,13 +427,9 @@ $(document).ready(function () {
             $row.find('.VoteQuestionItemTitle').val('');
             $row.find('.OrderIndex').val('');
 
-            // مقدار پیش‌فرض وزن
-            $row.find('.Weight')
-                .val(0)
-                .trigger('input')
-                .trigger('change');
-
-            $row.find('.weight-value-display').text('0');
+            $row.find('.Weight').val(1).each(function () {
+                updateWeightDisplay(this);
+            });
 
             // پاک کردن فایل انتخاب‌شده
             $row.find('.ImageFileCreate').val('');
@@ -991,7 +981,7 @@ if (submitButton) {
             return;
         }
 
-        if (Number(selectedType) === 1 && !validateChoiceQuestionFields()) {
+        if (Number(selectedType) === 1 && !validateOptionPriorities()) {
             return;
         }
 
@@ -1025,9 +1015,6 @@ if (submitButton) {
         formData.append('VoteQuestionTypeId', selectedType || '');
         formData.append('KeyWord', $("#KeyWord").val() || '');
         formData.append('Title', $("#Title").val() || '');
-        if (Number(selectedType) === 1) {
-            formData.append('Weight', document.getElementById('weightOfQuestion').value);
-        }
         formData.append('ValidationMessage', $("#ValidationMessage").val() || '');
         formData.append('InputPatternId', inputPattenrTemp ? Number(inputPattenrTemp) : '');
         formData.append('DataSourceId', dataSourceId ?? '');
@@ -1119,7 +1106,7 @@ if (submitButton) {
 
                 formData.append(`${prefix}.VoteQuestionItemId`, itemId || '');
                 formData.append(`${prefix}.Title`, title || '');
-                formData.append(`${prefix}.Weight`, weight || '0');
+                formData.append(`${prefix}.Weight`, weight || '1');
                 formData.append(`${prefix}.OrderIndex`, orderIndex || '0');
                 formData.append(`${prefix}.ImageUrl`, existingImageUrl || '');
 
