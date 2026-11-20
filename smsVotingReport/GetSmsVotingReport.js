@@ -8,7 +8,7 @@ let modalRecordCount = 10;
 let modalSmsId = null;
 let modalResendRecipients = [];
 function renderTableSkeleton(rowCount = 5) {
-    const columnCount = 12;
+    const columnCount = $('#reportTableBody').closest('table').find('thead th').length;
     let skeletonRows = '';
 
     for (let i = 0; i < rowCount; i++) {
@@ -120,8 +120,13 @@ function renderTable(data) {
         tbody.append(row);
     });
 
-    $('.table-row-hover').off('click').on('click', function () {
-        let smsId = $(this).data('sms-id');
+    $('.table-row-hover').off('click').on('click', function (event) {
+        const smsId = $(this).data('sms-id');
+        if ($(event.target).closest('.js-sms-report-resend').length) {
+            if (smsId) openSmsReportResend($(this).find('.sms-title').text().trim());
+            return;
+        }
+
         viewDetails(smsId);
     });
 }
@@ -253,6 +258,14 @@ function createTableRow(item, index, startIndex) {
             <!-- 12. درصد شرکت (گِیج نیم‌دایره) -->
             <td class="text-center">
                 ${renderGauge(participation)}
+            </td>
+
+            <td class="text-center">
+                <button type="button" class="sms-resend-button js-sms-report-resend"
+                        ${item.voteRequestSpecificationSmsId ? '' : 'disabled'}>
+                    <i class="ri-send-plane-line" aria-hidden="true"></i>
+                    ارسال گروهی
+                </button>
             </td>
         </tr>
     `;
@@ -582,7 +595,8 @@ function closeCustomModal() {
     modal.classList.remove('show');
     document.body.classList.remove('modal-open');
     modalResendRecipients = [];
-    selectSmsResendAudience(document.querySelector('#smsResendAudienceOptions [data-audience="all"]'));
+    const defaultAudience = document.querySelector('#smsResendAudienceOptions input[value="all"]');
+    if (defaultAudience) defaultAudience.checked = true;
 }
 
 document.getElementById('customDetailsModalClose').addEventListener('click', closeCustomModal);
@@ -598,38 +612,71 @@ document.addEventListener('keydown', function (e) {
 });
 
 
-function selectSmsResendAudience(option) {
-    if (!option) return;
-
-    $('#smsResendAudienceOptions [data-audience]').removeClass('active').attr('aria-pressed', 'false');
-    $(option).addClass('active').attr('aria-pressed', 'true');
-    $('#smsResendAudienceLabel').text(option.textContent.trim());
+function getSelectedSmsAudience(container) {
+    return container.querySelector('input[type="radio"]:checked')
+        .closest('label').textContent.trim();
 }
 
-function showSmsResendPreview(title, recipientLabel) {
+function showSmsResendPreview(title, recipientLabel, target = document.body) {
     Swal.fire({
-        target: document.getElementById('customDetailsModal'),
+        target,
         keydownListenerCapture: true,
         icon: 'info',
         title,
         text: recipientLabel + ' | ارسال پیامک پس از اتصال سرویس فعال می‌شود.',
-        confirmButtonText: 'متوجه شدم'
+        confirmButtonText: 'متوجه شدم',
+        buttonsStyling: false,
+        customClass: { confirmButton: 'sms-resend-button sms-resend-button--group' }
     });
 }
 
-$('#smsResendAudienceOptions').on('click', '[data-audience]', function () {
-    selectSmsResendAudience(this);
-});
+function openSmsReportResend(reportTitle) {
+    const audiences = document.getElementById('smsResendAudienceOptions').cloneNode(true);
+    audiences.removeAttribute('id');
+    audiences.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.name = 'summarySmsResendAudience';
+        input.checked = input.value === 'all';
+    });
+
+    const content = document.createElement('div');
+    content.className = 'sms-resend-dialog';
+    const report = document.createElement('p');
+    report.textContent = reportTitle;
+    content.append(report, audiences);
+
+    Swal.fire({
+        title: 'ارسال مجدد گروهی',
+        html: content,
+        showCancelButton: true,
+        confirmButtonText: 'ادامه',
+        cancelButtonText: 'انصراف',
+        buttonsStyling: false,
+        customClass: {
+            actions: 'sms-resend-dialog-actions',
+            confirmButton: 'sms-resend-button sms-resend-button--group',
+            cancelButton: 'sms-resend-button'
+        },
+        preConfirm: () => getSelectedSmsAudience(audiences)
+    }).then(result => {
+        if (result.isConfirmed) {
+            showSmsResendPreview('ارسال مجدد گروهی', reportTitle + ' — گیرندگان: ' + result.value);
+        }
+    });
+}
 
 $('#smsResendGroupButton').on('click', function () {
-    const audience = $('#smsResendAudienceLabel').text();
-    showSmsResendPreview('ارسال مجدد گروهی', 'گیرندگان این گزارش: ' + audience);
+    const audience = getSelectedSmsAudience(document.getElementById('smsResendAudienceOptions'));
+    showSmsResendPreview('ارسال مجدد گروهی', 'گیرندگان این گزارش: ' + audience, document.getElementById('customDetailsModal'));
 });
 
 $('#customDetailsModalBody').on('click', '.js-sms-resend-recipient', function () {
     const recipient = modalResendRecipients[Number(this.dataset.recipientIndex)];
     if (recipient?.mobileNo) {
-        showSmsResendPreview('ارسال مجدد لینک', 'شماره گیرنده: ' + convertToPersianNumbers(recipient.mobileNo));
+        showSmsResendPreview(
+            'ارسال مجدد لینک',
+            'شماره گیرنده: ' + convertToPersianNumbers(recipient.mobileNo),
+            document.getElementById('customDetailsModal')
+        );
     }
 });
 
@@ -730,7 +777,7 @@ function showDetailsModal(data) {
                 </td>
 
                 <td class="text-center text-nowrap">
-                    <button type="button" class="btn btn-sm btn-light-primary js-sms-resend-recipient"
+                    <button type="button" class="sms-resend-button js-sms-resend-recipient"
                             data-recipient-index="${i}" ${hasMobileNumber ? '' : 'disabled'}>
                         <i class="ri-send-plane-line" aria-hidden="true"></i>
                         ارسال مجدد لینک

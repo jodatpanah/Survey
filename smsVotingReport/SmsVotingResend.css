@@ -1,0 +1,112 @@
+.sms-resend-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: .75rem 1rem;
+    padding: .9rem 1rem;
+    border-block-end: 1px solid #e9e5ef;
+    background: #faf9fc;
+}
+
+.sms-resend-audiences {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.sms-resend-audiences legend {
+    float: none;
+    width: auto;
+    margin: 0 0 .4rem;
+    color: #4b4156;
+    font-size: .825rem;
+    font-weight: 600;
+}
+
+.sms-resend-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+.sms-resend-option {
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+}
+
+.sms-resend-button,
+.sms-resend-option > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    min-block-size: 2.35rem;
+    padding: .42rem .72rem;
+    border: 1px solid #e1dbea;
+    border-radius: .55rem;
+    background: #fff;
+    color: #514160;
+    font: inherit;
+    font-size: .825rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.sms-resend-button {
+    cursor: pointer;
+}
+
+.sms-resend-button i {
+    color: #734f8a;
+    font-size: 1rem;
+}
+
+.sms-resend-button:not(:disabled):hover,
+.sms-resend-option:hover > span {
+    border-color: #c5b4d3;
+    background: #f5f0f8;
+    color: #473151;
+}
+
+.sms-resend-button--group,
+.sms-resend-option input:checked + span {
+    border-color: #c9b5d8;
+    background: #eee6f4;
+    color: #4c3161;
+}
+
+.sms-resend-option input:checked + span::before {
+    content: "";
+    inline-size: .4rem;
+    block-size: .4rem;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.sms-resend-button:focus-visible,
+.sms-resend-option input:focus-visible + span {
+    outline: 2px solid #79588d;
+    outline-offset: 2px;
+}
+
+.sms-resend-button:disabled {
+    opacity: .55;
+    cursor: default;
+}
+
+.sms-resend-dialog {
+    direction: rtl;
+    text-align: start;
+}
+
+.sms-resend-dialog > p {
+    margin: 0 0 .9rem;
+    overflow-wrap: anywhere;
+}
+
+.sms-resend-dialog-actions {
+    gap: .5rem;
+}
