@@ -1,0 +1,784 @@
+@model Survey.FrameWork.common.VoteQuestion.CreateVoteQuestionCommand
+
+
+
+<div class="d-flex flex-column flex-lg-row">
+
+    <div class="flex-lg-row-fluid order-2 order-lg-1 mb-10 mb-lg-0">
+
+
+        <div class="d-flex flex-column gap-7 gap-lg-10">
+
+            <div class="card">
+                <div class="card-body pt-9 pb-0">
+                    <div class="d-flex flex-wrap flex-sm-nowrap mb-1">
+                        <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-80px h-80px w-lg-80px h-lg-80px me-7 mb-4">
+                            <img class="mw-50px mw-lg-75px" src="~/assets/media/sigma-1/4.png" alt="image" />
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap mt-1">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <div class="fw-bolder mt-5">ایجاد سوال جدید</div>
+                                        <div class="text-gray-600"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator"></div>
+                    <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
+                        <!--<ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2">-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary p-4 active" data-bs-toggle="tab" href="#kt_general">عمومی</a>
+                        </li>
+                        @*   <li class="nav-item">
+                        <a class="nav-link text-active-primary p-4" data-bs-toggle="tab" href="#kt_advanced">پیشرفته</a>
+                        </li> *@
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="kt_general" role="tab-panel">
+                    <form asp-action="Create" asp-controller="VoteQuestion" id="kt_add_Question_form" class="form d-flex flex-column flex-lg-row">
+                        @Html.AntiForgeryToken()
+
+                        <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 ">
+                            <div class="card card-flush py-4">
+                                <div class="px-10 py-1">
+                                    <label class="d-flex align-items-center fs-5 fw-bold">
+                                        <span class="required"> دسته بندی سوال  </span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب گروه سوال"></i>
+                                    </label>
+                                </div>
+                                <div class="card-body px-10">
+                                    <div class="mb-6 fv-row">
+                                        <select id="VoteQuestionGroupId" name="VoteQuestionGroupId" data-control="select2" data-placeholder=" نام گروه را انتخاب نمایید" class="form-select form-select-solid ">
+                                            <option value=""></option>
+                                        </select>
+
+                                    </div>
+                                    <div class="mb-6 fv-row subGroup">
+                                        <select id="SubVoteQuestionGroupId" name="SubVoteQuestionGroupId" data-control="select2" data-placeholder=" نام زیر گروه را انتخاب نمایید" class="form-select form-select-solid ">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-flush py-4">
+                                <div class="px-10 py-1">
+                                    <label class="d-flex align-items-center fs-5 fw-bold">
+                                        <span class="required">کلمات کلیدی</span>
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" >کلمات کلیدی    "></i>
+                                    </label>
+                                </div>
+                                <div class="card-body px-10">
+                                    <div class="mb-6 fv-row">
+                                        <input class="form-control form-control-solid" asp-for="KeyWord" placeholder="   " />
+
+                                    </div>
+                                    <div class="error-message fs-7 text-muted display-none" id="tag-error-message"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10 ms-lg-10 me-0">
+                            <div class="card card-flush py-4">
+                                <div class="card-body px-15">
+                                    <div class="mb-6 fv-row">
+                                        <div class="col-md-12 fv-row fv-plugins-icon-container">
+                                            <label class="required fs-6 fw-bold mb-1">
+                                                <span class="px-2"> عنوان سوال</span>
+                                            </label>
+                                            <textarea type="text" class="form-control form-control-solid" asp-for="Title" placeholder="عنوان سوال را وارد نمایید" maxlength="200"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-6 fv-row row">
+                                       @*  <div class="col-md-3 fv-row fv-plugins-icon-container">
+                                            <label class="fs-6 fw-bold mb-1">
+                                                <span class="px-2">وزن سوال</span>
+                                                <span id="WeightValueQuestion" class="badge badge-light-primary">0</span>
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="وزن سوال"></i>
+                                            </label>
+                                            <input type="range"
+                                                   min="0"
+                                                   max="10"
+                                                   value="0"
+                                                   class="form-range"
+                                                   id="weightOfQuestion"
+                                                   asp-for="Weight"
+                                                   dir="ltr" />
+                                            <div class="d-flex justify-content-between mt-1">
+
+                                                <small class="text-muted">10</small>
+                                                <small class="text-muted">0</small>
+                                            </div>
+                                        </div>
+
+ *@
+
+
+
+
+
+
+
+                                        <div class="col-md-12 fv-row fv-plugins-icon-container">
+                                            <label class="fs-6 fw-bold mb-1">
+                                                <span class="px-2">  پیغام راهنما  </span>
+
+                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="پیغام راهنما"></i>
+                                            </label>
+                                            <input type="text" class="form-control form-control-solid" asp-for="ValidationMessage" placeholder="پیغام راهنما  را وارد نمایید" maxlength="300" />
+                                        </div>
+                                    </div>
+                                </div>
+                              @*   <div class="cases">
+                                    <!-- کلمه نکته در بالا -->
+                                    <div class="mt-2">
+                                        <span class="text-tip">* نکته:</span>
+                                    </div>
+
+                                    <!-- ۵ متن زیر هم -->
+                                    <div class="d-flex flex-column gap-1">
+                                        <div>
+                                            <span class="text-cases" title="Hint توضیح متن 1">1. برای سوالاتی با بار مثبت وزن مثبت تایین کنید </span>
+                                        </div>
+                                        <div>
+                                            <span class="text-cases" title="Hint توضیح متن 2">2. برای سوالاتی با بار خنثی وزن مثبت تایین کنید</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-cases" title="Hint توضیح متن 3">3. برای سوالاتی با بار منفی وزن منفی تایین کنید</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-cases" title="Hint توضیح متن 4">4. برای سوالاتی که بار خنثی دارند، گزینه ها باتوجه به بار معنایی‌شان، منفی یا مثبت میتوانند باشند</span>
+                                        </div>
+
+                                    </div>
+                                </div> *@
+                            </div>
+
+                            <div class="card">
+                                <div class="row card-body">
+                                    <div class="col-sm-12 col-md-4 col-lg-4">
+                                        <div class="card card-flush py-4">
+                                            <div class="px-10 py-1">
+                                                <label class="d-flex align-items-center fs-5 fw-bold">
+                                                    <span class="required">نوع پرسش</span>
+                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
+                                                </label>
+                                            </div>
+                                            <div class="separator my-3"></div>
+                                            <div class="p-2">
+                                                <div id="VotequestionTypeIdSearch">
+                                                    @* add in create.js *@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="showDetailQuestion">
+                                            <div class="d-none showDetailQuestionItem" id="RadioShowcase-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="RadioShowcase">
+                                                            <span class="">تک انتخابی یا چند انتخابی</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="انتخاب نوع سوال"></i>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="separator my-3"></div>
+                                                    <div class="p-2">
+                                                        <div class="d-flex flex-column">
+                                                            <div id="kt_repeater_RadioShowcase">
+                                                                <div class="form-group">
+                                                                    <div data-repeater-list="item_List">
+                                                                        <div class="cases">
+                                                                            <!-- کلمه نکته در بالا -->
+                                                                            <div class="mt-2">
+                                                                                <span class="text-tip-option">* نکته:</span>
+                                                                            </div>
+
+
+                                                                            <!-- ۵ متن زیر هم -->
+                                                                            <div class="d-flex flex-column gap-1">
+                                                                                <div>
+                                                                                    <span class="text-cases-option" title="Hint توضیح متن 1">1. برای گزینه‌های سوالاتی که بار معنایی منفی دارند، وزن مثبت تعیین کنید </span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span class="text-cases-option" title="Hint توضیح متن 2">2. برای گزینه سوالات با بار معنایی مثبت، وزن گزینه های مثبت و  منفی میبایست قرینه باشند</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span class="text-cases-option-image" title="Hint توضیح متن 2">3. در صورت بارگذاری عکس، برای مشاهده آن لطفا کمی کوشا باشید</span>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="vote-option-header vote-option-grid">
+                                                                            <div class="header-cell">متن گزینه</div>
+                                                                            <div class="header-cell text-center">انتخاب عکس</div>
+                                                                            <div class="header-cell text-center">اولویت</div>
+                                                                            <div class="header-cell text-center">وزن</div>
+                                                                            <div class="header-cell text-center"></div>
+                                                                        </div>
+
+                                                                        @foreach (var item in Model.VoteQuestionItems.Where(x => x != null))
+                                                                        {
+                                                                            <div data-repeater-item class="vote-option-row vote-option-grid">
+
+                                                                                <div class="grid-cell">
+                                                                                    <input type="text"
+                                                                                           asp-for="@item.Title"
+                                                                                           class="form-control form-control-solid required VoteQuestionItemTitle"
+                                                                                           name="VoteQuestionItemTitle"
+                                                                                           value="@item.Title"
+                                                                                           placeholder="متن گزینه"
+                                                                                           maxlength="200" />
+                                                                                </div>
+
+                                                                                <div class="grid-cell d-flex justify-content-center">
+                                                                                    <div class="file-preview-box w-100 align-items-center justify-content-center gap-2 flex-wrap">
+
+                                                                                        <!-- دکمه انتخاب / تیک سبز -->
+                                                                                        <div class="d-inline-flex align-items-center gap-2">
+                                                                                            <label class="btn chooseImageQuestion btn-md my-1 js-label-trigger @(string.IsNullOrEmpty(item.ImageUrl) ? "" : "d-none")">
+                                                                                                <i class="ki-duotone ki-upload fs-6 me-1"></i>
+                                                                                                انتخاب کنید
+
+                                                                                                <input type="file"
+                                                                                                       class="d-none file-input-option ImageFileCreate"
+                                                                                                       accept="image/*" />
+                                                                                            </label>
+
+                                                                                            <!-- تیک سبز: دقیقاً هم‌تراز وسط دکمه -->
+                                                                                        </div>
+                                                                                        <!-- پیش‌نمایش عکس (وقتی عکس جدید انتخاب شد یا عکس قبلی هست) -->
+                                                                                        <div class="image-preview-wrapper @(string.IsNullOrEmpty(item.ImageUrl) ? "d-none" : "")">
+                                                                                            <button type="button" class="remove-image-btn js-remove-image" title="حذف عکس">×</button>
+                                                                                            <img src="@item.ImageUrl" class="option-image-preview" alt="preview" />
+                                                                                        </div>
+                                                                                        <span class="js-upload-status d-none align-items-center"
+                                                                                              title="تصویر انتخاب و بارگذاری شد">
+                                                                                            <i class="fas fa-check-circle text-success fs-4"></i>
+                                                                                        </span>
+
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="grid-cell d-flex justify-content-center">
+                                                                                    <input type="number"
+                                                                                           class="form-control form-control-solid w-100 OrderIndex"
+                                                                                           name="OrderIndex"
+                                                                                           value="@item.OrderIndex"
+                                                                                           placeholder="اولویت"
+                                                                                           min="0"
+                                                                                           max="999"
+                                                                                           required
+                                                                                           oninput="validateVoteQuestionItemOrderIndexInput(this)" />
+                                                                                </div>
+
+                                                                                <div class="grid-cell d-flex justify-content-center">
+                                                                                    <div class="weight-box">
+                                                                                        <input type="range"
+                                                                                               class="form-control form-range Weight"
+                                                                                               name="Weight"
+                                                                                               value="@item.Weight"
+                                                                                               min="-10"
+                                                                                               max="10"
+                                                                                               step="1"
+                                                                                               dir="ltr"
+                                                                                               required />
+                                                                                        <div class="d-flex justify-content-between align-items-center mt-1">
+                                                                                            <span class="text-muted fs-8">10</span>
+                                                                                            <span class="weight-value-display fw-bold">@item.Weight</span>
+                                                                                            <span class="text-muted fs-8">-10</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="grid-cell text-center">
+                                                                                    <a href="javascript:;" data-repeater-delete class="btn btn-icon btn-sm btn-light-danger">
+                                                                                        <i class="fonticon-trash fs-2x"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex flex-stack justify-content-end mt-3">
+                                                                    <a href="javascript:;" data-repeater-create class="btn btn-sm yas-primary-btn">
+                                                                        <i class="la la-plus"></i>افزودن گزینه
+                                                                    </a>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="NumberShowcase-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="AgreementShowcase">
+                                                            <span class="">   عددی</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+                                                    <div class="separator my-3"></div>
+                                                    <div class="p-2">
+
+                                                        <div class="alert alert-warning d-flex align-items-center p-5 mb-10">
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                                                    <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <div class="d-flex flex-column">
+                                                                <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                                                <span>در صورتی که سوال مورد نظر دارای بازه خاصی باشد می توان حداقل و یا حداکثر بازه را در فرم نظرسنجی وارد نمود. </span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="TextInputShowcase-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="AgreementShowcase">
+                                                            <span class="">   تشریحی</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+                                                    <div class="separator my-3"></div>
+                                                    <div class="card-body">
+
+                                                        <div class="alert alert-warning d-flex align-items-center p-5 mb-10">
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                                                    <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <div class="d-flex flex-column">
+                                                                <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                                                <span>تعداد کاراکترهای مورد نیاز سوال را می توان در فرم نظرسنجی وارد نمود. </span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="DateTimeShowcase-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="DateTimeShowcase-Add">
+                                                            <span class="">   تاریخ</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+                                                    <div class="separator my-3"></div>
+                                                    <div class="card-body">
+
+                                                        <div class="alert alert-warning d-flex align-items-center p-5 mb-10">
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                                                    <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <div class="d-flex flex-column">
+                                                                <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                                                <span>در صورتیکه سوال مورد نظر دارای بازه خاصی می باشد ,می توان حداقل و حداکثر تاریخ مجاز را در فرم نظرسنجی وارد نمود. </span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="InputValid-Add">
+
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="DateTimeShowcase-Add">
+                                                            <span class="">   ورودی معتبر</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+                                                    <div class="separator my-3"></div>
+                                                    <div class="card-body">
+
+                                                        <div class="fv-row mb-6">
+
+                                                            <label class="fs-6 fw-bold mb-1">
+                                                                <span class="px-2">نوع ورودی</span>
+                                                                <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="نوع ورودی"></i>
+                                                            </label>
+
+                                                            <select asp-for="InputPatternId" name="InputPatternId" data-control="select2" data-placeholder="  نوع ورودی  نام  را انتخاب نمایید" tabindex="-1" class="form-select form-select-solid  select2-hidden-accessible" id="InputPatternId">
+                                                                <option></option>
+                                                            </select>
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="Star-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="Star">
+                                                            <span class="">ستاره امتیاز دهی</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="separator my-3"></div>
+
+                                                    <div class="card-body">
+
+                                                        <div class="alert alert-warning d-flex align-items-center p-5 mb-10">
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                                                    <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <div class="d-flex flex-column">
+                                                                <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                                                <span>می توان برای این سوال حداکثر 5 ستاره در نظر گرفت. </span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 fv-row fv-plugins-icon-container mb-2 showDetailQuestionItem d-none card-body" id="DataSourceSelection">
+                                                <label class="fs-6 fw-bold mb-1">منبع داده</label>
+                                                <select class="form-select form-select-solid form-select-sm"
+                                                        id="SearchDataSourceId"
+                                                        name="SearchDataSourceId"
+                                                        data-control="select2"
+                                                        data-placeholder="منبع داده"
+                                                        data-hide-search="false">
+                                                    <option value="">انتخاب نمایید...</option>
+                                                </select>
+                                            </div>
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem" id="Range-Add">
+                                                <div class="card card-flush py-4">
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold" name="Range">
+                                                            <span class="">   بازه ای</span>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title=" در صفحه پرسشنامه تکمیل می شود"></i>
+                                                        </label>
+                                                    </div>
+                                                    <div class="separator my-3"></div>
+                                                    <div class="card-body">
+
+                                                        <div class="alert alert-warning d-flex align-items-center p-5 mb-10">
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z" fill="black"></path>
+                                                                    <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <div class="d-flex flex-column">
+                                                                <h4 class="mb-1 text-warning"> توضیحات تکمیلی</h4>
+                                                                <span>می توان برای این سوال بازه ای بین 1 تا 100 در نظر گرفت  </span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem"
+                                                 id="CompositionShowcase-Add">
+                                                <div class="card card-flush py-4">
+
+                                                    <div class="px-10 py-1">
+
+                                                        <label class="d-flex align-items-center fs-5 fw-bold">
+
+                                                            <span>کامپوزیشن</span>
+
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7"
+                                                               data-bs-toggle="tooltip"
+                                                               title="کامپوزیشن مجموعه‌ای از سوالات مرتبط است."></i>
+
+                                                        </label>
+
+                                                    </div>
+
+                                                    <div class="separator my-3"></div>
+
+                                                    <div class="card-body">
+
+                                                        <div class="alert alert-info d-flex align-items-center p-5 mb-0">
+
+                                                            <span class="svg-icon svg-icon-2hx svg-icon-info me-4">
+                                                                <i class="fas fa-layer-group fs-2 text-info"></i>
+                                                            </span>
+
+                                                            <div class="d-flex flex-column">
+
+                                                                <h4 class="mb-1 text-info">
+                                                                    کامپوزیشن
+                                                                </h4>
+
+                                                                <span>
+                                                                    برای ایجاد کامپوزیشن فقط عنوان سوال را وارد نمایید.
+                                                                    سوالات داخل کامپوزیشن بعداً در پرسشنامه به آن اضافه می‌شوند.
+                                                                </span>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="d-none mb-10 fv-row showDetailQuestionItem"
+                                                 id="DisplayContentShowcase-Add">
+                                                <div class="card card-flush py-4">
+
+                                                    <div class="px-10 py-1">
+                                                        <label class="d-flex align-items-center fs-5 fw-bold">
+
+                                                            <span>
+                                                                محتوای نمایشی
+                                                            </span>
+
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7"
+                                                               data-bs-toggle="tooltip"
+                                                               title="این محتوا در پرسشنامه نمایش داده می‌شود و پاسخی از کاربر دریافت نمی‌کند."></i>
+
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="separator my-3"></div>
+
+                                                    <div class="card-body">
+
+                                                        <div class="mb-8">
+
+                                                            <label class="form-label fw-bold">
+                                                                متن
+                                                            </label>
+
+                                                            <textarea id="DisplayContentDescription"
+                                                                      class="form-control form-control-solid"
+                                                                      rows="5"
+                                                                      placeholder="متن مورد نظر را وارد نمایید..."></textarea>
+
+                                                        </div>
+
+
+                                                        <div class="mb-8">
+
+                                                            <label class="form-label fw-bold">
+                                                                تصویر
+                                                            </label>
+
+                                                            <input type="file"
+                                                                   id="DisplayContentImage"
+                                                                   class="form-control form-control-solid"
+                                                                   accept="image/*" />
+
+                                                        </div>
+
+
+                                                        <div class="mb-0">
+
+                                                            <label class="form-label fw-bold">
+                                                                توضیح تصویر
+                                                            </label>
+
+                                                            <input type="text"
+                                                                   id="DisplayContentImageCaption"
+                                                                   class="form-control form-control-solid"
+                                                                   placeholder="توضیح تصویر را وارد نمایید" />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div id="bodyQuestionType15" class="d-none mb-10 fv-row showDetailQuestionItem">
+
+                                                <div class="row">
+
+                                                    <div class="col-md-4 mb-5">
+                                                        <label class="form-label">
+                                                            حداقل تعداد فایل
+                                                        </label>
+
+                                                        <input type="number"
+                                                               id="AttachmentMinFiles"
+                                                               class="form-control"
+                                                               min="0"
+                                                               value="0" />
+                                                    </div>
+
+
+                                                    <div class="col-md-4 mb-5">
+                                                        <label class="form-label">
+                                                            حداکثر تعداد فایل
+                                                        </label>
+
+                                                        <input type="number"
+                                                               id="AttachmentMaxFiles"
+                                                               class="form-control"
+                                                               min="1"
+                                                               value="1" />
+                                                    </div>
+
+
+                                                    <div class="col-md-4 mb-5">
+                                                        <label class="form-label">
+                                                            حداکثر حجم هر فایل
+                                                            <span class="text-muted">
+                                                                (MB)
+                                                            </span>
+                                                        </label>
+
+                                                        <input type="number"
+                                                               id="AttachmentMaxFileSizeMB"
+                                                               class="form-control"
+                                                               min="1"
+                                                               value="5" />
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="mb-5">
+
+                                                    <label class="form-label">
+                                                        فرمت‌های مجاز فایل
+                                                    </label>
+
+                                                    <select id="AttachmentAllowedFileTypeIds"
+                                                            class="form-select"
+                                                            multiple="multiple"
+                                                            data-placeholder="فرمت‌های مجاز را انتخاب نمایید">
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end  me-3 mt-3 mb-5">
+                                <a asp-action="Index" class="btn btn-light">بازگشت به لیست سوالات</a>
+                                <button type="button" class="btn btn-lg yas-primary-btn  mw-200px" id="add_Question_btn" data-kt-stepper-action="submit">
+                                    <span class="indicator-label">
+                                        افزودن سوال
+                                        <span class="svg-icon svg-icon-3 ms-2 me-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
+                                                <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                    <span class="indicator-progress">
+                                        چند لحظه صبر کنید...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+
+
+                <!--begin::Tab pane-->
+                <div class="tab-pane fade" id="kt_advanced" role="tab-panel">
+                    <div class="d-flex flex-column gap-7 gap-lg-10">
+                        <p>tab2</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+        <!--end::Form-->
+
+    </div>
+</div>
+
+
+<!-- مودال نمایش بزرگ تصویر -->
+<div id="imagePreviewModal" class="image-zoom-modal">
+    <span class="close-zoom-modal">&times;</span>
+    <img class="zoom-modal-content" id="imagePreviewModalImg">
+</div>
+
+
+<!-- مودال نمایش بزرگ تصویر -->
+<div id="imagePreviewModal" class="image-zoom-modal">
+    <span class="close-zoom-modal">&times;</span>
+    <img class="zoom-modal-content" id="imagePreviewModalImg">
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="../assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
+    <script src="../assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <!--end::Page Vendors Javascript-->
+    <!--begin::Page Custom Javascript(used by this page)-->
+    <script src="../assets/js/custom/utilities/modals/users-search.js"></script>
+    <script src="../assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+    <script src="~/assets/js/custom/voteQuestion/create.js" asp-append-version="true"></script>
+    <!--end::Javascript-->
+}
