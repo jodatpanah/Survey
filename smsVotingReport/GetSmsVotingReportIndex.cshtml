@@ -98,7 +98,7 @@
                         <th><i class="ri-error-warning-fill" title="ناموفق"></i>ناموفق</th>
                         <th>درصد تحویل</th>
                         <th>درصد شرکت</th>
-                        <th>ارسال مجدد</th>
+                        <th>ارسال مجدد گروهی</th>
                     </tr>
                 </thead>
 
@@ -147,27 +147,8 @@
         </div>
 
         <div class="sms-resend-toolbar">
-            <fieldset class="sms-resend-audiences" id="smsResendAudienceOptions">
-                <legend>گیرندگان ارسال مجدد</legend>
-                <div class="sms-resend-options">
-                    <label class="sms-resend-option">
-                        <input type="radio" class="visually-hidden" name="smsResendAudience" value="all" checked />
-                        <span>همه شماره‌ها</span>
-                    </label>
-                    <label class="sms-resend-option">
-                        <input type="radio" class="visually-hidden" name="smsResendAudience" value="not-participated" />
-                        <span>بدون مشارکت</span>
-                    </label>
-                    <label class="sms-resend-option">
-                        <input type="radio" class="visually-hidden" name="smsResendAudience" value="participated" />
-                        <span>مشارکت‌کرده</span>
-                    </label>
-                </div>
-            </fieldset>
-            <button type="button" class="sms-resend-button sms-resend-button--group" id="smsResendGroupButton">
-                <i class="ri-send-plane-line" aria-hidden="true"></i>
-                ارسال مجدد گروهی
-            </button>
+            <div class="sms-resend-toolbar-title">ارسال مجدد گروهی</div>
+            <div id="smsResendDetailActions"></div>
         </div>
 
         <div class="custom-modal-body" id="customDetailsModalBody"></div>
