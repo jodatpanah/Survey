@@ -24,10 +24,10 @@ function fillOptionPriorities() {
     }
 }
 
-function validateOptionPriorities() {
+function validateChoiceOptions() {
     fillOptionPriorities();
     const invalidField = document.querySelector(
-        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid'
+        '#kt_repeater_RadioShowcase .OrderIndex:enabled:invalid, #kt_repeater_RadioShowcase .Weight:enabled:invalid'
     );
     if (invalidField) {
         invalidField.reportValidity();
@@ -268,23 +268,28 @@ $(document).ready(function () {
 
     $choiceOptions.find('.Weight[data-saved-weight]').each(function () {
         const savedWeight = this.dataset.savedWeight;
-        const value = Number(savedWeight);
-        if (savedWeight === '' || !Number.isFinite(value)) {
+        if (savedWeight === '') {
             return;
         }
 
-        // Keep saved values from being rounded or clamped by the slider.
+        const value = Number(savedWeight);
+        if (!Number.isSafeInteger(value)) {
+            this.setCustomValidity('وزن گزینه باید عدد صحیح باشد.');
+            updateWeightDisplay(this, 'وزن نامعتبر');
+            return;
+        }
+
+        // Keep existing integer weights outside today's slider bounds.
         this.min = Math.min(Number(this.min), value);
         this.max = Math.max(Number(this.max), value);
-        if (!Number.isInteger(value)) {
-            this.step = 'any';
-        }
-        this.value = savedWeight;
-        updateWeightDisplay(this, savedWeight);
+        this.dataset.savedWeight = String(value);
+        this.value = this.dataset.savedWeight;
+        updateWeightDisplay(this);
     });
 
     $choiceOptions.on('input', '.Weight', function () {
         delete this.dataset.savedWeight;
+        this.setCustomValidity('');
         updateWeightDisplay(this);
     });
 
@@ -448,7 +453,7 @@ $(document).ready(function () {
                 delete this.dataset.savedWeight;
                 this.min = '-10';
                 this.max = '10';
-                this.step = '1';
+                this.setCustomValidity('');
                 this.value = '1';
                 updateWeightDisplay(this);
             });
@@ -474,7 +479,7 @@ $(document).ready(function () {
 
         hide: function (deleteElement) {
             if (confirm('آیا از حذف این گزینه اطمینان دارید؟')) {
-                $(this).find('.OrderIndex').prop('disabled', true);
+                $(this).find('.OrderIndex, .Weight').prop('disabled', true);
                 $(this).slideUp(deleteElement);
             }
         }
@@ -1003,7 +1008,7 @@ if (submitButton) {
             return;
         }
 
-        if (Number(selectedType) === 1 && !validateOptionPriorities()) {
+        if (Number(selectedType) === 1 && !validateChoiceOptions()) {
             return;
         }
 
