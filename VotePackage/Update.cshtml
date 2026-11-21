@@ -675,13 +675,13 @@
                                                                             <div class="d-flex align-items-center gap-2" dir="ltr">
                                                                                 <button type="button" class="btn btn-icon btn-sm btn-light-primary js-vote-package-weight-step"
                                                                                         data-weight-step="-1" aria-label="کاهش وزن سوال">−</button>
-                                                                                <input type="number" value="1" min="1" max="10" step="1" required
+                                                                                <input type="number" value="1" min="-10" max="10" step="1" required
                                                                                        class="form-control form-control-solid form-control-sm text-center w-75px"
                                                                                        id="weightOfQuestion" name="weightOfQuestion" aria-describedby="vote-package-question-weight-help" />
                                                                                 <button type="button" class="btn btn-icon btn-sm btn-light-primary js-vote-package-weight-step"
                                                                                         data-weight-step="1" aria-label="افزایش وزن سوال">+</button>
                                                                             </div>
-                                                                            <small id="vote-package-question-weight-help" class="text-muted">عدد صحیح از ۱ تا ۱۰</small>
+                                                                            <small id="vote-package-question-weight-help" class="text-muted">عدد صحیح از منفی ۱۰ تا مثبت ۱۰. اگر گزینه‌ای وزن منفی دارد، وزن سوال نمی‌تواند منفی باشد.</small>
                                                                         </div>
                                                                         <div class="separator separator-dashed m-8"></div>
                                                                         <label class="d-flex flex-stack mb-4 cursor-pointer px-2">

@@ -263,10 +263,7 @@ $(document).ready(function () {
         if (this.value && !Number.isSafeInteger(this.valueAsNumber)) {
             this.value = '';
         } else if (this.value) {
-            const value = this.valueAsNumber;
-            this.min = Math.min(Number(this.min), value);
-            this.max = Math.max(Number(this.max), value);
-            this.value = String(value);
+            this.value = String(this.valueAsNumber);
         }
         this.dataset.lastIntegerWeight = this.value;
     });
@@ -1009,12 +1006,37 @@ function validateForm() {
     return true;
 }
 
+async function getQuestionWeightConflict(voteQuestionId) {
+    const unavailable = 'وزن سوال در پرسشنامه‌ها قابل بررسی نبود. دوباره تلاش کنید.';
+    try {
+        const response = await $.ajax({
+            type: 'POST',
+            url: '/VoteQuestion/GetVoteQuestionByVoteQuestionId',
+            dataType: 'json',
+            data: { voteQuestionId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('RequestVerificationToken', $('input[name="__RequestVerificationToken"]').val());
+            }
+        });
+        const packageDetails = response?.data?.votePackageDetailList;
+        if (!Array.isArray(packageDetails) || packageDetails.some(detail =>
+            detail?.weight == null || String(detail.weight).trim() === '' || !Number.isFinite(Number(detail.weight))
+        )) return unavailable;
+
+        return packageDetails.some(detail => Number(detail?.weight) < 0)
+            ? 'این سوال در یک پرسشنامه وزن منفی دارد. وزن گزینه‌های آن باید صفر یا مثبت باشد.'
+            : '';
+    } catch {
+        return unavailable;
+    }
+}
+
 if (submitButton) {
 
     const newSubmitButton = submitButton.cloneNode(true);
     submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
 
-    newSubmitButton.addEventListener('click', function (e) {
+    newSubmitButton.addEventListener('click', async function (e) {
         e.preventDefault();
 
         console.log('کلیک دکمه ویرایش - شروع فرآیند');
@@ -1134,6 +1156,7 @@ if (submitButton) {
             }
         }
 
+        let hasNegativeOption = false;
         if (Number(selectedType) === 1) {
             let itemIndex = 0;
 
@@ -1162,6 +1185,7 @@ if (submitButton) {
                 formData.append(`${prefix}.Title`, title || '');
                 if (!Number.isNaN(weight)) {
                     formData.append(`${prefix}.Weight`, String(weight));
+                    hasNegativeOption ||= weight < 0;
                 }
                 formData.append(`${prefix}.OrderIndex`, orderIndex || '0');
                 formData.append(`${prefix}.ImageUrl`, existingImageUrl || '');
@@ -1179,6 +1203,16 @@ if (submitButton) {
             });
         }
 
+
+        if (hasNegativeOption) {
+            const conflict = await getQuestionWeightConflict(formData.get('VoteQuestionId'));
+            if (conflict) {
+                newSubmitButton.removeAttribute('data-kt-indicator');
+                newSubmitButton.disabled = false;
+                Swal.fire({ text: conflict, icon: 'warning', confirmButtonText: 'بستن' });
+                return;
+            }
+        }
 
         $.ajax({
             type: "POST",

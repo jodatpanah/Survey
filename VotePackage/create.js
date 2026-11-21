@@ -1621,28 +1621,30 @@ $(document).ready(function () {
             input.stepDown();
         }
         input.dataset.lastIntegerWeight = input.value;
+        updateVotePackageQuestionWeightValidity(input);
     });
 
     $(document).on('beforeinput', '#weightOfQuestion', function (event) {
         const data = event.originalEvent?.data;
-        if (data && !/^[\d۰-۹٠-٩]+$/.test(data)) {
+        if (data && !/^-?[\d۰-۹٠-٩]*$/.test(data)) {
             event.preventDefault();
         }
     });
 
     $(document).on('paste', '#weightOfQuestion', function (event) {
         const value = event.originalEvent?.clipboardData?.getData('text');
-        if (value && !/^[\d۰-۹٠-٩]+$/.test(value.trim())) {
+        if (value && !/^-?[\d۰-۹٠-٩]+$/.test(value.trim())) {
             event.preventDefault();
         }
     });
 
     $(document).on('input', '#weightOfQuestion', function () {
-        if (this.validity.badInput || (this.value && !/^\d+$/.test(this.value))) {
+        if (this.value && !/^-?\d+$/.test(this.value)) {
             this.value = this.dataset.lastIntegerWeight ?? '';
-        } else {
+        } else if (!this.validity.badInput) {
             this.dataset.lastIntegerWeight = this.value;
         }
+        updateVotePackageQuestionWeightValidity(this);
     });
 
     $(document).on("click", ".add-confirm-config", function () {
@@ -4543,17 +4545,37 @@ function UpdateOwnerAll() {
 //});
 
 
+let selectedVotePackageQuestion = null;
+
+function updateVotePackageQuestionWeightValidity(input) {
+    let error = '';
+    if (input.valueAsNumber < 0) {
+        const optionItems = selectedVotePackageQuestion?.voteQuestionItemsList;
+        const isChoice = Number(selectedVotePackageQuestion?.voteQuestionTypeList?.voteQuestionTypeId) === 1;
+
+        if (!selectedVotePackageQuestion || (isChoice && !Array.isArray(optionItems))) {
+            error = 'برای بررسی وزن گزینه‌ها، سوال را دوباره انتخاب کنید.';
+        } else if (Array.isArray(optionItems) && optionItems.some(option => Number(option?.weight) < 0)) {
+            error = 'این سوال گزینه با وزن منفی دارد. وزن سوال را صفر یا مثبت وارد کنید.';
+        }
+    }
+    input.setCustomValidity(error);
+}
+
 function getVotePackageQuestionWeight() {
     const input = document.getElementById('weightOfQuestion');
-    return /^\d+$/.test(input.value) && input.validity.valid
+    updateVotePackageQuestionWeightValidity(input);
+    return /^-?\d+$/.test(input.value) && input.validity.valid
         ? input.valueAsNumber
         : null;
 }
 
 function resetVotePackageQuestionWeight() {
+    selectedVotePackageQuestion = null;
     const input = document.getElementById('weightOfQuestion');
     input.value = input.defaultValue;
     input.dataset.lastIntegerWeight = input.value;
+    input.setCustomValidity('');
 }
 
 function clearModalAddQuestionForData() {
@@ -4835,6 +4857,10 @@ $('#AllQuestionByVoteQuestionGroupId').on('select2:select', function (e) {
             xhr.setRequestHeader("RequestVerificationToken", $('input[name="__RequestVerificationToken"]').val());
         },
         success: function (data) {
+            const selectedId = $("#AllQuestionByVoteQuestionGroupId").val();
+            if (String(selectedId) !== String(data.data.voteQuestionId)) return;
+
+            selectedVotePackageQuestion = data.data;
             var voteQuestionIdGET = data.data.voteQuestionId;
             $("#vote-package-question-weight").toggleClass(
                 'd-none', Number(data.data.voteQuestionTypeList.voteQuestionTypeId) === 14
@@ -6167,7 +6193,9 @@ AcceptQuetionToPackage.addEventListener('click', function (e) {
 
                 Swal.fire({
                     text:
-                        "وزن سوال باید یک عدد صحیح از ۱ تا ۱۰ باشد.",
+                        document.getElementById('weightOfQuestion').validity.customError
+                          ? document.getElementById('weightOfQuestion').validationMessage
+                          : "وزن سوال باید یک عدد صحیح از منفی ۱۰ تا مثبت ۱۰ باشد.",
 
                     icon:
                         "warning",
