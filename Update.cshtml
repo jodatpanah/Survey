@@ -1,4 +1,11 @@
 @model Survey.FrameWork.common.VoteQuestion.UpdateVoteQuestionCommand
+@using System.Linq
+@using Survey.FrameWork.common.VoteQuestionMedia
+
+@{
+    var displayMedias = Model.VoteQuestionMedias?.OrderBy(media => media.OrderIndex).ToList()
+        ?? new List<VoteQuestionMediaDto>();
+}
 
 <link rel="stylesheet" href="~/assets/css/question-editor.css" asp-append-version="true" />
 
@@ -462,17 +469,6 @@
                                                 </div>
                                             </div>
 
-                                            @using System.Linq
-                                        @using Survey.FrameWork.common.VoteQuestionMedia
-
-@{
-                                                var displayMedias =
-                                                    Model.VoteQuestionMedias?
-                                                        .OrderBy(x => x.OrderIndex)
-                                                        .ToList()
-                                                    ?? new List<VoteQuestionMediaDto>();
-                                            }
-
                                             @* ============================= *@
                                             @* Composition *@
                                             @* ============================= *@
@@ -512,162 +508,80 @@
                                             @* ============================= *@
                                             <div class="d-none mb-10 fv-row showDetailQuestionItem" id="DisplayContentShowcase-Add">
                                                 <div class="card card-flush py-4">
-
                                                     <div class="px-10 py-1">
                                                         <label class="d-flex align-items-center fs-5 fw-bold">
                                                             <span>محتوای نمایشی</span>
                                                             <i class="fas fa-exclamation-circle ms-2 fs-7"
                                                                data-bs-toggle="tooltip"
-                                                               title="این نوع سوال برای نمایش متن و تصویر در پرسشنامه استفاده می‌شود"></i>
+                                                               title="این محتوا در پرسشنامه نمایش داده می‌شود و پاسخی از کاربر دریافت نمی‌کند."></i>
                                                         </label>
                                                     </div>
 
                                                     <div class="separator my-3"></div>
 
                                                     <div class="card-body">
-
-                                                        <div class="fv-row mb-8">
-                                                            <label asp-for="Description" class="fs-6 fw-bold mb-2">
-                                                                متن نمایشی
-                                                            </label>
-
+                                                        <div class="mb-8">
+                                                            <label for="DisplayContentDescription" class="form-label fw-bold">متن</label>
                                                             <textarea asp-for="Description"
                                                                       id="DisplayContentDescription"
                                                                       class="form-control form-control-solid"
                                                                       rows="5"
-                                                                      placeholder="متن نمایشی را وارد نمایید"></textarea>
+                                                                      placeholder="متن مورد نظر را وارد نمایید..."></textarea>
                                                         </div>
 
-
-                                                        @if (displayMedias.Any())
+                                                        @for (var i = 0; i < Math.Max(1, displayMedias.Count); i++)
                                                         {
-                                                            <div id="DisplayContentExistingMediaList">
-
-                                                                @for (int i = 0; i < displayMedias.Count; i++)
-                                                                {
-                                                                    var media = displayMedias[i];
-
-                                                                    <div class="border border-gray-300 rounded p-5 mb-6 bg-light">
-
-                                                                        <div class="row g-5 align-items-start">
-
-                                                                            <div class="col-md-4">
-                                                                                @if (!string.IsNullOrWhiteSpace(media.ImageUrl))
-                                                                                {
-                                                                                    <div class="mb-3">
-                                                                                        <img src="@media.ImageUrl"
-                                                                                             alt="@media.Caption"
-                                                                                             class="w-100 rounded"
-                                                                                             style="max-height: 220px; object-fit: cover;" />
-                                                                                    </div>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <div class="d-flex align-items-center justify-content-center rounded bg-secondary bg-opacity-10 text-muted"
-                                                                                         style="height:220px;">
-                                                                                        تصویری ثبت نشده است
-                                                                                    </div>
-                                                                                }
-                                                                            </div>
-
-                                                                            <div class="col-md-8">
-
-                                                                                <div class="fv-row mb-4">
-                                                                                    <label class="fs-6 fw-bold mb-2">
-                                                                                        توضیح تصویر
-                                                                                    </label>
-
-                                                                                    <input type="text"
-                                                                                           name="VoteQuestionMedias[@i].Caption"
-                                                                                           class="form-control form-control-solid"
-                                                                                           value="@media.Caption"
-                                                                                           placeholder="توضیح تصویر را وارد نمایید" />
-                                                                                </div>
-
-                                                                                <div class="fv-row mb-4">
-                                                                                    <label class="fs-6 fw-bold mb-2">
-                                                                                        جایگزینی تصویر
-                                                                                    </label>
-
-                                                                                    <input type="file"
-                                                                                           name="VoteQuestionMedias[@i].ImageFile"
-                                                                                           class="form-control form-control-solid"
-                                                                                           accept="image/*" />
-                                                                                </div>
-
-                                                                                <div class="fv-row mb-2">
-                                                                                    <label class="fs-6 fw-bold mb-2">
-                                                                                        اولویت نمایش
-                                                                                    </label>
-
-                                                                                    <input type="number"
-                                                                                           name="VoteQuestionMedias[@i].OrderIndex"
-                                                                                           class="form-control form-control-solid"
-                                                                                           value="@media.OrderIndex"
-                                                                                           min="1" />
-                                                                                </div>
-
-                                                                                <input type="hidden"
-                                                                                       name="VoteQuestionMedias[@i].VoteQuestionMediaId"
-                                                                                       value="@media.VoteQuestionMediaId" />
-
-                                                                                <input type="hidden"
-                                                                                       name="VoteQuestionMedias[@i].VoteQuestionId"
-                                                                                       value="@media.VoteQuestionId" />
-
-                                                                                <input type="hidden"
-                                                                                       name="VoteQuestionMedias[@i].ImageUrl"
-                                                                                       value="@media.ImageUrl" />
-                                                                            </div>
+                                                            var media = displayMedias.ElementAtOrDefault(i);
+                                                            var imageId = $"DisplayContentImage-{i}";
+                                                            var captionId = $"DisplayContentImageCaption-{i}";
+                                                            <div class="js-display-content-media @(i > 0 ? "mt-8 pt-6 border-top" : "")">
+                                                                <div class="mb-8">
+                                                                    <label for="@imageId" class="form-label fw-bold">تصویر</label>
+                                                                    @if (!string.IsNullOrWhiteSpace(media?.ImageUrl))
+                                                                    {
+                                                                        <div class="mb-3">
+                                                                            <img src="@media.ImageUrl" alt="@media.Caption"
+                                                                                 class="img-thumbnail mh-150px mw-100" loading="lazy" />
                                                                         </div>
-                                                                    </div>
-                                                                }
-
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="border border-dashed border-gray-300 rounded p-5 mb-6">
-                                                                <div class="fv-row mb-4">
-                                                                    <label class="fs-6 fw-bold mb-2">
-                                                                        توضیح تصویر
-                                                                    </label>
-
-                                                                    <input type="text"
-                                                                           name="VoteQuestionMedias[0].Caption"
-                                                                           class="form-control form-control-solid"
-                                                                           placeholder="توضیح تصویر را وارد نمایید" />
-                                                                </div>
-
-                                                                <div class="fv-row mb-4">
-                                                                    <label class="fs-6 fw-bold mb-2">
-                                                                        تصویر
-                                                                    </label>
-
+                                                                    }
                                                                     <input type="file"
-                                                                           name="VoteQuestionMedias[0].ImageFile"
+                                                                           id="@imageId"
+                                                                           name="VoteQuestionMedias[@i].ImageFile"
                                                                            class="form-control form-control-solid"
                                                                            accept="image/*" />
                                                                 </div>
 
-                                                                <input type="hidden"
-                                                                       name="VoteQuestionMedias[0].VoteQuestionMediaId"
-                                                                       value="0" />
+                                                                <div class="mb-0">
+                                                                    <label for="@captionId" class="form-label fw-bold">توضیح تصویر</label>
+                                                                    <input type="text"
+                                                                           id="@captionId"
+                                                                           name="VoteQuestionMedias[@i].Caption"
+                                                                           class="form-control form-control-solid"
+                                                                           value="@(media?.Caption)"
+                                                                           placeholder="توضیح تصویر را وارد نمایید" />
+                                                                </div>
 
-                                                                <input type="hidden"
-                                                                       name="VoteQuestionMedias[0].VoteQuestionId"
-                                                                       value="@Model.VoteQuestionId" />
-
-                                                                <input type="hidden"
-                                                                       name="VoteQuestionMedias[0].OrderIndex"
-                                                                       value="1" />
-
-                                                                <input type="hidden"
-                                                                       name="VoteQuestionMedias[0].ImageUrl"
-                                                                       value="" />
+                                                                @if (displayMedias.Count > 1)
+                                                                {
+                                                                    var orderId = $"DisplayContentImageOrder-{i}";
+                                                                    <div class="mt-4">
+                                                                        <label for="@orderId" class="form-label fw-bold">اولویت نمایش</label>
+                                                                        <input type="number"
+                                                                               id="@orderId"
+                                                                               name="VoteQuestionMedias[@i].OrderIndex"
+                                                                               class="form-control form-control-solid"
+                                                                               value="@(media?.OrderIndex ?? i + 1)" min="1" />
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="hidden" name="VoteQuestionMedias[@i].OrderIndex" value="@(media?.OrderIndex ?? 1)" />
+                                                                }
+                                                                <input type="hidden" name="VoteQuestionMedias[@i].VoteQuestionMediaId" value="@(media?.VoteQuestionMediaId ?? 0)" />
+                                                                <input type="hidden" name="VoteQuestionMedias[@i].VoteQuestionId" value="@Model.VoteQuestionId" />
+                                                                <input type="hidden" name="VoteQuestionMedias[@i].ImageUrl" value="@(media?.ImageUrl)" />
                                                             </div>
                                                         }
-
                                                     </div>
                                                 </div>
                                             </div>

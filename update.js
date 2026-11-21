@@ -1006,6 +1006,29 @@ function validateForm() {
     return true;
 }
 
+function appendDisplayContentFields(formData) {
+    const description = document.getElementById('DisplayContentDescription').value.trim();
+    formData.append('Description', description);
+
+    document.querySelectorAll('#DisplayContentShowcase-Add .js-display-content-media').forEach(row => {
+        const mediaId = row.querySelector('input[name$=".VoteQuestionMediaId"]').value;
+        const imageInput = row.querySelector('input[type="file"]');
+        const imageFile = imageInput.files[0];
+
+        if (mediaId === '0' && !imageFile) return;
+
+        row.querySelectorAll('input[name]').forEach(input => {
+            if (input !== imageInput) {
+                formData.append(input.name, input.value.trim());
+            }
+        });
+
+        if (imageFile) {
+            formData.append(imageInput.name, imageFile, imageFile.name);
+        }
+    });
+}
+
 async function getQuestionWeightConflict(voteQuestionId) {
     const unavailable = 'وزن سوال در پرسشنامه‌ها قابل بررسی نبود. دوباره تلاش کنید.';
     try {
@@ -1108,52 +1131,8 @@ if (submitButton) {
             loadAttachmentFileTypesForUpdate();
         }
 
-        if (String(selectedType) === "14") {
-
-            const description =
-                ($("#DisplayContentDescription").val() || '')
-                    .trim();
-
-            const caption =
-                ($("#DisplayContentImageCaption").val() || '')
-                    .trim();
-
-            const imageFile =
-                document
-                    .getElementById("DisplayContentImage")
-                    ?.files?.[0];
-
-
-            // متن نمایشی خود Question
-            formData.append(
-                'Description',
-                description
-            );
-
-
-            // اگر تصویر انتخاب شده باشد
-            if (imageFile) {
-
-                formData.append(
-                    'VoteQuestionMedias[0].VoteQuestionMediaId',
-                    '0'
-                );
-
-                formData.append(
-                    'VoteQuestionMedias[0].Caption',
-                    caption
-                );
-
-                formData.append(
-                    'VoteQuestionMedias[0].OrderIndex',
-                    '1'
-                );
-
-                formData.append(
-                    'VoteQuestionMedias[0].ImageFile',
-                    imageFile
-                );
-            }
+        if (Number(selectedType) === 14) {
+            appendDisplayContentFields(formData);
         }
 
         let hasNegativeOption = false;
