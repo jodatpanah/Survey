@@ -7,6 +7,7 @@ let modalTotalPages = 1;
 let modalRecordCount = 10;
 let modalSmsId = null;
 let modalResendRecipients = [];
+const pendingSmsResendReports = new Set();
 function renderTableSkeleton(rowCount = 5) {
     const columnCount = $('#reportTableBody').closest('table').find('thead th').length;
     let skeletonRows = '';
@@ -121,7 +122,7 @@ function renderTable(data) {
     });
 
     $('.table-row-hover').off('click').on('click', function (event) {
-        const smsId = $(this).data('sms-id');
+        const smsId = $(this).attr('data-sms-id');
         if ($(event.target).closest('.sms-resend-controls').length) return;
 
         viewDetails(smsId);
@@ -129,6 +130,7 @@ function renderTable(data) {
 }
 
 function createTableRow(item, index, startIndex) {
+    const smsId = getSmsResendId(item.voteRequestSpecificationSmsId);
     const getGaugeData = (value) => {
         const val = parseFloat(value) || 0;
         let color = '#22C55E'; // success
@@ -189,7 +191,7 @@ function createTableRow(item, index, startIndex) {
     `;
 
     return `
-        <tr class="table-row-hover align-middle" data-sms-id="${item.voteRequestSpecificationSmsId || ''}">
+        <tr class="table-row-hover align-middle" data-sms-id="${smsId}">
             <!-- 1. ردیف -->
             <td class="text-center">
                 <span class="badge bg-light text-dark rounded-pill">
@@ -258,7 +260,7 @@ function createTableRow(item, index, startIndex) {
             </td>
 
             <td class="text-center sms-resend-table-actions">
-                ${renderSmsResendGroupButtons(!item.voteRequestSpecificationSmsId)}
+                ${renderSmsResendGroupButtons(!smsId)}
             </td>
         </tr>
     `;
@@ -541,7 +543,7 @@ function viewDetails(smsId, page = 1) {
 
             let items = details.result?.[0]?.details || [];
 
-            showDetailsModal(items);
+            showDetailsModal(items, smsId);
 
             // اگر API تعداد رکورد را برگرداند
             renderModalPagination();
@@ -588,7 +590,7 @@ function closeCustomModal() {
     modal.classList.remove('show');
     document.body.classList.remove('modal-open');
     modalResendRecipients = [];
-    $('#smsResendDetailActions .sms-resend-status').text('');
+    $('#smsResendDetailActions').removeAttr('data-sms-id').empty();
 }
 
 document.getElementById('customDetailsModalClose').addEventListener('click', closeCustomModal);
@@ -605,16 +607,27 @@ document.addEventListener('keydown', function (e) {
 
 
 const smsResendGroups = {
-    all: 'همه شماره‌ها',
-    participated: 'مشارکت‌کنندگان',
-    'not-participated': 'افراد بدون مشارکت'
+    all: { action: 'ResendAllSms', label: 'همه شماره‌ها' },
+    participated: { action: 'ResendParticipatedSms', label: 'مشارکت‌کنندگان' },
+    'not-participated': { action: 'ResendNotParticipatedSms', label: 'افراد بدون مشارکت' }
 };
+
+function getSmsResendId(value) {
+    if (typeof value === 'number' && !Number.isSafeInteger(value)) return '';
+
+    const id = String(value ?? '').trim();
+    return /^[1-9]\d*$/.test(id) ? id : '';
+}
+
+function getSmsResendDetailId(item) {
+    return getSmsResendId(item?.voteRequestSpecificationDetailSmsId ?? item?.detailSmsId);
+}
 
 function renderSmsResendGroupButtons(disabled = false) {
     return `
         <div class="sms-resend-controls">
             <div class="sms-resend-group-actions" role="group" aria-label="ارسال مجدد گروهی">
-                ${Object.entries(smsResendGroups).map(([group, label]) => `
+                ${Object.entries(smsResendGroups).map(([group, { label }]) => `
                     <button type="button" class="sms-resend-button js-sms-resend-group"
                             data-audience="${group}" aria-label="ارسال مجدد به ${label}" ${disabled ? 'disabled' : ''}>
                         ${label}
@@ -626,41 +639,59 @@ function renderSmsResendGroupButtons(disabled = false) {
     `;
 }
 
-$('#smsResendDetailActions').html(renderSmsResendGroupButtons());
+async function requestSmsResend(smsId, action, data, $controls) {
+    const $status = $controls.find('.sms-resend-status');
+    if (pendingSmsResendReports.has(smsId)) {
+        $status.text('یک درخواست ارسال برای این گزارش در حال انجام است.');
+        return;
+    }
+
+    pendingSmsResendReports.add(smsId);
+    const $buttons = $controls.find('.sms-resend-button:enabled');
+    $buttons.prop('disabled', true);
+    $status.text('در حال ثبت درخواست ارسال مجدد…');
+
+    const failureMessage = 'ثبت درخواست ارسال مجدد تأیید نشد.';
+    try {
+        const response = await $.ajax({
+            url: '/VoteAnswerReport/' + action,
+            type: 'GET',
+            data,
+            dataType: 'json',
+            cache: false
+        });
+        const result = typeof response === 'string' ? JSON.parse(response) : response;
+        const success = result === true || result?.success === true || result?.isSuccess === true;
+        $status.text(success
+            ? 'درخواست ارسال مجدد ثبت شد.'
+            : result?.operationErrors?.[0]?.description || result?.message || failureMessage);
+    } catch (error) {
+        const result = error?.responseJSON;
+        $status.text(result?.operationErrors?.[0]?.description || result?.message || failureMessage);
+    } finally {
+        pendingSmsResendReports.delete(smsId);
+        $buttons.prop('disabled', false);
+    }
+}
 
 $('#reportTableBody, #smsResendDetailActions').on('click', '.js-sms-resend-group', function () {
-    const label = smsResendGroups[this.dataset.audience];
-    if (!label || this.disabled) return;
+    const group = smsResendGroups[this.dataset.audience];
+    const smsId = getSmsResendId($(this).closest('[data-sms-id]').attr('data-sms-id'));
+    if (!group || !smsId || this.disabled) return;
 
-    $(this).closest('.sms-resend-controls').find('.sms-resend-status')
-        .text(label + ' · ارسال پیامک هنوز فعال نیست.');
+    requestSmsResend(smsId, group.action, { smsId }, $(this).closest('.sms-resend-controls'));
 });
-
-function showSmsResendPreview(title, recipientLabel, target = document.body) {
-    Swal.fire({
-        target,
-        keydownListenerCapture: true,
-        icon: 'info',
-        title,
-        text: recipientLabel + ' | ارسال پیامک پس از اتصال سرویس فعال می‌شود.',
-        confirmButtonText: 'متوجه شدم',
-        buttonsStyling: false,
-        customClass: { confirmButton: 'sms-resend-button sms-resend-button--group' }
-    });
-}
 
 $('#customDetailsModalBody').on('click', '.js-sms-resend-recipient', function () {
     const recipient = modalResendRecipients[Number(this.dataset.recipientIndex)];
-    if (recipient?.mobileNo) {
-        showSmsResendPreview(
-            'ارسال مجدد لینک',
-            'شماره گیرنده: ' + convertToPersianNumbers(recipient.mobileNo),
-            document.getElementById('customDetailsModal')
-        );
-    }
+    const detailSmsId = getSmsResendDetailId(recipient);
+    const smsId = getSmsResendId($('#smsResendDetailActions').attr('data-sms-id'));
+    if (!detailSmsId || !smsId || this.disabled) return;
+
+    requestSmsResend(smsId, 'ResendSingleSms', { detailSmsId }, $(this).closest('.sms-resend-controls'));
 });
 
-function showDetailsModal(data) {
+function showDetailsModal(data, smsId) {
 
     const items = Array.isArray(data)
         ? data
@@ -678,6 +709,12 @@ function showDetailsModal(data) {
         return;
     }
 
+    const $detailActions = $('#smsResendDetailActions');
+    const reportId = getSmsResendId(smsId);
+    if ($detailActions.attr('data-sms-id') !== reportId) {
+        $detailActions.attr('data-sms-id', reportId).html(renderSmsResendGroupButtons(!reportId));
+    }
+
     const statusBadge = (status, desc) => {
         const map = {
             8: 'warning',
@@ -693,7 +730,7 @@ function showDetailsModal(data) {
     };
 
     const rows = items.map((item, i) => {
-        const hasMobileNumber = String(item.mobileNo ?? '').trim() !== '';
+        const canResend = reportId && getSmsResendDetailId(item);
 
         const startIndex =
             (modalCurrentPage - 1) * modalRecordCount;
@@ -756,12 +793,15 @@ function showDetailsModal(data) {
             }
                 </td>
 
-                <td class="text-center text-nowrap">
-                    <button type="button" class="sms-resend-button js-sms-resend-recipient"
-                            data-recipient-index="${i}" ${hasMobileNumber ? '' : 'disabled'}>
-                        <i class="ri-send-plane-line" aria-hidden="true"></i>
-                        ارسال مجدد لینک
-                    </button>
+                <td class="text-center">
+                    <div class="sms-resend-controls">
+                        <button type="button" class="sms-resend-button js-sms-resend-recipient"
+                                data-recipient-index="${i}" ${canResend ? '' : 'disabled'}>
+                            <i class="ri-send-plane-line" aria-hidden="true"></i>
+                            ارسال مجدد لینک
+                        </button>
+                        <p class="sms-resend-status" role="status">${canResend ? '' : 'شناسه ارسال در دسترس نیست.'}</p>
+                    </div>
                 </td>
             </tr>
         `;
