@@ -537,11 +537,10 @@
 
                     @* starterVotepackage *@
                     @* starterVotepackage *@
-                    <div class="starterVotepackage HaveAnimation d-none">
+                    <div id="surveyWelcome" class="starterVotepackage HaveAnimation d-none">
 
                         <div class="survey-welcome-screen">
 
-                            <!-- 60% Top -->
                             <div class="survey-welcome-hero">
 
                                 <img src="~/images/Logo/logo-yaas.png"
@@ -551,19 +550,14 @@
                             </div>
 
 
-                            <!-- 40% Bottom -->
                             <div class="survey-welcome-panel">
 
                                 <div class="survey-welcome-panel-content">
 
-                                    <div class="survey-welcome-copy" role="region" aria-label="معرفی نظرسنجی" tabindex="0">
-                                        <h1 class="survey-welcome-title"></h1>
+                                    <h1 class="survey-welcome-title"></h1>
 
-                                        <div class="survey-welcome-divider" aria-hidden="true">
-                                            <span></span>
-                                        </div>
-
-                                        <div class="wellcomeMsg lblText survey-welcome-message"></div>
+                                    <div class="survey-welcome-divider" aria-hidden="true">
+                                        <span></span>
                                     </div>
 
                                     <button type="button"
@@ -577,6 +571,10 @@
                                         </span>
 
                                     </button>
+
+                                    <div class="survey-welcome-copy" role="region" aria-label="معرفی نظرسنجی" tabindex="0">
+                                        <div class="wellcomeMsg lblText survey-welcome-message"></div>
+                                    </div>
 
                                 </div>
 
@@ -1002,3 +1000,5 @@
         <span class="fas fa-times"></span>
     </div>
 </div>
+
+<script src="~/js/survey-welcome-viewport.js" asp-append-version="true" defer></script>

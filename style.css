@@ -6745,6 +6745,12 @@ input.inputFild[pattern] {
     display: none !important;
 }
 
+.starterVotepackage.survey-welcome-visual-viewport {
+    inset: var(--survey-welcome-top) auto auto var(--survey-welcome-left) !important;
+    width: var(--survey-welcome-width) !important;
+    height: var(--survey-welcome-height) !important;
+}
+
 .starterVotepackage .survey-welcome-screen {
     position: relative;
     width: 100%;
@@ -6856,7 +6862,11 @@ input.inputFild[pattern] {
 
     .starterVotepackage .survey-welcome-title {
         width: 100%;
+        max-height: 5.1em;
         margin: 0;
+        flex: 0 1 auto;
+        overflow: auto;
+        overflow-wrap: anywhere;
         color: #191b1a;
         font-size: 24px;
         font-weight: 700;
@@ -6874,7 +6884,8 @@ input.inputFild[pattern] {
         position: relative;
         width: 72px;
         height: 10px;
-        margin: 9px auto 10px;
+        margin: 0 auto;
+        flex: 0 0 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -6929,7 +6940,6 @@ input.inputFild[pattern] {
         width: 100%;
         max-width: 420px;
         height: 58px;
-        margin-top: auto;
         padding: 0 22px;
         flex: 0 0 58px;
         display: flex;
@@ -7000,7 +7010,8 @@ input.inputFild[pattern] {
 @media (max-width: 576px) and (min-height: 26rem), (hover: none) and (pointer: coarse) and (min-height: 26rem) {
     .starterVotepackage .survey-welcome-hero {
         display: flex;
-        flex: 0 0 52%;
+        flex: 0 0 48%;
+        max-height: 18rem;
     }
 
     .starterVotepackage .survey-welcome-logo {
@@ -7021,11 +7032,37 @@ input.inputFild[pattern] {
 }
 
 @media (max-height: 26rem) {
+    .starterVotepackage .survey-welcome-hero {
+        display: none;
+    }
+
+    .starterVotepackage .survey-welcome-panel {
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
     .starterVotepackage .survey-welcome-panel-content {
         padding-top: max(8px, env(safe-area-inset-top));
         padding-bottom: max(8px, env(safe-area-inset-bottom));
         gap: 8px;
     }
+}
+
+.starterVotepackage.survey-welcome-compact .survey-welcome-hero {
+    display: none;
+}
+
+.starterVotepackage.survey-welcome-compact .survey-welcome-panel {
+    margin-top: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.starterVotepackage.survey-welcome-compact .survey-welcome-panel-content {
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    gap: 8px;
 }
 
 /* =========================================================
