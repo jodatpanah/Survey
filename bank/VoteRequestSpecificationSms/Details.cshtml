@@ -1,0 +1,288 @@
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@model PagedResult<Survey.FrameWork.common.VoteRequestSpecificationDetailSms.VoteRequestSpecificationDetailSmsListDto>
+
+@{
+    ViewData["Title"] = "برگزاری نظرسنجی- روش ارسال پیامک";
+    long i = (Model.PageNumber - 1) * Model.TotalRecordCount;
+    var parentId = ViewBag.ParentId;
+}
+
+<!--searchForm-->
+<form class="searchForm" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@ViewBag.ParentId" name="ParentId" />
+    <div class="card mb-7">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="position-relative w-md-400px me-md-2">
+                    <span class="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control form-control-sm form-control-solid ps-10" id="LastName" name="LastName" value="@ViewBag.LastName" placeholder="نام خانوادگی" />
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-sm btn-bg-light px-2 py-2">
+                        <span class="svg-icon svg-icon-1  svg-icon-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8C2182">
+                                <path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="#8C2182" />
+                                <path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="#8C2182" />
+                            </svg>
+                        </span>
+                    </button>
+
+
+                    <a id="kt_horizontal_search_advanced_link" class="btn btn-sm  btn-icon-primary btn-text-primary me-2  " data-bs-toggle="collapse" href="#kt_advanced_search_form"> جست و جوی پیشرفته</a>
+                </div>
+
+            </div>
+
+            <div class="collapse" id="kt_advanced_search_form">
+                <div class="separator separator-dashed mt-9 mb-6"></div>
+                <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                     data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
+                    <div class="fv-row">
+
+                        <div class="row g-9 mb-2">
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2"> نام </label>
+                                <input class="form-control form-control-sm  form-control-solid" placeholder="نام" id="FirstName" name="FirstName" value="@ViewBag.FirstName">
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">نام خانوادگی </label>
+                                <input class="form-control  form-control-sm  form-control-solid" name="LastNamePro" id="LastNamePro" placeholder=" نام خانوادگی" value="@ViewBag.LastNamePro">
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">شماره تماس </label>
+                                <input class="form-control  form-control-sm  form-control-solid" id="MobileNo" name="MobileNo" placeholder="شماره تماس" value="@ViewBag.MobileNo">
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">وضعیت ارسال</label>
+                                <select class="form-select form-select-sm form-select-solid" id="IsDeliver" name="IsDeliver" data-control="select2" data-hide-search="true" data-placeholder="وضعیت " data-kt-ecommerce-product-filter="status">
+                                    <option></option>
+                                    <option value="null">همه</option>
+                                    <option value="True">ارسال شده </option>
+                                    <option value="False">  ارسال نشده </option>
+                                </select>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row px-3 float-end">
+                            <button type="submit" class="btn btn-primary  btn-sm  px-2 py-2 w-100px ">
+                                جست و جو
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <img class="bgImage" src="../../assets/media/sigma-1/5.png" />
+
+        </div>
+    </div>
+</form>
+<div class="card ">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">جزئیات برگزاری نظرسنجی- روش ارسال پیامک </span>
+            <span class="text-muted mt-1 fw-bold fs-7">  </span>
+        </h3>
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+        </div>
+
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+
+            <div class="w-100 mw-150px d-flex justify-content-end">
+                <button type="button" class="btn btn-sm btn-bg-light btn-icon-primary btn-text-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+                    <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.3" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="black"></rect>
+                            <path d="M12.0573 6.11875L13.5203 7.87435C13.9121 8.34457 14.6232 8.37683 15.056 7.94401C15.4457 7.5543 15.4641 6.92836 15.0979 6.51643L12.4974 3.59084C12.0996 3.14332 11.4004 3.14332 11.0026 3.59084L8.40206 6.51643C8.0359 6.92836 8.0543 7.5543 8.44401 7.94401C8.87683 8.37683 9.58785 8.34458 9.9797 7.87435L11.4427 6.11875C11.6026 5.92684 11.8974 5.92684 12.0573 6.11875Z" fill="black"></path>
+                            <path d="M18.75 8.25H17.75C17.1977 8.25 16.75 8.69772 16.75 9.25C16.75 9.80228 17.1977 10.25 17.75 10.25C18.3023 10.25 18.75 10.6977 18.75 11.25V18.25C18.75 18.8023 18.3023 19.25 17.75 19.25H5.75C5.19772 19.25 4.75 18.8023 4.75 18.25V11.25C4.75 10.6977 5.19771 10.25 5.75 10.25C6.30229 10.25 6.75 9.80228 6.75 9.25C6.75 8.69772 6.30229 8.25 5.75 8.25H4.75C3.64543 8.25 2.75 9.14543 2.75 10.25V19.25C2.75 20.3546 3.64543 21.25 4.75 21.25H18.75C19.8546 21.25 20.75 20.3546 20.75 19.25V10.25C20.75 9.14543 19.8546 8.25 18.75 8.25Z" fill="#C4C4C4"></path>
+                        </svg>
+                    </span>
+                    خروجی فایل
+                </button>
+                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary  w-100 mw-150px py-3" data-kt-menu="true">
+                    <div class="menu-item px-3">
+                        <a asp-action="ExportToExcelData"
+                           asp-controller="VoteRequestSpecificationSms"
+                           asp-route-parentId="@ViewBag.ParentId"
+                           asp-route-firstName="@ViewBag.FirstName"
+                           asp-route-lastName="@ViewBag.LastName"
+                           asp-route-lastNamePro="@ViewBag.LastNamePro"
+                           asp-route-mobileNo="@ViewBag.MobileNo"
+                           asp-route-isDeliver="@ViewBag.SendStatus"
+                           name="ParentId"
+                           class="menu-link px-3"><img class="w-20px h-20px" src="/assets/media/svg/files/excel.svg" /> خروجی اکسل</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="card-body pt-4">
+        <!--<table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_table">-->
+
+        <table class="table align-middle table-row-dashed fs-6 gy-3" id="kt_main_table">
+            <thead>
+                <tr class="text-start fw-bolder fs-7 text-muted bg-light">
+                    <th class="rounded-start  ps-4 w-50px">
+                        @* <div class="form-check form-check-sm form-check-custom form-check-solid">
+                        <input class="form-check-input" type="checkbox" value="1" />
+                        </div> *@
+                    </th>
+                    <th class="text-start ">  @Html.DisplayNameFor(model => model.Result.FirstOrDefault().FirstName) </th>
+                    <th class="text-start min-w-70px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().LastName)
+                    </th>
+                    <th class="text-start min-w-70px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().MobileNo)
+                    </th>
+
+                    <th class="text-start min-w-70px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().Message)
+                    </th>
+                    <th class="text-start min-w-70px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().TrackingNo)
+                    </th>
+                    <th class="text-start min-w-70px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().SendDateTime)
+                    </th>
+                    <th class="rounded-end text-start min-w-50px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().SendStatus)
+                    </th>
+
+                    <th class="rounded-end text-start min-w-50px">
+                        @Html.DisplayNameFor(model => model.Result.FirstOrDefault().IsActive)
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody class="fw-bold text-gray-600">
+
+
+                @foreach (var item in Model.Result)
+                {
+                    <tr>
+                        <td class="ps-4 ">
+                            @* <div class="form-check form-check-sm form-check-custom form-check-solid">
+                        <input class="form-check-input" type="checkbox" value="1" />
+                        </div> *@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNo)
+                        </td>
+
+
+
+                        <td class="limitDataTableHead">
+                            <span class="limitDataTable">
+                                @Html.DisplayFor(modelItem => item.Message)
+                            </span>
+
+                        </td>
+
+                        <td class="limitDataTableHead">
+                            <span class="limitDataTable">
+                                @Html.DisplayFor(modelItem => item.TrackingNo)
+                            </span>
+
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SendDateTimePersian)
+                        </td>
+                        <td>
+                            @{
+                                var enumValue = item.SendStatus;
+                                string displayName = "نامشخص";
+                                string badgeClass = "badge badge-light";
+
+                                if (enumValue != null)
+                                {
+                                    var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
+
+                                    if (fieldInfo != null)
+                                    {
+                                        var displayAttribute = fieldInfo.GetCustomAttribute<DisplayAttribute>();
+                                        displayName = displayAttribute != null ? displayAttribute.Name : enumValue.ToString();
+                                    }
+                                    else
+                                    {
+                                        displayName = enumValue.ToString();
+                                    }
+
+                                    switch (enumValue)
+                                    {
+                                        case SmsSendStatus.NotSent:
+                                            badgeClass = "badge badge-warning"; // Yellow for unSent
+                                            break;
+                                        case SmsSendStatus.Sent:
+                                            badgeClass = "badge badge-primary"; // Blue for Sent
+                                            break;
+                                        case SmsSendStatus.Delivered:
+                                            badgeClass = "badge badge-success"; // Green for Delivered
+                                            break;
+                                        case SmsSendStatus.UnDelivered:
+                                            badgeClass = "badge badge-danger"; // Red for UnDelivered
+                                            break;
+                                        default:
+                                            badgeClass = "badge bg-info"; // Default in case of Other status
+                                            break;
+                                    }
+                                }
+                            }
+
+                            <span class="@badgeClass fs-7 fw-bolder">@displayName</span>
+
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <span class="badge badge-light-success fs-7 fw-bolder">فعال</span>
+
+                            }
+                            else
+                            {
+                                <span class="badge badge-light-danger fs-7 fw-bolder">غیر فعال</span>
+                            }
+
+                        </td>
+
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+        @Html.PagedListPager(Model, page => Url.Action("Details", new { page, FirstName = ViewBag.FirstName, LastName = ViewBag.LastName, LastNamePro = ViewBag.LastNamePro, MobileNo = ViewBag.MobileNo, SendStatus = ViewBag.SendStatus, ParentId = ViewBag.ParentId }))
+
+
+    </div>
+    <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <a class="btn btn-active-light me-2" asp-action="index" asp-controller="VoteRequestSpecificationSms">بازگشت به لیست</a>
+
+    </div>
+</div>
+
+
