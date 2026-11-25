@@ -11,7 +11,7 @@
 
         <div class="modal-content" id="modalcontentAdd">
 
-            <form id="kt_modal_add_form" class="form " enctype="multipart/form-data" asp-action="Create" asp-controller="VoteRequestSpecificationSms">
+            <form id="kt_modal_add_form" method="post" data-sms-create class="form " enctype="multipart/form-data" asp-action="Create" asp-controller="VoteRequestSpecificationSms">
                 @Html.AntiForgeryToken()
                 <input type="hidden" />
                 <div class="modal-header" id="kt_modal_add_header">
@@ -47,7 +47,6 @@
                         <div id="charCount">کاراکتر باقی‌مانده: 70</div>
                         </div>
 
-                        <div class="col-md-6 fv-row">
                         <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-1" for="StartDateTime">
                                 <span class="px-2"> تاریخ  </span>
@@ -98,6 +97,8 @@
 
 
 
+                    <partial name="_SmsRecipientIdentifier" />
+
                     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x fs-5 fw-bolder">
                         <li class="nav-item">
                             <a class="nav-link text-active-primary p-4 active" data-bs-toggle="tab" href="#kt_advanced">
@@ -140,30 +141,31 @@
                             <div class="card w-100">
 
 
-                                    <div class="card-body  row">
-                                        <div class="col-md-7 fv-row">
-                                            <div class="d-flex flex-stack mb-3">
-                                                <label class=" fs-6 mb-2 min-w-50px"><span class=" min-w-100"> فایل</span></label>
-                                            <input asp-for="FileName" type="file" class="form-control form-control-solid mb-4" id="formFile" name="formFile" placeholder="فایل  را وارد کنید" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" />
-                                        
-                                           
+                                <div class="card-body">
+                                    <div class="row g-4 align-items-end">
+                                        <div class="col-md-7">
+                                            <label for="formFile" class="fs-6 fw-bold mb-2">فایل اکسل گیرندگان</label>
+                                            <input asp-for="FileName" type="file" class="form-control form-control-solid" id="formFile" name="formFile" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="sms-file-identifier-hint sms-file-error" />
                                         </div>
-                                        </div>     
-                                        <div class="col-md-5 fv-row">
-                                            <div class="d-flex flex-stack mb-3">
-   
-                                                <a href="/Files/ImportCustomers.xlsx" class=" btn btn-bg-light btn-color-primary me-2 mb-2">دانلود فایل نمونه</a>
-                                        </div>
+                                        <div class="col-md-5">
+                                            <a href="/Files/ImportCustomers.xlsx" class="btn btn-light-primary">دانلود فایل نمونه</a>
                                         </div>
                                     </div>
+                                    <p id="sms-file-identifier-hint" class="form-text mb-0" aria-live="polite">
+                                        <span data-sms-file-hint="true">در فایل اکسل ستون شماره موبایل را تکمیل کنید.</span>
+                                        <span data-sms-file-hint="false" class="d-none">در فایل اکسل ستون کد پرسنلی را تکمیل کنید.</span>
+                                    </p>
+                                    <div id="sms-file-error" class="text-danger mt-2 d-none" role="alert"></div>
                                 </div>
                             </div>
+                        </div>
 
                         <div class="tab-pane fade" id="kt_general" role="tab-panel">
 
                             <div class="card w-100">
 
                                 <div class="card-body  p-2">
+                                    <div id="sms-manual-error" class="text-danger mb-2 d-none" role="alert"></div>
 
                                         <div class="fv-row">
                                             <div class="card mb-6 mb-xl-9">
@@ -175,14 +177,14 @@
 
                                                                 <th class="w-100px">نام </th>
                                                                 <th class="min-w-100px">نام خانوادگی  </th>
-                                                                <th class="w-100px required"> شماره تماس  </th>
-                                                                <th class="w-100px">کد پرسنلی</th>
+                                                                <th scope="col" class="min-w-150px required" data-sms-recipient="true">شماره موبایل</th>
+                                                                <th scope="col" class="min-w-150px required d-none" data-sms-recipient="false">کد پرسنلی</th>
                                                                 <th class="w-100px">کد شعبه</th>
                                                                 <th class="w-100px">کد خدمت</th>
                                                                 <th class="w-50px text-end px-5">حذف  </th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="fw-bold text-gray-600 tableTbodyCount" id="kt_view_table">
+                                                        <tbody class="fw-bold text-gray-600 tableTbodyCount">
                                                           
                                                          
                                                         </tbody>
@@ -213,7 +215,7 @@
 
                 <div class="modal-footer flex-end">
                     <button type="reset" id="kt_modal_add_cancel" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light me-3">انصراف</button>
-                    <button id="kt_modal_add_submit" class="btn btn-primary" type="button" data-kt-stepper-action="submit">
+                    <button id="kt_modal_add_submit" class="btn btn-primary" type="submit">
 
                         <span class="indicator-label">تایید</span>
                         <span class="indicator-progress">

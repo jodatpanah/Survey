@@ -388,72 +388,207 @@ function ChangeStatus(clickedId, isActive) {
 //kamaDatepicker('ToSendDateTime', customOptions);
 //kamaDatepicker('FromSendDateTime', customOptions);
 $(document).ready(function () {
-    const table = $("#kt_view_table");
+    const createFormSelector = '#kt_modal_add_form[data-sms-create]';
 
-    function addRownew() {
-        var count = table.find("tr.CountRow").length;
-        var newRow = `
-            <tr class='remove CountRow'>
-                <td class=''><input maxlength="20" class='form-control'  value='' id='FirstName[${count}]' name='VoteRequestSpecificationDetailSms[${count}].FirstName'></td>
-                <td class=''><input maxlength="50" class='form-control' value='' id='LastName[${count}]' name='VoteRequestSpecificationDetailSms[${count}].LastName'></td>
-                <td class=''><input maxlength="11" class='form-control' value='' id='MobileNo[${count}]' name='VoteRequestSpecificationDetailSms[${count}].MobileNo'></td>
-                <td class=''><input maxlength="10" type="number" oninput="ValidateEmployeeCodeInput(this)"  class='form-control' value='' id='EmployeeCode[${count}]' name='VoteRequestSpecificationDetailSms[${count}].EmployeeCode'></td>
-                <td class=''><input maxlength="6" type="number" oninput="ValidateBranchCodeInput(this)" class='form-control' value='' id='BranchCode[${count}]' name='VoteRequestSpecificationDetailSms[${count}].BranchCode'></td>
-                <td class=''><input maxlength="6" type="number" oninput="ValidateProcessCodeInput(this)" class='form-control' value='' id='ProcessCode[${count}]' name='VoteRequestSpecificationDetailSms[${count}].ProcessCode'></td>
-                <td class='text-end'><a class="btn btn-sm btn-light-danger btn-icon btnremove" title="حذف"><i class="fonticon-trash"></i></a></td>
-            </tr>`;
-
-        table.append(newRow);
+    function showError(error, message) {
+        error.textContent = message;
+        error.classList.toggle('d-none', !message);
     }
 
-    function validateCurrentRows() {
-        let isValid = true;
-        $(".CountRow").each(function () {
-            var mobileInput = $(this).find("input[name*='MobileNo']");
-            var mobileValue = mobileInput.val();
-            var regexp = /^09\d{9}$/;
-                                             
-            mobileInput.css("border", ""); // Reset previous border
+    function markInvalid(input, isInvalid) {
+        input.classList.toggle('is-invalid', isInvalid);
+        if (isInvalid) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
+    }
 
-            if (!mobileValue || !regexp.test(mobileValue)) {
-                mobileInput.css("border", "1px solid red"); // Set red border
-                isValid = false; // Mark as invalid
-            } 
+    function syncRecipientType(form) {
+        const selected = form.querySelector('input[name="UseMobileNo"]:checked');
+        form.querySelectorAll('input[name="UseMobileNo"]').forEach(function (radio) {
+            const option = radio.closest('label');
+            option.classList.toggle('btn-light-primary', radio.checked);
+            option.classList.toggle('border-primary', radio.checked);
+            option.classList.toggle('btn-light', !radio.checked);
+            option.classList.toggle('border-secondary', !radio.checked);
         });
-        return isValid;
+        form.querySelectorAll('[data-sms-file-hint]').forEach(function (hint) {
+            hint.classList.toggle('d-none', hint.dataset.smsFileHint !== selected.value);
+        });
+        form.querySelectorAll('[data-sms-recipient]').forEach(function (cell) {
+            const isSelected = cell.dataset.smsRecipient === selected.value;
+            cell.classList.toggle('d-none', !isSelected);
+            const input = cell.querySelector('input');
+            if (input) {
+                input.disabled = !isSelected;
+                if (!isSelected) markInvalid(input, false);
+            }
+        });
+        showError(form.querySelector('#sms-manual-error'), '');
     }
 
-    $("#btnAddNew").click(function (e) {
-        e.preventDefault();
+    function addRecipientRow(form) {
+        const rows = form.querySelector('#kt_view_table tbody');
+        rows.insertAdjacentHTML('beforeend', `
+            <tr>
+                <td><input class="form-control" maxlength="20" data-sms-field="FirstName" aria-label="نام"></td>
+                <td><input class="form-control" maxlength="50" data-sms-field="LastName" aria-label="نام خانوادگی"></td>
+                <td data-sms-recipient="true"><input class="form-control" type="tel" dir="ltr" inputmode="numeric" maxlength="11" data-sms-field="MobileNo" aria-label="شماره موبایل" aria-required="true" aria-describedby="sms-manual-error"></td>
+                <td data-sms-recipient="false"><input class="form-control" dir="ltr" inputmode="numeric" maxlength="10" data-sms-field="EmployeeCode" aria-label="کد پرسنلی" aria-required="true" aria-describedby="sms-manual-error"></td>
+                <td><input class="form-control" type="number" oninput="ValidateBranchCodeInput(this)" data-sms-field="BranchCode" aria-label="کد شعبه"></td>
+                <td><input class="form-control" type="number" oninput="ValidateProcessCodeInput(this)" data-sms-field="ProcessCode" aria-label="کد خدمت"></td>
+                <td class="text-end"><button type="button" class="btn btn-sm btn-light-danger btn-icon js-remove-sms-recipient" aria-label="حذف ردیف" title="حذف ردیف"><i class="fonticon-trash" aria-hidden="true"></i></button></td>
+            </tr>`);
+        syncRecipientType(form);
+        rows.lastElementChild.querySelector('[data-sms-recipient]:not(.d-none) input').focus();
+    }
 
-        if (validateCurrentRows()) {
-            addRownew();
+    function validateRecipientRows(form, requireRows) {
+        const usesMobile = form.querySelector('input[name="UseMobileNo"]:checked').value === 'true';
+        const inputs = form.querySelectorAll(`[data-sms-recipient="${usesMobile}"] input`);
+        const pattern = usesMobile ? /^09[0-9]{9}$/ : /^[0-9]{1,10}$/;
+        let firstInvalid;
+
+        inputs.forEach(function (input) {
+            input.value = input.value.trim()
+                .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
+                .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit));
+            const isInvalid = !pattern.test(input.value);
+            markInvalid(input, isInvalid);
+            if (isInvalid) firstInvalid ??= input;
+        });
+
+        const error = form.querySelector('#sms-manual-error');
+        if (firstInvalid) {
+            showError(error, usesMobile
+                ? 'شماره موبایل هر ردیف باید ۱۱ رقمی باشد و با ۰۹ شروع شود.'
+                : 'کد پرسنلی هر ردیف را با ۱ تا ۱۰ رقم وارد کنید.');
+            firstInvalid.focus();
+            return false;
         }
+        if (requireRows && !inputs.length) {
+            showError(error, 'دست‌کم یک ردیف گیرنده اضافه کنید.');
+            form.querySelector('#btnAddNew').focus();
+            return false;
+        }
+        showError(error, '');
+        return true;
+    }
 
-        AddRemoveAction(); // Reinitialize remove action
-    });
+    const formValidators = new WeakMap();
 
-    function AddRemoveAction() {
-        $(".btnremove").off("click").on("click", function () {
-            $(this).closest('tr.remove').remove();
+    $(document)
+        .on('change', `${createFormSelector} input[name="UseMobileNo"]`, function () {
+            syncRecipientType(this.form);
+        })
+        .on('change', `${createFormSelector} #formFile`, function () {
+            markInvalid(this, false);
+            showError(this.form.querySelector('#sms-file-error'), '');
+        })
+        .on('input', `${createFormSelector} [data-sms-recipient] input`, function () {
+            markInvalid(this, false);
+        })
+        .on('click', `${createFormSelector} #btnAddNew`, function () {
+            if (validateRecipientRows(this.form, false)) addRecipientRow(this.form);
+        })
+        .on('click', `${createFormSelector} .js-remove-sms-recipient`, function () {
+            this.closest('tr').remove();
+            showError(this.form.querySelector('#sms-manual-error'), '');
+        })
+        .on('submit', createFormSelector, async function (event) {
+            event.preventDefault();
+
+            const form = this;
+            const button = form.querySelector('#kt_modal_add_submit')
+                || document.querySelector('#kt_modal_add_submit[form="kt_modal_add_form"]');
+            if (button.disabled) return;
+
+            if (!formValidators.has(form)) {
+                formValidators.set(form, FormValidation.formValidation(form, {
+                    fields: {
+                        Title: { validators: { notEmpty: { message: 'لطفا عنوان را وارد کنید.' } } },
+                        Content: { validators: { notEmpty: { message: 'لطفا متن پیامک را وارد کنید.' } } },
+                        PersianDateTime: { validators: { notEmpty: { message: 'لطفا تاریخ را وارد کنید.' } } },
+                        VotePackageId: { validators: { notEmpty: { message: 'لطفا یک فرم نظرسنجی انتخاب کنید.' } } }
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap: new FormValidation.plugins.Bootstrap5({ rowSelector: '.fv-row', eleInvalidClass: '', eleValidClass: '' })
+                    }
+                }));
+            }
+
+            button.disabled = true;
+            try {
+                if ((await formValidators.get(form).validate()) !== 'Valid') return;
+
+                const addingFile = form.querySelector('#kt_advanced').classList.contains('active');
+                const fileInput = form.querySelector('#formFile');
+                if (addingFile && !fileInput.files.length) {
+                    showError(form.querySelector('#sms-file-error'), 'فایل اکسل گیرندگان را انتخاب کنید.');
+                    markInvalid(fileInput, true);
+                    fileInput.focus();
+                    return;
+                }
+                if (!addingFile && !validateRecipientRows(form, true)) return;
+
+                const data = new FormData(form);
+                if (!addingFile) {
+                    data.delete('formFile');
+                    form.querySelectorAll('#kt_view_table tbody tr').forEach(function (row, index) {
+                        row.querySelectorAll('input[data-sms-field]:enabled').forEach(function (input) {
+                            data.append(`VoteRequestSpecificationDetailSms[${index}].${input.dataset.smsField}`, input.value);
+                        });
+                    });
+                }
+
+                button.setAttribute('data-kt-indicator', 'on');
+                const response = await $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: form.action,
+                    data,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('RequestVerificationToken', data.get('__RequestVerificationToken'));
+                    }
+                });
+
+                if (response.success) {
+                    await Swal.fire({
+                        text: 'با موفقیت انجام شد',
+                        icon: 'success',
+                        buttonsStyling: false,
+                        confirmButtonText: 'بستن',
+                        customClass: { confirmButton: 'btn btn-primary' }
+                    });
+                    window.location.href = '/VoteRequestSpecificationSms/Index';
+                } else {
+                    await Swal.fire({
+                        text: response.operationErrors?.[0]?.description || 'ثبت نظرسنجی انجام نشد.',
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        confirmButtonText: 'بستن',
+                        customClass: { confirmButton: 'btn btn-primary' }
+                    });
+                }
+            } catch (error) {
+                if (![401, 403, 429].includes(error?.status)) {
+                    await Swal.fire({
+                        text: 'در ثبت نظرسنجی خطایی رخ داد.',
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        confirmButtonText: 'بستن',
+                        customClass: { confirmButton: 'btn btn-primary' }
+                    });
+                }
+            } finally {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+            }
         });
-    }
 
-    AddRemoveAction(); // Initialize on page load
-
+    document.querySelectorAll(createFormSelector).forEach(syncRecipientType);
 });
-
-function ValidateEmployeeCodeInput(input) {
-    if (input.value < 0 || input.value > 9999999999) {
-        input.value = '';
-    }
-
-    input.value = input.value.slice(0, 10);
-    // Remove leading zeros
-    if (input.value.length > 1 && input.value[0] === '0') {
-        input.value = parseInt(input.value, 10);
-    }
-}
 
 function ValidateBranchCodeInput(input) {
     if (input.value < 0 || input.value > 999999) {

@@ -193,27 +193,6 @@ function ResetVariables() {
     isLastPageDropDown = false;
 }
 
-const form = document.getElementById('kt_modal_add_form');
-
-var validator = FormValidation.formValidation(
-    form,
-    {
-        fields: {
-            Title: { validators: { notEmpty: { message: "لطفا  عنوان را وارد نمایید." } } },
-            Content: { validators: { notEmpty: { message: 'لطفا  متن پیامک را وارد نمایید.' } } },
-            PersianDateTime: { validators: { notEmpty: { message: "لطفا تاریخ را وارد نمایید." } } },
-            VotePackageId: { validators: { notEmpty: { message: "لطفا یک فرم نظرسنجی انتخاب  نمایید." } } },
-
-        },
-
-
-        plugins: {
-            trigger: new FormValidation.plugins.Trigger(),
-            bootstrap: new FormValidation.plugins.Bootstrap5({ rowSelector: '.fv-row', eleInvalidClass: '', eleValidClass: '' })
-        }
-    }
-);
-
 $(document).on('input', '.js-count-content-char', function () {
     const maxChar = parseInt($(this).data('max-char'), 10) || 70;
     CountContentChar(this, maxChar);
@@ -237,92 +216,6 @@ function CountContentChar(inputElement, singleLimit) {
     // Update character count display
     $('#charCount').text(`${messageType}کاراکتر باقی‌مانده  : ${remainingChars}`);
 }
-
-
-
-const submitButton = document.getElementById('kt_modal_add_submit');
-
-submitButton?.addEventListener('click', function (e) {
-    e.preventDefault();
-
-    if (validator) {
-        validator.validate().then(function (status) {
-
-            if (status == 'Valid') {
-
-                submitButton.setAttribute('data-kt-indicator', 'on');
-                submitButton.disabled = true;
-
-                setTimeout(function () {
-                    submitButton.removeAttribute('data-kt-indicator');
-                    submitButton.disabled = false;
-
-                    a = document.querySelector("#kt_modal_add_form");
-                    const dataForm = new FormData(document.getElementById("kt_modal_add_form"));
-                    var input = document.getElementById("formFile");
-                    const file = input.files[0];
-                    dataForm.append('formFile', file);
-
-
-                    $.ajax({
-
-                        type: "POST",
-                        dataType: 'JSOn',
-                        url: '/VoteRequestSpecificationSms/Create',
-                        data: dataForm,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader("RequestVerificationToken", $('input[name="__RequestVerificationToken"]').val());
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    text: "با موفقیت انجام شد",
-                                    icon: "success",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "بستن",
-                                    customClass: { confirmButton: "btn yas-primary-btn" },
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = '/VoteRequestSpecificationSms/Index';
-
-                                    }
-                                });
-                            }
-                            else {
-
-                                Swal.fire({
-                                    text: response.operationErrors[0].description,
-                                    icon: "warning",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "تایید",
-                                    customClass: { confirmButton: "btn yas-primary-btn" },
-                                });
-                            }
-                        },
-
-
-                        error: function () {
-                            Swal.fire({
-                                text: "خطا ! لطفا با ادمین سیستم تماس بگیرید",
-                                icon: "warning",
-                                buttonsStyling: !1,
-                                confirmButtonText: "بستن",
-                                customClass: { confirmButton: "btn yas-primary-btn" },
-
-                            });
-                        }
-
-                    })
-
-
-
-                }, 3000);
-            }
-        });
-    }
-});
 
 document.getElementById("IsActiveCheck").addEventListener("change", function () {
     ChangeText();
