@@ -150,41 +150,6 @@ $(document).ready(function () {
             });
         }
     });
-
-    const selectElement = document.querySelector('select[name="IsActive"]');
-    const hiddenInput = document.getElementById('searchIsActive');
-    const storedValue = sessionStorage.getItem('selectedValue');
-
-    if (storedValue) {
-        selectElement.value = storedValue;
-        const event = new Event('change');
-        selectElement.dispatchEvent(event);
-    }
-
-    selectElement.addEventListener('change', function () {
-        hiddenInput.value = selectElement.value;
-        sessionStorage.setItem('selectedValue', selectElement.value);
-    });
-
-    document.getElementById('searchForm').addEventListener('submit', function () {
-        hiddenInput.value = selectElement.value;
-        document.getElementById('pageInput').value = 1;
-        sessionStorage.setItem('selectedValue', selectElement.value);
-    });
-
-    window.addEventListener('load', function () {
-        const selectElement = document.querySelector('select[name="IsActive"]');
-        const storedValue = sessionStorage.getItem('selectedValue');
-
-        if (storedValue) {
-            selectElement.value = storedValue;
-            document.getElementById('searchIsActive').value = storedValue;
-            const event = new Event('change');
-            selectElement.dispatchEvent(event);
-        }
-    });
-
-    ResetSelectedValue();
 });
 
 function ResetVariables() {
