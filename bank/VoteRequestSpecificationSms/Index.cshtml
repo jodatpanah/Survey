@@ -1,0 +1,345 @@
+@model PagedResult<Survey.FrameWork.common.VoteRequestSpecificationSms.VoteRequestSpecificationSmsListDto>
+
+@{
+    ViewData["TitlePage"] = "برگزاری نظرسنجی- روش ارسال پیامک";
+    long i = (Model.PageNumber - 1) * Model.TotalRecordCount;
+}
+
+
+<!--searchForm-->
+<form class="searchForm" method="post" id="searchForm">
+    <input type="hidden" name="page" value="1" id="pageInput" />
+    @Html.AntiForgeryToken()
+    <div class="card mb-7">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <input hidden id="searchIsActive" value="@ViewBag.IsActive" />
+                <div class="position-relative w-md-400px me-md-2">
+                    <span class="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control form-control-sm form-control-solid ps-10" name="VotePackageTitle" value="@ViewBag.VotePackageTitle" placeholder="فرم نظرسنجی" />
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-sm btn-bg-light px-2 py-2">
+                        <span class="svg-icon svg-icon-1  svg-icon-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8C2182">
+                                <path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="#8C2182" />
+                                <path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="#8C2182" />
+                            </svg>
+                        </span>
+                    </button>
+
+
+                    <a id="kt_horizontal_search_advanced_link" class="btn btn-sm  btn-icon-primary btn-text-primary me-2  " data-bs-toggle="collapse" href="#kt_advanced_search_form"> جست و جوی پیشرفته</a>
+                </div>
+
+            </div>
+
+            <div class="collapse" id="kt_advanced_search_form">
+                <div class="separator separator-dashed mt-9 mb-6"></div>
+                @*   <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="400px"> *@
+                <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll">
+                    <div class="fv-row">
+                        <div class="row mb-2">
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">فرم نظرسنجی</label>
+                                <input class="form-control form-control-sm  form-control-solid" placeholder="فرم نظرسنجی" name="TitlePro" value="@ViewBag.TitlePro">
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row  mb-2">
+                                <label class="fs-6 fw-bold" for="FromSendDateTime">
+                                    <span class="fs-6 px-2"> از تاریخ  </span>
+                                </label>
+                                <div class="position-relative align-items-center">
+                                    <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                            <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                            <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                        </svg>
+                                    </span>
+                                    <input class="form-control  form-control-sm  form-control-solid  ps-12 FromSendDateTime" type="text" placeholder="از تاریخ" id="FromSendDateTime" name="FromSendDateTime" data-jdp data-jdp-only-date />
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row mb-2">
+                                <label class=" fs-6 fw-bold" for="ToSendDateTime">
+                                    <span class="px-2 fs-6 "> تا تاریخ  </span>
+                                </label>
+                                <div class="position-relative align-items-center">
+                                    <span class="svg-icon svg-icon-2 position-absolute mx-4 my-3 z-index-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="black" />
+                                            <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="black" />
+                                            <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="black" />
+                                        </svg>
+                                    </span>
+                                    <input class="form-control  form-control-sm  form-control-solid  ps-12" type="text" placeholder="تا تاریخ" data-jdp id="ToSendDateTime" name="ToSendDateTime" data-jdp-only-date />
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">وضعیت</label>
+                                <select class="form-select form-select-sm form-select-solid" name="IsActive" data-control="select2" data-hide-search="true" data-placeholder="وضعیت " data-kt-ecommerce-product-filter="status">
+                                    <option></option>
+                                    <option selected="selected" value="null">همه</option>
+                                    <option value="True">فعال </option>
+                                    <option value="False"> غیر فعال </option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2">عنوان </label>
+                                <input class="form-control form-control-sm  form-control-solid" placeholder="عنوان " name="Title" value="@ViewBag.Title">
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-3 fv-row fv-plugins-icon-container mb-2">
+                                <label class="fs-6 px-2"> متن پیامک</label>
+                                <input class="form-control form-control-sm  form-control-solid" placeholder="متن پیامک" name="Content" value="@ViewBag.Content">
+                            </div>
+
+                        </div>
+                        <div class="row px-3 float-end">
+                            <button type="submit" class="btn btn-lg btn-primary  btn-sm  px-2 py-2 w-100px ">
+                                جست و جو
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <img class="bgImage" src="../../assets/media/sigma-1/5.png" />
+
+        </div>
+    </div>
+</form>
+
+
+<div class="card ">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">برگزاری نظرسنجی- روش ارسال پیامک </span>
+            <span class="text-muted mt-1 fw-bold fs-7">  </span>
+        </h3>
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+
+
+            <div class="">
+                @*  <button type="button" class="btn btn-sm btn-bg-light btn-icon-primary btn-text-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+                <span class="svg-icon svg-icon-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect opacity="0.3" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="black"></rect>
+                <path d="M12.0573 6.11875L13.5203 7.87435C13.9121 8.34457 14.6232 8.37683 15.056 7.94401C15.4457 7.5543 15.4641 6.92836 15.0979 6.51643L12.4974 3.59084C12.0996 3.14332 11.4004 3.14332 11.0026 3.59084L8.40206 6.51643C8.0359 6.92836 8.0543 7.5543 8.44401 7.94401C8.87683 8.37683 9.58785 8.34458 9.9797 7.87435L11.4427 6.11875C11.6026 5.92684 11.8974 5.92684 12.0573 6.11875Z" fill="black"></path>
+                <path d="M18.75 8.25H17.75C17.1977 8.25 16.75 8.69772 16.75 9.25C16.75 9.80228 17.1977 10.25 17.75 10.25C18.3023 10.25 18.75 10.6977 18.75 11.25V18.25C18.75 18.8023 18.3023 19.25 17.75 19.25H5.75C5.19772 19.25 4.75 18.8023 4.75 18.25V11.25C4.75 10.6977 5.19771 10.25 5.75 10.25C6.30229 10.25 6.75 9.80228 6.75 9.25C6.75 8.69772 6.30229 8.25 5.75 8.25H4.75C3.64543 8.25 2.75 9.14543 2.75 10.25V19.25C2.75 20.3546 3.64543 21.25 4.75 21.25H18.75C19.8546 21.25 20.75 20.3546 20.75 19.25V10.25C20.75 9.14543 19.8546 8.25 18.75 8.25Z" fill="#C4C4C4"></path>
+                </svg>
+                </span>
+                خروجی فایل
+                </button> *@
+                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary  w-100 mw-150px py-3" data-kt-menu="true">
+                    <div class="menu-item px-3">
+                        <a href="#" class="menu-link px-3"><img class="w-20px h-20px" src="/assets/media/svg/files/excel.svg" />خروجی اکسل</a>
+                    </div>
+
+                </div>
+            </div>
+            <a class="btn btn-success btn-sm " asp-action="Create" asp-controller="VoteRequestSpecificationSms">
+                <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs011.svg-->
+                <span class="svg-icon svg-icon-muted icon-size-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.3" d="M3 13V11C3 10.4 3.4 10 4 10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14H4C3.4 14 3 13.6 3 13Z" fill="black" />
+                        <path d="M13 21H11C10.4 21 10 20.6 10 20V4C10 3.4 10.4 3 11 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="black" />
+                    </svg>
+                </span>
+                افزودن
+            </a>
+        </div>
+    </div>
+    <div class="card-body pt-4">
+        <table class="table align-middle table-row-dashed  fs-6 gy-5" id="kt_main_table">
+            <thead>
+                <tr class="text-start fw-bolder fs-7 bg-light">
+                    <th class="text-start ps-4 min-w-150px"> @Html.DisplayNameFor(model => model.Result.FirstOrDefault().VotePackageTitle)  </th>
+                    <th class="text-start min-w-70px">@Html.DisplayNameFor(model => model.Result.FirstOrDefault().Title)</th>
+                    <th class="text-start min-w-70px">@Html.DisplayNameFor(model => model.Result.FirstOrDefault().Content)</th>
+                    <th class="text-start min-w-70px">@Html.DisplayNameFor(model => model.Result.FirstOrDefault().SendDateTime)</th>
+                    <th class="rounded-end text-start min-w-50px">@Html.DisplayNameFor(model => model.Result.FirstOrDefault().IsActive)</th>
+                    <th class="rounded-begin px-15 min-w-50px text-end "> عملیات </th>
+                </tr>
+            </thead>
+
+
+            <tbody class="fw-bold text-gray-900">
+
+                @foreach (var item in Model.Result)
+                {
+                    <tr>
+                        <td class="ps-4 limitDataTableHead15">
+                            <span class="limitDataTable">
+                                @Html.DisplayFor(modelItem => item.VotePackageTitle)
+                            </span>
+                        </td>
+                        <td class="limitDataTableHead15">
+                            <span class="limitDataTable">
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </span>
+                        </td>
+                        <td class="limitDataTableHead15">
+                            <span class="limitDataTable">
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SendDateTimePersian)
+                        </td>
+
+
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <div class="d-flex">
+
+                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                        <input class="form-check-input change-status-spec-sms-checkbox change-status-spec-sms-checkbox" type="checkbox" id="VoteRequestSpecificationSmsId-@Html.DisplayFor(modelItem => item.VoteRequestSpecificationSmsId)" checked="checked" data-id="@item.VoteRequestSpecificationSmsId" data-status="0" />
+                                        <span class="form-check-label fw-bold text-muted">  فعال</span>
+                                    </label>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="d-flex">
+
+                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                        <input class="form-check-input change-status-spec-sms-checkbox change-status-spec-sms-checkbox" type="checkbox" id="VoteRequestSpecificationSmsId-@Html.DisplayFor(modelItem => item.VoteRequestSpecificationSmsId)" data-id="@item.VoteRequestSpecificationSmsId" data-status="1" />
+                                        <span class="form-check-label fw-bold text-muted">غیر فعال</span>
+                                    </label>
+                                </div>
+                            }
+                        </td>
+
+                        <td class="text-end ps-5 ">
+                            <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-primary btn-text-primary btn-sm px-4 openmodal" title="جزئیات" asp-action="Details" asp-controller="VoteRequestSpecificationSms" asp-route-parentId="@item.VoteRequestSpecificationSmsId">
+                                <span class="svg-icon svg-icon-3">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="black"></path>
+                                        <path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="black"></path>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </a>
+                            @{
+                                bool IsSent = false;
+                                foreach (var item1 in item.VoteRequestSpecificationDetailSms)
+                                {
+                                    if (item1.TrackingNo != null)
+                                    {
+                                        IsSent = true;
+                                        break;
+                                    }
+                                }
+                                if (IsSent == false)
+                                {
+                                    // <a asp-controller="VoteRequestSpecificationSms" asp-action="UpdateRecord" asp-route-VoteRequestSpecificationSmsId="@item.VoteRequestSpecificationSmsId" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-primary btn-text-primary btn-sm px-4" title="ویرایش">
+
+                                    //     <span class="svg-icon svg-icon-3">
+                                    //         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    //             <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
+                                    //             <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="black"></path>
+                                    //         </svg>
+                                    //     </span>
+                                    //     <!--end::Svg Icon-->
+
+
+                                    // </a>
+                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-primary btn-text-primary btn-sm px-4 load-modal-btn" data-bs-toggle="modal" data-bs-target="#kt_modal_add" data-bs-placement="top" title="ویرایش" data-id="@item.VoteRequestSpecificationSmsId">
+                                        <span class="svg-icon svg-icon-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
+                                                <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="black"></path>
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a class="btn btn-icon btn-bg-light btn-sm me-1 btn-icon-primary btn-text-primary btn-sm px-4 disabled">
+                                        <span class="svg-icon svg-icon-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
+                                                <path d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z" fill="black"></path>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                }
+
+                            }
+                            <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-icon-danger btn-text-danger btn-sm px-4 delete-vote-request-spec-sms-btn" data-id="@item.VoteRequestSpecificationSmsId" title="حذف" id="@Html.DisplayFor(modelItem => item.VoteRequestSpecificationSmsId)">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                <span class="svg-icon svg-icon-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
+                                        <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"></path>
+                                        <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"></path>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+
+
+
+            </tbody>
+        </table>
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, votePackageTitle = ViewBag.VotePackageTitle, FromSendDateTime = ViewBag.FromSendDateTime, ToSendDateTime = ViewBag.ToSendDateTime, IsActive = ViewBag.IsActive, TitlePro = ViewBag.TitlePro, title = ViewBag.Title, content = ViewBag.Content }))
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="kt_modal_add" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-850px">
+        <div class="modal-content">
+
+            <div class="modal-header" id="kt_modal_add_header">
+                <h2 class="fw-bold">ویرایش برگزاری نظرسنجی- روش ارسال پیامک </h2>
+                <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-1">
+                        <img src="assets/media/icons/duotune/arrows/arr088.svg" class="opacity-50" />
+                    </span>
+                </div>
+            </div>
+            <div id="modalcontent">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <link href="~/assets/js/jalalidatepicker.min.css" rel="stylesheet" />
+    <script src="~/assets/js/jalalidatepicker.min.js"></script>
+
+    <script src="~/assets/js/custom/voterequestspecificationsms/index.js" asp-append-version="true"></script>
+    <script src="~/assets/js/custom/voterequestspecificationsms/UpdateRecord.js" asp-append-version="true"></script>
+
+}
