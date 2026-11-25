@@ -415,9 +415,12 @@ $(document).ready(function () {
         });
     }
 
-    function syncRecipientRow(row) {
-        const mode = row.querySelector('[data-sms-recipient-type]').value;
-        row.querySelectorAll('[data-sms-identifier]').forEach(function (input) {
+    function syncManualRecipientType(form) {
+        const mode = form.querySelector('[data-sms-manual-recipient-type]').value;
+        form.querySelector('[data-sms-manual-identifier-heading]').textContent =
+            mode === 'true' ? 'شماره موبایل' : 'کد پرسنلی';
+
+        form.querySelectorAll('[data-sms-identifier]').forEach(function (input) {
             const active = input.dataset.smsIdentifier === mode;
             input.classList.toggle('d-none', !active);
             input.disabled = !active;
@@ -432,12 +435,6 @@ $(document).ready(function () {
                 <td><input class="form-control" maxlength="20" data-sms-field="FirstName" aria-label="نام"></td>
                 <td><input class="form-control" maxlength="50" data-sms-field="LastName" aria-label="نام خانوادگی"></td>
                 <td>
-                    <select class="form-select" data-sms-recipient-type aria-label="نوع شناسه گیرنده">
-                        <option value="true">شماره موبایل</option>
-                        <option value="false">کد پرسنلی</option>
-                    </select>
-                </td>
-                <td>
                     <input class="form-control" type="tel" dir="ltr" inputmode="numeric" maxlength="11" data-sms-field="MobileNo" data-sms-identifier="true" aria-label="شماره موبایل" aria-required="true" aria-describedby="sms-manual-error">
                     <input class="form-control d-none" dir="ltr" maxlength="20" data-sms-field="PersonnelCode" data-sms-identifier="false" aria-label="کد پرسنلی" aria-required="true" aria-describedby="sms-manual-error" disabled>
                 </td>
@@ -445,7 +442,8 @@ $(document).ready(function () {
                 <td><input class="form-control" type="number" oninput="ValidateProcessCodeInput(this)" data-sms-field="ProcessCode" aria-label="کد خدمت"></td>
                 <td class="text-end"><button type="button" class="btn btn-sm btn-light-danger btn-icon js-remove-sms-recipient" aria-label="حذف ردیف" title="حذف ردیف"><i class="fonticon-trash" aria-hidden="true"></i></button></td>
             </tr>`);
-        rows.lastElementChild.querySelector('[data-sms-recipient-type]').focus();
+        syncManualRecipientType(form);
+        rows.lastElementChild.querySelector('[data-sms-identifier]:enabled').focus();
     }
 
     function validateRecipientRows(form, requireRows) {
@@ -486,8 +484,8 @@ $(document).ready(function () {
         .on('change', `${createFormSelector} input[name="UseMobileNo"]`, function () {
             syncFileRecipientType(this.form);
         })
-        .on('change', `${createFormSelector} [data-sms-recipient-type]`, function () {
-            syncRecipientRow(this.closest('tr'));
+        .on('change', `${createFormSelector} [data-sms-manual-recipient-type]`, function () {
+            syncManualRecipientType(this.form);
             showError(this.form.querySelector('#sms-manual-error'), '');
         })
         .on('change', `${createFormSelector} #formFile`, function () {
@@ -539,15 +537,19 @@ $(document).ready(function () {
                     fileInput.focus();
                     return;
                 }
-                if (!addingFile && !validateRecipientRows(form, true)) return;
+                if (!addingFile) {
+                    syncManualRecipientType(form);
+                    if (!validateRecipientRows(form, true)) return;
+                }
 
                 const data = new FormData(form);
                 if (!addingFile) {
                     data.delete('formFile');
                     data.delete('UseMobileNo');
+                    const manualMode = form.querySelector('[data-sms-manual-recipient-type]').value;
                     form.querySelectorAll('#kt_view_table tbody tr').forEach(function (row, index) {
                         const prefix = `VoteRequestSpecificationDetailSms[${index}]`;
-                        data.append(`${prefix}.UseMobileNo`, row.querySelector('[data-sms-recipient-type]').value);
+                        data.append(`${prefix}.UseMobileNo`, manualMode);
                         row.querySelectorAll('input[data-sms-field]:enabled').forEach(function (input) {
                             data.append(`${prefix}.${input.dataset.smsField}`, input.value);
                         });
@@ -601,7 +603,10 @@ $(document).ready(function () {
             }
         });
 
-    document.querySelectorAll(createFormSelector).forEach(syncFileRecipientType);
+    document.querySelectorAll(createFormSelector).forEach(function (form) {
+        syncFileRecipientType(form);
+        syncManualRecipientType(form);
+    });
 });
 
 function ValidateBranchCodeInput(input) {

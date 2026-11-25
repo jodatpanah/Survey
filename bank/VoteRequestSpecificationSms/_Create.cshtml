@@ -176,7 +176,13 @@
                             <div class="card w-100">
 
                                 <div class="card-body  p-2">
-                                    <p class="form-text mb-2">برای هر گیرنده، شماره موبایل یا کد پرسنلی را انتخاب کنید.</p>
+                                    <div class="mb-4 mw-300px">
+                                        <label for="sms-modal-manual-recipient-type" class="fs-6 fw-bold mb-2">نوع شناسه گیرندگان</label>
+                                        <select id="sms-modal-manual-recipient-type" class="form-select form-select-solid" data-sms-manual-recipient-type>
+                                            <option value="true">شماره موبایل</option>
+                                            <option value="false">کد پرسنلی</option>
+                                        </select>
+                                    </div>
                                     <div id="sms-manual-error" class="text-danger mb-2 d-none" role="alert"></div>
 
                                         <div class="fv-row">
@@ -189,8 +195,7 @@
 
                                                                 <th class="w-100px">نام </th>
                                                                 <th class="min-w-100px">نام خانوادگی  </th>
-                                                                <th scope="col" class="min-w-150px">نوع شناسه</th>
-                                                                <th scope="col" class="min-w-150px required">شناسه گیرنده</th>
+                                                                <th scope="col" class="min-w-150px required" data-sms-manual-identifier-heading>شماره موبایل</th>
                                                                 <th class="w-100px">کد شعبه</th>
                                                                 <th class="w-100px">کد خدمت</th>
                                                                 <th class="w-50px text-end px-5">حذف  </th>
