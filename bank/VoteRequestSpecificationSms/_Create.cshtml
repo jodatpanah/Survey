@@ -97,6 +97,20 @@
 
 
 
+                    <div class="mb-5" role="group" aria-labelledby="sms-modal-recipient-heading">
+                        <div id="sms-modal-recipient-heading" class="fs-6 fw-bold mb-3">نوع شناسه گیرندگان</div>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label class="btn btn-sm btn-light-primary border border-primary d-inline-flex align-items-center gap-2">
+                                <input type="radio" class="form-check-input m-0" name="UseMobileNo" value="true" checked="checked" />
+                                <span class="fw-bold text-gray-900">شماره موبایل</span>
+                            </label>
+                            <label class="btn btn-sm btn-light border border-secondary d-inline-flex align-items-center gap-2">
+                                <input type="radio" class="form-check-input m-0" name="UseMobileNo" value="false" />
+                                <span class="fw-bold text-gray-900">کد پرسنلی</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x fs-5 fw-bolder">
                         <li class="nav-item">
                             <a class="nav-link text-active-primary p-4 active" data-bs-toggle="tab" href="#kt_advanced">
@@ -140,19 +154,6 @@
 
 
                                 <div class="card-body">
-                                    <div class="mb-5" role="group" aria-labelledby="sms-modal-recipient-heading">
-                                        <div id="sms-modal-recipient-heading" class="fs-6 fw-bold mb-3">نوع شناسه در فایل</div>
-                                        <div class="d-flex flex-wrap gap-3">
-                                            <label class="btn btn-sm btn-light-primary border border-primary d-inline-flex align-items-center gap-2">
-                                                <input type="radio" class="form-check-input m-0" name="UseMobileNo" value="true" checked="checked" />
-                                                <span class="fw-bold text-gray-900">شماره موبایل</span>
-                                            </label>
-                                            <label class="btn btn-sm btn-light border border-secondary d-inline-flex align-items-center gap-2">
-                                                <input type="radio" class="form-check-input m-0" name="UseMobileNo" value="false" />
-                                                <span class="fw-bold text-gray-900">کد پرسنلی</span>
-                                            </label>
-                                        </div>
-                                    </div>
                                     <div class="row g-4 align-items-end">
                                         <div class="col-md-7">
                                             <label for="formFile" class="fs-6 fw-bold mb-2">فایل اکسل گیرندگان</label>
@@ -176,13 +177,6 @@
                             <div class="card w-100">
 
                                 <div class="card-body  p-2">
-                                    <div class="mb-4 mw-300px">
-                                        <label for="sms-modal-manual-recipient-type" class="fs-6 fw-bold mb-2">نوع شناسه گیرندگان</label>
-                                        <select id="sms-modal-manual-recipient-type" class="form-select form-select-solid" data-sms-manual-recipient-type>
-                                            <option value="true">شماره موبایل</option>
-                                            <option value="false">کد پرسنلی</option>
-                                        </select>
-                                    </div>
                                     <div id="sms-manual-error" class="text-danger mb-2 d-none" role="alert"></div>
 
                                         <div class="fv-row">

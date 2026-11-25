@@ -401,7 +401,7 @@ $(document).ready(function () {
         else input.removeAttribute('aria-invalid');
     }
 
-    function syncFileRecipientType(form) {
+    function syncRecipientType(form) {
         const selected = form.querySelector('input[name="UseMobileNo"]:checked');
         form.querySelectorAll('input[name="UseMobileNo"]').forEach(function (radio) {
             const option = radio.closest('label');
@@ -413,15 +413,12 @@ $(document).ready(function () {
         form.querySelectorAll('[data-sms-file-hint]').forEach(function (hint) {
             hint.classList.toggle('d-none', hint.dataset.smsFileHint !== selected.value);
         });
-    }
 
-    function syncManualRecipientType(form) {
-        const mode = form.querySelector('[data-sms-manual-recipient-type]').value;
         form.querySelector('[data-sms-manual-identifier-heading]').textContent =
-            mode === 'true' ? 'شماره موبایل' : 'کد پرسنلی';
+            selected.value === 'true' ? 'شماره موبایل' : 'کد پرسنلی';
 
         form.querySelectorAll('[data-sms-identifier]').forEach(function (input) {
-            const active = input.dataset.smsIdentifier === mode;
+            const active = input.dataset.smsIdentifier === selected.value;
             input.classList.toggle('d-none', !active);
             input.disabled = !active;
             if (!active) markInvalid(input, false);
@@ -442,7 +439,7 @@ $(document).ready(function () {
                 <td><input class="form-control" type="number" oninput="ValidateProcessCodeInput(this)" data-sms-field="ProcessCode" aria-label="کد خدمت"></td>
                 <td class="text-end"><button type="button" class="btn btn-sm btn-light-danger btn-icon js-remove-sms-recipient" aria-label="حذف ردیف" title="حذف ردیف"><i class="fonticon-trash" aria-hidden="true"></i></button></td>
             </tr>`);
-        syncManualRecipientType(form);
+        syncRecipientType(form);
         rows.lastElementChild.querySelector('[data-sms-identifier]:enabled').focus();
     }
 
@@ -482,10 +479,7 @@ $(document).ready(function () {
 
     $(document)
         .on('change', `${createFormSelector} input[name="UseMobileNo"]`, function () {
-            syncFileRecipientType(this.form);
-        })
-        .on('change', `${createFormSelector} [data-sms-manual-recipient-type]`, function () {
-            syncManualRecipientType(this.form);
+            syncRecipientType(this.form);
             showError(this.form.querySelector('#sms-manual-error'), '');
         })
         .on('change', `${createFormSelector} #formFile`, function () {
@@ -538,18 +532,18 @@ $(document).ready(function () {
                     return;
                 }
                 if (!addingFile) {
-                    syncManualRecipientType(form);
+                    syncRecipientType(form);
                     if (!validateRecipientRows(form, true)) return;
                 }
 
                 const data = new FormData(form);
                 if (!addingFile) {
                     data.delete('formFile');
+                    const useMobileNo = data.get('UseMobileNo');
                     data.delete('UseMobileNo');
-                    const manualMode = form.querySelector('[data-sms-manual-recipient-type]').value;
                     form.querySelectorAll('#kt_view_table tbody tr').forEach(function (row, index) {
                         const prefix = `VoteRequestSpecificationDetailSms[${index}]`;
-                        data.append(`${prefix}.UseMobileNo`, manualMode);
+                        data.append(`${prefix}.UseMobileNo`, useMobileNo);
                         row.querySelectorAll('input[data-sms-field]:enabled').forEach(function (input) {
                             data.append(`${prefix}.${input.dataset.smsField}`, input.value);
                         });
@@ -603,10 +597,7 @@ $(document).ready(function () {
             }
         });
 
-    document.querySelectorAll(createFormSelector).forEach(function (form) {
-        syncFileRecipientType(form);
-        syncManualRecipientType(form);
-    });
+    document.querySelectorAll(createFormSelector).forEach(syncRecipientType);
 });
 
 function ValidateBranchCodeInput(input) {
