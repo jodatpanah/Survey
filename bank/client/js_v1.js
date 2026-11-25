@@ -1,6 +1,4 @@
 
-/*$('#MobileNumberEnterByUser').text(toPersianDigits(mobileValue));*/
-
 var votePackageBox = document.getElementById('votePackageBox');
 var StructureId = $('#StructureId').val();
 var SurveyTypeId = $('#SurveyTypeId').val();
@@ -10,7 +8,9 @@ var ProcessTypeId;
 var votePackageIdData;
 var votePackageReferenceId;
 var VotePackageId;
-var MobileNumber;
+var surveyLoginIdentifier;
+var lastEditedIdentifier;
+let isSendingSurveyOtp = false;
 var QuestionTypeId;
 var VotePackageTitle;
 var VotePackagegoodByeMessage;
@@ -20,6 +20,9 @@ var TopInformation;
 var RequestQRType;
 
 var typeLoad = $('#typeLoad').val();
+const smsLoginData = typeLoad === '3' ? getVotePackageData() : null;
+const smsUseMobileNo = smsLoginData?.UseMobileNo ?? smsLoginData?.useMobileNo;
+const usesPersonnelCode = typeLoad === '3' && String(smsUseMobileNo).toLowerCase() === 'false';
 
 var MandatoryLogin;
 var SMSId;
@@ -40,7 +43,7 @@ var zoomSvg = `
 
 $(document).ready(function () {
     const otpInputs = document.querySelectorAll('.otp-input'); // کلاس inputهای OTP رو بذار
-    otpInputs[0].addEventListener('paste', function (e) {
+    otpInputs[0]?.addEventListener('paste', function (e) {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').trim();
         const digits = pastedData.replace(/\D/g, ''); // فقط عدد
@@ -56,14 +59,6 @@ $(document).ready(function () {
 
 
 
-    const mobileSpan = document.getElementById('MobileNumberEnterByUser');
-    if (mobileSpan) {
-        new MutationObserver(() => {
-            const t = mobileSpan.textContent;
-            const p = toPersianDigits(t);
-            if (t !== p) mobileSpan.textContent = p;
-        }).observe(mobileSpan, { childList: true, characterData: true, subtree: true });
-    }
     const timerLabel = document.getElementById('base-timer-label');
     if (timerLabel) {
         new MutationObserver(() => {
@@ -72,7 +67,7 @@ $(document).ready(function () {
             if (t !== p) timerLabel.textContent = p;
         }).observe(timerLabel, { childList: true, characterData: true, subtree: true });
     }
-    document.getElementById('MobileNumber').placeholder = toPersianDigits('9121234567');
+    configureSurveyLogin();
 
     // Get token from meta tag (or localStorage/sessionStorage)
     const token = $('#JWT').val();
@@ -495,90 +490,89 @@ const countdownTimer = new Timer(
 
 
 
-function sendOtpCode() {
-    if (!validateMobileNumber()) {
+function configureSurveyLogin() {
+    const input = document.getElementById('MobileNumber');
+    if (!input) return;
+
+    input.setAttribute('aria-describedby', 'survey-login-error');
+    if (!usesPersonnelCode) {
+        input.placeholder = toPersianDigits('9121234567');
         return;
     }
 
-    if (OldNumber != MobileNumber) {
-        countdownTimer.reset();
-        if (typeLoad === '5') {
-            changeWaitForOTP(true)
-        }
+    input.type = 'text';
+    input.maxLength = 20;
+    input.placeholder = 'کد پرسنلی';
+    $('#survey-login-mobile-prefix').addClass('d-none');
+    $('#survey-login-identifier-label').text('برای شرکت در نظرسنجی، کد پرسنلی خود را وارد کنید.');
+    $('#survey-login-otp-label').text('کد ۶ رقمی پیامک‌شده به شماره موبایل ثبت‌شده برای کد پرسنلی خود را وارد کنید.');
+    $('#survey-login-edit-label').text('ویرایش کد پرسنلی');
+}
+
+function readSurveyLoginIdentifier() {
+    const input = $('#MobileNumber');
+    const raw = toLatinDigits((input.val() || '').trim());
+    let identifier;
+    let message = '';
+
+    if (usesPersonnelCode) {
+        identifier = raw;
+        if (!raw) message = 'کد پرسنلی خود را وارد کنید.';
+        else if (raw.length > 20) message = 'کد پرسنلی حداکثر ۲۰ کاراکتر است.';
+    } else {
+        const nationalNumber = raw.replace(/^0/, '');
+        identifier = '98' + nationalNumber;
+        if (!raw) message = 'شماره موبایل خود را وارد کنید.';
+        else if (!/^9[0-9]{9}$/.test(nationalNumber)) message = 'شماره موبایل واردشده معتبر نیست.';
     }
 
-    $('#MobileNumberEnterByUser').html(MobileNumber);
-    sendOtpCodeSms(1);
-    $('#MobileNumber').css('border', 'none');
+    input.css('border', message ? '3px solid #fd282869' : '')
+        .attr('aria-invalid', message ? 'true' : 'false');
+    $('#survey-login-error').text(message).toggle(Boolean(message));
+    return message ? null : identifier;
+}
 
+function surveyLoginPayload(mobileField) {
+    const identifierField = usesPersonnelCode ? 'PersonnelCode' : mobileField;
+    const payload = { [identifierField]: surveyLoginIdentifier };
+
+    if (typeLoad === '3') {
+        payload.UseMobileNo = !usesPersonnelCode;
+        payload.VoteRequestSpecificationDetailSmsId = SMSId;
+    }
+
+    return payload;
+}
+
+function sendOtpCode() {
+    if (isSendingSurveyOtp) return;
+    const identifier = readSurveyLoginIdentifier();
+    if (identifier === null) return;
+
+    surveyLoginIdentifier = identifier;
+    if (lastEditedIdentifier !== identifier) {
+        countdownTimer.reset();
+        if (typeLoad === '5') changeWaitForOTP(true);
+    }
+
+    sendOtpCodeSms(1);
     $('.base-timer__path-remaining.arc').css('color', '#2cc570');
     closeNumberPad();
 }
 
-var mobile;
-var mobileNew;
-//function validateMobileNumber() {
-
-
-//    mobile = $('#MobileNumber').val();
-//    mobile = (mobile * 1).toString();
-//    mobile = "98" + mobile;
-//    MobileNumber = mobile.replace(/\D/g, '').trim();
-//    const regexp = /^989\d{9}$/;
-
-
-//    $('#MobileNumber').css("border-bottom", "1px solid #ccc");
-//    $('.alertFild').html('');
-
-//    if (MobileNumber === "") {
-//        $('.alertFild').html(' شماره موبایل را وارد نمایید.').show(500);
-//        $('#MobileNumber').css("border", "3px solid #fd282869").show(500);
-//        return false;
-//    }
-
-//    if (!regexp.test(MobileNumber)) {
-//        $('#MobileNumber').css("border", "3px solid #fd282869").show(500);
-//        $('.alertFild').html('شماره وارد شده معتبر نمی باشد.').show(500);
-//        return false;
-//    }
-//    return true;
-//}
-function validateMobileNumber() {
-    let raw = toLatinDigits(($('#MobileNumber').val() || '').trim());
-    mobile = (raw * 1).toString();
-    mobile = "98" + mobile;
-    MobileNumber = mobile.replace(/\D/g, '').trim();
-    const regexp = /^989\d{9}$/;
-
-    $('#MobileNumber').css("border-bottom", "1px solid #ccc");
-    $('.alertFild').html('');
-
-    if (MobileNumber === "") {
-        $('.alertFild').html(' شماره موبایل را وارد نمایید.').show(500);
-        $('#MobileNumber').css("border", "3px solid #fd282869").show(500);
-        return false;
-    }
-
-    if (!regexp.test(MobileNumber)) {
-        $('#MobileNumber').css("border", "3px solid #fd282869").show(500);
-        $('.alertFild').html('شماره وارد شده معتبر نمی باشد.').show(500);
-        return false;
-    }
-    return true;
-}
-
-
 function sendOtpCodeSms(VoterLoginMethodType) {
+    if (isSendingSurveyOtp) return;
+    isSendingSurveyOtp = true;
 
     $.ajax({
-        type: "POST",
+        type: 'POST',
         dataType: 'JSON',
         url: '/Home/SendOtp',
         data: {
             FirstName: '',
             LastName: '',
             GenderId: '',
-            MobileNo: toLatinDigits(MobileNumber),
+            ...surveyLoginPayload('MobileNo'),
             CustomerNo: '',
             LastVerificationCode: '',
             LastVerificationCodeSendDateTime: '',
@@ -593,63 +587,36 @@ function sendOtpCodeSms(VoterLoginMethodType) {
             if (data.success) {
                 $('.LoginStep1').addClass('d-none');
                 $('.LoginStep2').removeClass('d-none');
-
+                $('.base-timer').removeClass('hidden');
+                $('#textotpCodeBox').addClass('hidden');
+                $('.alertFild').text('');
+                $('#MobileNumberEnterByUser').text(toPersianDigits(surveyLoginIdentifier));
                 countdownTimer.reset();
-                //  if (OldNumber != MobileNumber) {
                 countdownTimer.start();
-                //  }  
-
-                $('.alertFild').html('');
-                $('#MobileNumberEnterByUser').empty();
-                $('#MobileNumberEnterByUser').html('');
-                $('#MobileNumberEnterByUser').html(MobileNumber);
+                return;
             }
-            else {
-                $('.alertFild').html(data.operationErrors[0].description);
-                $('#MobileNumberEnterByUser').empty();
-                $('#MobileNumberEnterByUser').html('');
-                $('#MobileNumberEnterByUser').html(MobileNumber);
 
-                var resultError = data.operationErrors[0].code;
-
-                switch (resultError) {
-                    case 7:
-                        showAlert(data.operationErrors[0].description)
-                        break;
-                    case 19:
-                        showAlert(data.operationErrors[0].description)
-                        break;
-                }
-            }
+            const error = data.operationErrors?.[0];
+            const message = error?.description || 'ارسال پیامک تایید انجام نشد.';
+            $('.alertFild').text(message).show();
+            if (error?.code === 7 || error?.code === 19) showAlert(message);
         },
         error: function () {
             showAlert('خطا ! لطفا با ادمین سیستم تماس بگیرید');
+        },
+        complete: function () {
+            isSendingSurveyOtp = false;
         }
     });
 }
 
-
 function SendAgain() {
-
-    $('#textotpCodeBox').addClass("hidden");
-    $('.base-timer').removeClass("hidden");
+    if (!surveyLoginIdentifier || isSendingSurveyOtp) return;
     $('.base-timer__path-remaining.arc').css('color', '#49cf67');
-    // Reset the timer
-    //countdownTimer.reset();
-
-    //// Restart the timer
-    //countdownTimer.start();
-
-    if (typeLoad === '5') {
-        changeWaitForOTP(true)
-    }
-
-    // Clear any previous OTP input
-    $('#otpInput').val('');
+    if (typeLoad === '5') changeWaitForOTP(true);
+    clearOtpInputs();
     sendOtpCodeSms(1);
 }
-
-
 
 // Utility function to format time
 function formatTime(time) {
@@ -662,10 +629,6 @@ function formatTime(time) {
 
 
 
-
-function clearInterval() {
-    count = 0;
-}
 
 function display(val) {
     if (val < 10) {
@@ -680,9 +643,10 @@ function display(val) {
 var voterReferenceId;
 
 function VerifiedOtp() {
-    var CodeOtp = getOtpValue();
-    if (CodeOtp === "") {
-        $('.alertFild').html('کد ارسال شده را وارد نمایید.');
+    if (!surveyLoginIdentifier || isSendingSurveyOtp) return;
+    const otp = toLatinDigits(getOtpValue());
+    if (!otp || (typeLoad === '3' && !/^[0-9]{6}$/.test(otp))) {
+        $('.alertFild').text('کد ارسال‌شده را وارد کنید.').show();
     }
 
     else {
@@ -691,8 +655,8 @@ function VerifiedOtp() {
             dataType: 'JSOn',
             url: '/Home/VerifyOtp',
             data: {
-                MobileNumber: MobileNumber,
-                EnteredOtp: toLatinDigits(CodeOtp),
+                ...surveyLoginPayload('MobileNumber'),
+                EnteredOtp: otp,
                 VoteRequestSmsId: ''
             },
             success: function (data) {
@@ -743,17 +707,13 @@ $('.close-btn').click(function () {
     $('.alert').addClass("hide");
 
 });
-var OldNumber;
 function editNumber() {
     $('.LoginStep2').addClass('d-none');
     $('.LoginStep1').removeClass('d-none');
-    $('#CodeOtp').val('');
-    $('.alertFild ').html('');
-    OldNumber = $('#MobileNumberEnterByUser').html();
-    OldNumber = (mobile * 1).toString();
-    OldNumber = "98" + mobile;
-    OldNumber = mobile.replace(/\D/g, '').trim();
-
+    clearOtpInputs(false);
+    $('.alertFild').text('');
+    lastEditedIdentifier = surveyLoginIdentifier;
+    $('#MobileNumber').trigger('focus');
 }
 
 function forstarterVotepackage(statusMandatory) {
@@ -1464,13 +1424,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const mobileInput = document.getElementById("MobileNumber");
     if (!mobileInput) return;
 
-    // ۱. فیلتر کردن ورودی با استفاده از تابع isNumberKey موجود شما
     mobileInput.addEventListener("keypress", function (evt) {
-        if (typeof isNumberKey === "function") {
-            const isValid = isNumberKey(evt);
-            if (!isValid) {
-                evt.preventDefault();
-            }
+        if (!usesPersonnelCode && !evt.ctrlKey && !evt.metaKey
+            && evt.key?.length === 1 && !/^[0-9۰-۹٠-٩]$/.test(evt.key)) {
+            evt.preventDefault();
         }
     });
 
@@ -1478,6 +1435,12 @@ document.addEventListener("DOMContentLoaded", function () {
     mobileInput.addEventListener("input", function () {
         this.value = toPersianDigits(this.value);
     });
+
+    if (typeLoad === '3') {
+        document.getElementById('CodeOtp')?.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') eventHandlerVerifiedOtp(event);
+        });
+    }
 
     // ۳. مدیریت رویدادهای کلیک و کیبورد بر اساس نوع اینپوت
     if (mobileInput.classList.contains("mobile-input-type-qr")) {
@@ -2792,16 +2755,16 @@ document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
 
 // برای گرفتن مقدار کامل OTP
 function getOtpValue() {
-    return [...document.querySelectorAll('.otp-input')]
-        .map(input => input.value)
-        .join('');
+    const inputs = document.querySelectorAll('.otp-input');
+    if (!inputs.length) return document.getElementById('CodeOtp')?.value.trim() || '';
+
+    return Array.from(inputs, input => input.value).join('');
 }
 
-
-function clearOtpInputs() {
-    document.querySelectorAll('.otp-input').forEach(input => {
+function clearOtpInputs(focus = true) {
+    const inputs = document.querySelectorAll('.otp-input, #CodeOtp');
+    inputs.forEach(input => {
         input.value = '';
     });
-    // فوکوس رو هم به اولین اینپوت برگردون
-    document.querySelector('.otp-input')?.focus();
+    if (focus) inputs[0]?.focus();
 }
