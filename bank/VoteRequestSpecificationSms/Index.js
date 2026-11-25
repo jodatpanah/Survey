@@ -401,7 +401,7 @@ $(document).ready(function () {
         else input.removeAttribute('aria-invalid');
     }
 
-    function syncRecipientType(form) {
+    function syncFileRecipientType(form) {
         const selected = form.querySelector('input[name="UseMobileNo"]:checked');
         form.querySelectorAll('input[name="UseMobileNo"]').forEach(function (radio) {
             const option = radio.closest('label');
@@ -413,16 +413,16 @@ $(document).ready(function () {
         form.querySelectorAll('[data-sms-file-hint]').forEach(function (hint) {
             hint.classList.toggle('d-none', hint.dataset.smsFileHint !== selected.value);
         });
-        form.querySelectorAll('[data-sms-recipient]').forEach(function (cell) {
-            const isSelected = cell.dataset.smsRecipient === selected.value;
-            cell.classList.toggle('d-none', !isSelected);
-            const input = cell.querySelector('input');
-            if (input) {
-                input.disabled = !isSelected;
-                if (!isSelected) markInvalid(input, false);
-            }
+    }
+
+    function syncRecipientRow(row) {
+        const mode = row.querySelector('[data-sms-recipient-type]').value;
+        row.querySelectorAll('[data-sms-identifier]').forEach(function (input) {
+            const active = input.dataset.smsIdentifier === mode;
+            input.classList.toggle('d-none', !active);
+            input.disabled = !active;
+            if (!active) markInvalid(input, false);
         });
-        showError(form.querySelector('#sms-manual-error'), '');
     }
 
     function addRecipientRow(form) {
@@ -431,36 +431,43 @@ $(document).ready(function () {
             <tr>
                 <td><input class="form-control" maxlength="20" data-sms-field="FirstName" aria-label="نام"></td>
                 <td><input class="form-control" maxlength="50" data-sms-field="LastName" aria-label="نام خانوادگی"></td>
-                <td data-sms-recipient="true"><input class="form-control" type="tel" dir="ltr" inputmode="numeric" maxlength="11" data-sms-field="MobileNo" aria-label="شماره موبایل" aria-required="true" aria-describedby="sms-manual-error"></td>
-                <td data-sms-recipient="false"><input class="form-control" dir="ltr" inputmode="numeric" maxlength="10" data-sms-field="EmployeeCode" aria-label="کد پرسنلی" aria-required="true" aria-describedby="sms-manual-error"></td>
+                <td>
+                    <select class="form-select" data-sms-recipient-type aria-label="نوع شناسه گیرنده">
+                        <option value="true">شماره موبایل</option>
+                        <option value="false">کد پرسنلی</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control" type="tel" dir="ltr" inputmode="numeric" maxlength="11" data-sms-field="MobileNo" data-sms-identifier="true" aria-label="شماره موبایل" aria-required="true" aria-describedby="sms-manual-error">
+                    <input class="form-control d-none" dir="ltr" maxlength="20" data-sms-field="PersonnelCode" data-sms-identifier="false" aria-label="کد پرسنلی" aria-required="true" aria-describedby="sms-manual-error" disabled>
+                </td>
                 <td><input class="form-control" type="number" oninput="ValidateBranchCodeInput(this)" data-sms-field="BranchCode" aria-label="کد شعبه"></td>
                 <td><input class="form-control" type="number" oninput="ValidateProcessCodeInput(this)" data-sms-field="ProcessCode" aria-label="کد خدمت"></td>
                 <td class="text-end"><button type="button" class="btn btn-sm btn-light-danger btn-icon js-remove-sms-recipient" aria-label="حذف ردیف" title="حذف ردیف"><i class="fonticon-trash" aria-hidden="true"></i></button></td>
             </tr>`);
-        syncRecipientType(form);
-        rows.lastElementChild.querySelector('[data-sms-recipient]:not(.d-none) input').focus();
+        rows.lastElementChild.querySelector('[data-sms-recipient-type]').focus();
     }
 
     function validateRecipientRows(form, requireRows) {
-        const usesMobile = form.querySelector('input[name="UseMobileNo"]:checked').value === 'true';
-        const inputs = form.querySelectorAll(`[data-sms-recipient="${usesMobile}"] input`);
-        const pattern = usesMobile ? /^09[0-9]{9}$/ : /^[0-9]{1,10}$/;
+        const inputs = form.querySelectorAll('[data-sms-identifier]:enabled');
         let firstInvalid;
 
         inputs.forEach(function (input) {
             input.value = input.value.trim()
                 .replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
                 .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit));
-            const isInvalid = !pattern.test(input.value);
+            const isInvalid = input.dataset.smsIdentifier === 'true'
+                ? !/^09[0-9]{9}$/.test(input.value)
+                : !input.value || input.value.length > 20;
             markInvalid(input, isInvalid);
             if (isInvalid) firstInvalid ??= input;
         });
 
         const error = form.querySelector('#sms-manual-error');
         if (firstInvalid) {
-            showError(error, usesMobile
-                ? 'شماره موبایل هر ردیف باید ۱۱ رقمی باشد و با ۰۹ شروع شود.'
-                : 'کد پرسنلی هر ردیف را با ۱ تا ۱۰ رقم وارد کنید.');
+            showError(error, firstInvalid.dataset.smsIdentifier === 'true'
+                ? 'شماره موبایل باید ۱۱ رقمی باشد و با ۰۹ شروع شود.'
+                : 'کد پرسنلی را وارد کنید. حداکثر ۲۰ کاراکتر.');
             firstInvalid.focus();
             return false;
         }
@@ -477,13 +484,17 @@ $(document).ready(function () {
 
     $(document)
         .on('change', `${createFormSelector} input[name="UseMobileNo"]`, function () {
-            syncRecipientType(this.form);
+            syncFileRecipientType(this.form);
+        })
+        .on('change', `${createFormSelector} [data-sms-recipient-type]`, function () {
+            syncRecipientRow(this.closest('tr'));
+            showError(this.form.querySelector('#sms-manual-error'), '');
         })
         .on('change', `${createFormSelector} #formFile`, function () {
             markInvalid(this, false);
             showError(this.form.querySelector('#sms-file-error'), '');
         })
-        .on('input', `${createFormSelector} [data-sms-recipient] input`, function () {
+        .on('input', `${createFormSelector} [data-sms-identifier]`, function () {
             markInvalid(this, false);
         })
         .on('click', `${createFormSelector} #btnAddNew`, function () {
@@ -533,9 +544,12 @@ $(document).ready(function () {
                 const data = new FormData(form);
                 if (!addingFile) {
                     data.delete('formFile');
+                    data.delete('UseMobileNo');
                     form.querySelectorAll('#kt_view_table tbody tr').forEach(function (row, index) {
+                        const prefix = `VoteRequestSpecificationDetailSms[${index}]`;
+                        data.append(`${prefix}.UseMobileNo`, row.querySelector('[data-sms-recipient-type]').value);
                         row.querySelectorAll('input[data-sms-field]:enabled').forEach(function (input) {
-                            data.append(`VoteRequestSpecificationDetailSms[${index}].${input.dataset.smsField}`, input.value);
+                            data.append(`${prefix}.${input.dataset.smsField}`, input.value);
                         });
                     });
                 }
@@ -587,7 +601,7 @@ $(document).ready(function () {
             }
         });
 
-    document.querySelectorAll(createFormSelector).forEach(syncRecipientType);
+    document.querySelectorAll(createFormSelector).forEach(syncFileRecipientType);
 });
 
 function ValidateBranchCodeInput(input) {
