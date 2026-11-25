@@ -21,8 +21,9 @@ var RequestQRType;
 
 var typeLoad = $('#typeLoad').val();
 const smsLoginData = typeLoad === '3' ? getVotePackageData() : null;
-const smsUseMobileNo = smsLoginData?.UseMobileNo ?? smsLoginData?.useMobileNo;
-const usesPersonnelCode = typeLoad === '3' && String(smsUseMobileNo).toLowerCase() === 'false';
+const hasAccessToPackageWithMobile = smsLoginData?.HasAccessToPackageWithMobile
+    ?? smsLoginData?.hasAccessToPackageWithMobile;
+const usesPersonnelCode = typeLoad === '3' && String(hasAccessToPackageWithMobile).toLowerCase() === 'false';
 
 var MandatoryLogin;
 var SMSId;
